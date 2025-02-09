@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { useFonts } from "expo-font";
-import SignUpScreen from './screens/SignUpScreen';
+import SignUpScreen from './screens/SignupScreen';
 
 export default function App() {
   const [fontsLoaded] = useFonts({

@@ -10,17 +10,24 @@ import {
 
 import colors from "../assets/colors/colors";
 
-function SignUpScreen() {
+function SignupScreen() {
   return (
     <View style={styles.screen}>
-      <View style={styles.logo}>
+      {/* star Area */}
+      <View style={styles.starArea}>
         <Image
           source={require("../assets/images/Picture1.png")}
           style={styles.star}
         />
-        <Text style={styles.logoTitle}>FitCheck</Text>
       </View>
-      <View style={styles.signUpForm}>
+
+      {/* title Area */}
+      <View style={styles.titleArea}>
+        <Text style={styles.title}>FitCheck</Text>
+      </View>
+
+      {/* Form Area */}
+      <View style={styles.signupForm}>
         <TextInput placeholder="Your Email" style={styles.input} />
         <TextInput placeholder="Name" style={styles.input} />
         <TextInput placeholder="Password" style={styles.input} />
@@ -34,7 +41,9 @@ function SignUpScreen() {
             <Text style={styles.buttonTitle}>Sign Up</Text>
           </Pressable>
         </View>
+
       </View>
+      
     </View>
   );
 }
@@ -47,27 +56,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 4,
   },
-  logo: {
-    flex: 2,
+  starArea: {
+    flex: 4,
     width: "100%",
     justifyContent: "flex-end",
     alignItems: "center",
     paddingBottom: 12,
-    marginBottom: 40,
   },
   star: {
     width: 70,
     height: 70,
-    position: "absolute",
-    top: 135,
-    right: 25,
+    left: 130,
+    bottom: 35,
   },
-  logoTitle: {
+  titleArea: {
+    flex: 2,
+    width: "100%",
+    alignItems: "center",
+  },
+  title: {
     fontFamily: "higuen",
     fontSize: 67,
   },
-  signUpForm: {
-    flex: 3,
+  signupForm: {
+    flex: 8,
     width: "100%",
     paddingHorizontal: 40,
   },
@@ -92,4 +104,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpScreen;
+export default SignupScreen;
