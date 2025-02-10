@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     // borderStyle: "dashed",
   },
   inputField: {
-    // fontFamily: "glacial",
+    // fontFamly: "glacial-bold",
     fontWeight: "700",
     fontSize: 12,
     color: "black",

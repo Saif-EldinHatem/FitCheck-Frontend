@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-end",
     alignItems: "center",
-    paddingBottom: 12, // <=== also check if you really need this one here
+    // paddingBottom: 12, // <=== also check if you really need this one here
   },
   star: {
     width: 70,
