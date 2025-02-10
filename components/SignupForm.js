@@ -1,4 +1,5 @@
 import { StyleSheet, View, TextInput, Text } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
 import colors from "../assets/colors/colors";
 import PrimaryButton from "./PrimaryButton";
@@ -8,25 +9,45 @@ function SignupForm() {
     <View style={styles.signupForm}>
       {/* title Area */}
       <View style={styles.titleArea}>
-        <Text style={styles.title}>FitCheck</Text>
+        <Animated.Text
+          entering={FadeInUp.duration(1000).springify()}
+          style={styles.title}
+        >
+          FitCheck
+        </Animated.Text>
       </View>
       <View style={styles.inputArea}>
-        <TextInput
-          placeholder="Your Email"
-          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Name"
-          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Password"
-          placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-          style={styles.input}
-          secureTextEntry
-        />
+        <Animated.View
+          entering={FadeInUp.duration(1000).springify()}
+          style={styles.inputContainer}
+        >
+          <TextInput
+            placeholder="Your Email"
+            placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+            style={styles.inputField}
+          />
+        </Animated.View>
+        <Animated.View
+          entering={FadeInUp.delay(200).duration(1000).springify()}
+          style={styles.inputContainer}
+        >
+          <TextInput
+            placeholder="Name"
+            placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+            style={styles.inputField}
+          />
+        </Animated.View>
+        <Animated.View
+          entering={FadeInUp.delay(400).duration(1000).springify()}
+          style={styles.inputContainer}
+        >
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
+            style={styles.inputField}
+            secureTextEntry
+          />
+        </Animated.View>
         {/* Button */}
         <PrimaryButton>Sign Up</PrimaryButton>
       </View>
@@ -52,21 +73,23 @@ const styles = StyleSheet.create({
   inputArea: {
     flex: 4,
     width: "100%",
-    paddingHorizontal: 40,
+    paddingHorizontal: 20,
   },
-  input: {
-    fontFamily: "glacial-italic",
-    fontWeight: "700",
-    fontSize: 12,
-    color: "black",
+  inputContainer: {
     backgroundColor: "#D5C8B8",
     borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    elevation: 6,
+    padding: 10,
+    marginBottom: 15,
+    elevation: 5,
     // borderWidth: 1,
     // borderBottomColor: "#746d67",
     // borderStyle: "dashed",
+  },
+  inputField: {
+    // fontFamily: "glacial",
+    fontWeight: "700",
+    fontSize: 12,
+    color: "black",
   },
 });
 
