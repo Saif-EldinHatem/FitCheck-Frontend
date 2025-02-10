@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     elevation: 6,
     overflow: Platform.OS === "android" ? "hidden" : "visible",
+    marginTop: 16,
   },
   button: {
     padding: 16,
