@@ -5,7 +5,10 @@ import SignUpScreen from './screens/SignupScreen';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    higuen: require("./assets/Fonts/Higuen Serif.otf"),
+    "higuen": require("./assets/Fonts/Higuen Serif.otf"),
+    "glacial": require("./assets/Fonts/GlacialIndifference-Regular.otf"),
+    "glacial-bold": require("./assets/Fonts/GlacialIndifference-Bold.otf"),   
+    "glacial-italic": require("./assets/Fonts/GlacialIndifference-Italic.otf"),
   });
 
   if (!fontsLoaded) {

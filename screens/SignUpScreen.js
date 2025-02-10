@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-} from "react-native";
+import { StyleSheet, View, Text, Image } from "react-native";
 
 import colors from "../assets/colors/colors";
 import SignupForm from "../components/SignupForm";
@@ -55,12 +50,12 @@ const styles = StyleSheet.create({
     flex: 2,
     width: "100%",
     alignItems: "center",
+    minHeight: 2,
   },
   title: {
     fontFamily: "higuen",
     fontSize: 67,
   },
-
 });
 
 export default SignupScreen;
