@@ -6,6 +6,7 @@ import WardrobeScreen from "../screens/WardrobeScreen";
 import OutfitsScreen from "../screens/OutfitsScreen";
 import YouScreen from "../screens/YouScreen";
 import { Ionicons } from '@expo/vector-icons';
+import colors from "../assets/colors/colors";
 
 const Tab = createBottomTabNavigator();
 const screenOptions = ({ route }) => ({
@@ -15,20 +16,20 @@ const screenOptions = ({ route }) => ({
         if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
         } else if (route.name === 'Wardrobe') {
-            iconName = focused ? 'shirt' : 'shirt-outline';
+            iconName = focused ? 'file-tray-stacked' : 'file-tray-stacked-outline';
         } else if (route.name === 'Outfits') {
-            iconName = focused ? 'pricetag' : 'pricetag-outline';
+            iconName = focused ? 'shirt' : 'shirt-outline';
         } else if (route.name === 'You') {
-            iconName = focused ? 'person' : 'person-outline';
+            iconName = focused ? 'reorder-four' : 'reorder-four-outline';
         }
 
-        return <Ionicons name={iconName} size={size} color={color} />;
+        return <Ionicons name={iconName}  size={size} color={colors.accent} />;
     },
+    
 });
 
 const tabBarOptions = {
-    activeTintColor: 'primary',
-    inactiveTintColor: 'gray',
+
 };
 
 const NavBar = () => {
