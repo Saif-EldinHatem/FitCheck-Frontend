@@ -1,18 +1,22 @@
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { Platform } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
 import colors from "../assets/colors/colors";
 
 function PrimaryButton({ children }) {
   return (
-    <View style={styles.buttonContainer}>
+    <Animated.View
+      entering={FadeInUp.delay(600).duration(1000).springify()}
+      style={styles.buttonContainer}
+    >
       <Pressable
         style={styles.button}
         android_ripple={{ color: "rgba(0,0,0,0,1)" }}
       >
         <Text style={styles.buttonTitle}>{children}</Text>
       </Pressable>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -30,7 +34,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonTitle: {
+    fontFamily: "glacial-bold",
+    fontSize: 16,
     color: "white",
+    padding: 2,
+    // fontWeight: "700",
   },
 });
 
