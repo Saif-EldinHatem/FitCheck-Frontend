@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { Platform } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
+import {scale, verticalScale } from "react-native-size-matters";
 
 import colors from "../assets/colors/colors";
 
@@ -23,21 +24,21 @@ function PrimaryButton({ children }) {
 const styles = StyleSheet.create({
   buttonContainer: {
     backgroundColor: colors.accent,
-    borderRadius: 12,
+    borderRadius: scale(12 * (350 / 412)), // Responsive border radius
     elevation: 6,
     overflow: Platform.OS === "android" ? "hidden" : "visible",
-    marginTop: 16,
+    marginTop: verticalScale(16 * (680 / 915)), // Responsive margin top
   },
   button: {
-    padding: 16,
+    padding: scale(16 * (350 / 412)), // Responsive padding
     justifyContent: "center",
     alignItems: "center",
   },
   buttonTitle: {
     fontFamily: "glacial-bold",
-    fontSize: 16,
+    fontSize: scale(16 * (350 / 412)), // Responsive font size
     color: "white",
-    padding: 2,
+    padding: scale(2 * (350 / 412)), // Responsive padding
     // fontWeight: "700",
   },
 });

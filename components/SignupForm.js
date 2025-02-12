@@ -1,8 +1,10 @@
 import { StyleSheet, View, TextInput, Text } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
+import {scale, verticalScale, moderateScale } from "react-native-size-matters";
 
 import colors from "../assets/colors/colors";
 import PrimaryButton from "./PrimaryButton";
+
 
 function SignupForm() {
   return (
@@ -64,22 +66,22 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     alignItems: "center",
-    minHeight: 5,
+    minHeight: verticalScale(5),
   },
   title: {
     fontFamily: "higuen",
-    fontSize: 67,
+    fontSize: scale(57),
   },
   inputArea: {
     flex: 4,
     width: "100%",
-    paddingHorizontal: 20,
+    paddingHorizontal: scale(17),
   },
   inputContainer: {
     backgroundColor: "#D5C8B8",
-    borderRadius: 12,
-    padding: 10,
-    marginBottom: 15,
+    borderRadius: scale(10), //12 before responsive
+    padding: scale(8), //10 before responsive
+    marginBottom: verticalScale(15 * (680 / 915)),
     elevation: 5,
     // borderWidth: 1,
     // borderBottomColor: "#746d67",
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
   inputField: {
     // fontFamly: "glacial-bold",
     fontWeight: "700",
-    fontSize: 12,
+    fontSize: (12 * (350 / 412)),
     color: "black",
   },
 });

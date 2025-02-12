@@ -10,6 +10,7 @@ import colors from "../assets/colors/colors";
 
 const Tab = createBottomTabNavigator();
 const screenOptions = ({ route }) => ({
+    tabBarLabelStyle: { color: colors.accent },
     tabBarIcon: ({ focused, color, size }) => {
         let iconName;
 
