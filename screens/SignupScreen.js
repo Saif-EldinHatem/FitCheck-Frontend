@@ -1,9 +1,14 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
-import {scale, verticalScale} from "react-native-size-matters";
+import { scale, verticalScale } from "react-native-size-matters";
 
 import colors from "../assets/colors/colors";
 import SignupForm from "../components/SignupForm";
+
+// Responsive design related code
+const {width, height} = Dimensions.get("window");
+const isSmallWidth = width < 480;
+const isSmallHeight = height < 900;
 
 function SignupScreen() {
   return (
@@ -28,19 +33,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.main,
     padding: scale(4 * (350 / 412)),
+    paddingVertical: verticalScale(40),
   },
   starArea: {
-    flex: 3,
+    flex: 5,
     width: "100%",
     justifyContent: "flex-end",
     alignItems: "center",
+    // backgroundColor: "blue",
     // paddingBottom: 12, // <=== also check if you really need this one here
   },
   star: {
-width: scale(70 * (350 / 412)), // Responsive width
-    height: scale(70 * (350 / 412)), // Responsive height
-    left: scale(130 * (350 / 412)), // Responsive left position
-    bottom: verticalScale(35 * (680 / 915)), // Responsive bottom position
+    width: isSmallWidth ? scale(70 * (350 / 412)) : 70, // Responsive width
+    height: isSmallWidth ? scale(70 * (350 / 412)) : 70, // Responsive width
+    // left: 130, // Responsive left position
+    // bottom: 35, // Responsive bottom position
+    left: isSmallWidth? scale(130 * (350 / 412)) : "25%", // Responsive left position
+    bottom: isSmallHeight ? verticalScale(35 * (680 / 915)) : "15", // Responsive bottom position
   },
 });
 
