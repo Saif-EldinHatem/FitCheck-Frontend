@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, StatusBar } from 'react-native';
+import colors from '../assets/colors/colors';
 
 function ItemDetailScreen() {
     const handleDelete = () => {
@@ -16,7 +17,7 @@ function ItemDetailScreen() {
     <StatusBar hidden />
     
     {/* Product Image */}
-    <Image source={require("..assets/images/blueTshirt.jpg")} style={styles.image} />
+    <Image source={require("../assets/images/blueTshirt.jpg")} style={styles.image} />
 
     {/* Product Details */}
     <View style={styles.detailsContainer}>
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         padding: 16,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: colors.main,
       },
       image: {
         width: '100%',
