@@ -4,6 +4,7 @@ import { useFonts } from "expo-font";
 import SignupScreen from './screens/SignupScreen';
 import LoginScreen from "./screens/LoginScreen";
 import UserRegisterationScreen from './screens/UserRegistertaionScreen';
+import ItemDetailScreen from './screens/ItemDetailScreen';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -25,22 +26,8 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <StatusBar style="auto" />
-      <Stack.Navigator 
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {backgroundColor: colors.main},
-        }}
-
-      >
-        <Stack.Screen name="Signup" component={SignupScreen}/>
-        <Stack.Screen name="Login" component={LoginScreen}/>
-        <Stack.Screen name="UserRegisteration" component={UserRegisterationScreen}/>
-
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+    <ItemDetailScreen/> 
+    );
 }
 
 const styles = StyleSheet.create({
