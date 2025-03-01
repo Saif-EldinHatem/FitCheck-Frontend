@@ -49,39 +49,6 @@ function SignupForm() {
             style={styles.inputField}
           />
         </Animated.View>
-        {/* <Animated.View
-          // entering={FadeInUp.delay(200).duration(1000).springify()}
-          style={styles.inputContainer}
-        >
-          <TextInput
-            placeholder="Name"
-            placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-            style={styles.inputField}
-          />
-        </Animated.View>
-        <Animated.View
-          // entering={FadeInUp.delay(400).duration(1000).springify()}
-          style={styles.inputContainer}
-        >
-          <TextInput
-            placeholder="Password"
-            placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-            style={styles.inputField}
-            secureTextEntry
-          />
-        </Animated.View>
-
-        <Animated.View
-          // entering={FadeInUp.delay(600).duration(1000).springify()}
-          style={styles.inputContainer}
-        >
-          <TextInput
-            placeholder="Confirm Password"
-            placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-            style={styles.inputField}
-            secureTextEntry
-          />
-        </Animated.View> */}
 
         {/* Button */}
         <PrimaryButton onPress={()=>navigation.navigate("UserRegisteration")}>Proceed</PrimaryButton>
@@ -98,9 +65,9 @@ function SignupForm() {
         {/* navigation text */}
         <Animated.View
           style={styles.switchArea}
-          // entering={FadeInUp.delay(200).duration(1000).springify()}
+          entering={FadeInUp.delay(200).duration(1000).springify()}
         >
-          <Text>Already have an account?</Text>
+          <Text style={styles.switchText}>Already have an account?</Text>
           <Pressable onPress={() => navigation.replace("Login")}>
             <Text style={styles.pressableText}>Sign In</Text>
           </Pressable>
@@ -112,29 +79,25 @@ function SignupForm() {
 
 const styles = StyleSheet.create({
   signupForm: {
-    flex: 13,
+    // flex: 13,
+    // height: 650,
     width: "100%",
     alignItems: "center",
-    // backgroundColor: "darkred",
   },
   titleArea: {
-    flex: 1,
+    marginTop: 30,
+    marginBottom: 30,
     width: "100%",
     alignItems: "center",
-    minHeight: 10,
-    // backgroundColor: "red",
   },
   title: {
     fontFamily: "higuen",
     fontSize: isSmallWidth ? scale(57) : 67,
   },
   inputArea: {
-
-    flex: 5,
     width: "100%",
     paddingHorizontal: scale(17),
     width: isSmallWidth ? "100%" : "80%",
-    // backgroundColor: "green",
   },
   inputContainer: {
     backgroundColor: "#D5C8B8",
@@ -142,21 +105,16 @@ const styles = StyleSheet.create({
     padding: moderateScale(8), //10 before responsive
     marginBottom: verticalScale(15 * (680 / 915)),
     elevation: 5,
-    width: "100%",
-    // borderWidth: 1,
-    // borderBottomColor: "#746d67",
-    // borderStyle: "dashed",
   },
   inputField: {
-    // fontFamly: "glacial-bold",
-    fontWeight: "700",
-    fontSize: 12,
-    color: "black",
+    fontSize: 16,
+    height:32,
+    paddingVertical:0,    
   },
   lineContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: verticalScale(12),
+    marginVertical: 22,
   },
   line: {
     flex: 1,
@@ -166,7 +124,6 @@ const styles = StyleSheet.create({
   lineText: {
     marginHorizontal: 10,
     fontSize: 16,
-    fontWeight: "bold",
     color: colors.secondary,
   },
   switchArea: {
@@ -175,10 +132,14 @@ const styles = StyleSheet.create({
     marginTop: 30,
     justifyContent: "center",
   },
+  switchText: {
+    fontSize:15,
+  },
   pressableText: {
     fontFamily: "glacial-bold",
     marginHorizontal: 4,
     color: colors.accent,
+    fontSize: 15,
   },
 });
 

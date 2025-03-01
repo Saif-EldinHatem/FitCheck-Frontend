@@ -8,7 +8,7 @@ import colors from "../assets/colors/colors";
 function GoogleButton({ children }) {
   return (
     <Animated.View
-      // entering={FadeInUp.delay(0).duration(1000).springify()}
+      entering={FadeInUp.delay(0).duration(1000).springify()}
       style={styles.buttonContainer}
     >
       <Pressable
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.accent,
+    borderColor: "grey",
     // elevation: 6,
     overflow: Platform.OS === "android" ? "hidden" : "visible",
     // marginTop: moderateVerticalScale(16 * (680 / 915)),
