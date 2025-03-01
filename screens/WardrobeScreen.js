@@ -1,10 +1,10 @@
 import { StyleSheet, View, TextInput, Text } from "react-native";
-
+import ItemDetailScreen from "./ItemDetailScreen";
 
 function WardrobeScreen() {
   return (
     <View>
-      <Text>this is the WardrobeScreen</Text>
+      <ItemDetailScreen/>
       </View>
   );
 }
