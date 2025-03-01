@@ -65,7 +65,7 @@ function UserRegisterationForm() {
           //   entering={FadeInUp.duration(1000).springify()}
           style={styles.title}
         >
-          Registertion
+          Register
         </Animated.Text>
       </View>
       <View style={styles.inputArea}>
@@ -162,7 +162,7 @@ function UserRegisterationForm() {
         {/* Button */}
         <View style={styles.button}>
           <PrimaryButton
-            onPress={() => navigation.navigate("UserRegisteration")}
+            onPress={() => navigation.navigate("Verification")}
           >
             Sign Up
           </PrimaryButton>
@@ -175,22 +175,19 @@ function UserRegisterationForm() {
 const styles = StyleSheet.create({
   UserRegisterationForm: {
     paddingTop: 200,
-    flex: 1,
     width: "100%",
     alignItems: "center",
-    // justifyContent: "center",
     // backgroundColor: "darkred",
   },
   titleArea: {
-    flex: 2,
     width: "100%",
     alignItems: "center",
-    minHeight: 10,
+    marginBottom: 50,
     // backgroundColor: "red",
   },
   title: {
     fontFamily: "higuen",
-    fontSize: isSmallWidth ? scale(50) : 60,
+    fontSize: isSmallWidth ? scale(60) : 60,
   },
   inputArea: {
     flex: 8,
@@ -216,9 +213,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "black",
   },
-  button: {
-    marginTop: 20,
-  },
   dobArea: {
     width: "100%",
     flexDirection: "row",
@@ -237,6 +231,10 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#D5C8B8",
   },
+  button: {
+    marginVertical: 20,
+  },
+
 });
 
 export default UserRegisterationForm;

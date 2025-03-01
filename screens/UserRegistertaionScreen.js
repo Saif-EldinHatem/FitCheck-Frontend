@@ -1,4 +1,11 @@
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  KeyboardAvoidingView,
+  ScrollView,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import UserRegisterationForm from "../components/UserRegisterationForm";
 
@@ -6,19 +13,17 @@ function UserRegisterationScreen() {
   const navigation = useNavigation();
 
   return (
-
-      <View style={styles.screen}>
+    <KeyboardAvoidingView>
+      <ScrollView contentContainerStyle={styles.screen}>
         <UserRegisterationForm />
-      </View>
-
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
-    // justifyContent: "center",
-    // alignItems: "center",
+    flexGrow: 1,
   },
 });
 
