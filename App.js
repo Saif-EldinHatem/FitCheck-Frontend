@@ -3,7 +3,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { useFonts } from "expo-font";
 import SignupScreen from "./screens/SignupScreen";
 import LoginScreen from "./screens/LoginScreen";
-import UserRegisterationScreen from "./screens/UserRegistertaionScreen";
+import UserRegisterationScreen from './screens/UserRegistertaionScreen';
+import ItemDetailScreen from './screens/ItemDetailScreen';
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
