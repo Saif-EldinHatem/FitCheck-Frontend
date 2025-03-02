@@ -14,10 +14,18 @@ import {
   moderateVerticalScale,
 } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/native";
+import { Formik } from "formik";
+import * as yup from "yup";
 
 import colors from "../assets/colors/colors";
 import PrimaryButton from "./PrimaryButton";
 import GoogleButton from "./GoogleButton";
+import ValidatedInput from "./ValidatedInput";
+import { Fragment } from "react";
+
+const validationSchema = yup.object().shape({
+  email: yup.string().label("Email").email().required(),
+});
 
 // Responsive design related code
 const { width, height } = Dimensions.get("window");
@@ -39,20 +47,29 @@ function SignupForm() {
         </Animated.Text>
       </View>
       <View style={styles.inputArea}>
-        <Animated.View
-          entering={FadeInUp.duration(1000).springify()}
-          style={styles.inputContainer}
+        <Formik
+          initialValues={{ email: "" }}
+          onSubmit={() => navigation.navigate("UserRegisteration")}
+          validationSchema={validationSchema}
         >
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-            style={styles.inputField}
-          />
-        </Animated.View>
-
-        {/* Button */}
-        <PrimaryButton onPress={()=>navigation.navigate("UserRegisteration")}>Proceed</PrimaryButton>
-
+          {(formikProps) => (
+            <Fragment>
+              <ValidatedInput
+                placeholder={"Email"}
+                error={formikProps.errors.email}
+                touched={formikProps.touched.email}
+                handleChange={formikProps.handleChange("email")}
+                handleBlur={formikProps.handleBlur("email")}
+                // isPassword={false}
+              />
+              {/* Button */}
+              <PrimaryButton onPress={formikProps.handleSubmit}>
+                Proceed
+              </PrimaryButton>
+            </Fragment>
+          )}
+        </Formik>
+        {/* <Text>testing</Text> */}
         {/* -----or ----- */}
         <View style={styles.lineContainer}>
           <View style={styles.line}></View>
@@ -108,8 +125,8 @@ const styles = StyleSheet.create({
   },
   inputField: {
     fontSize: 16,
-    height:32,
-    paddingVertical:0,    
+    height: 32,
+    paddingVertical: 0,
   },
   lineContainer: {
     flexDirection: "row",
@@ -133,7 +150,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   switchText: {
-    fontSize:15,
+    fontSize: 15,
   },
   pressableText: {
     fontFamily: "glacial-bold",
