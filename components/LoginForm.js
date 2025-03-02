@@ -16,6 +16,7 @@ import * as yup from "yup";
 import colors from "../assets/colors/colors";
 import PrimaryButton from "./PrimaryButton";
 import GoogleButton from "./GoogleButton";
+import ValidatedInput from "./ValidatedInput";
 
 const validationSchema = yup.object().shape({
   email: yup.string().label("Email").email().required(),
@@ -68,62 +69,22 @@ function LoginForm() {
         >
           {(formikProps) => (
             <Fragment>
-              <Animated.View
-                entering={FadeInUp.duration(1000).springify()}
-                style={styles.inputWrapper}
-              >
-                <View
-                  style={[
-                    styles.inputContainer,
-                    formikProps.touched.email &&
-                      formikProps.errors.email &&
-                      styles.errorBorder,
-                  ]}
-                >
-                  <TextInput
-                    placeholder="Email"
-                    placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-                    style={styles.inputField}
-                    onChangeText={formikProps.handleChange("email")}
-                    onBlur={formikProps.handleBlur("email")}
-                  />
-                </View>
-                {formikProps.touched.email && formikProps.errors.email && (
-                  <Text style={styles.validationText}>
-                    {formikProps.errors.email}
-                  </Text>
-                )}
-              </Animated.View>
+              <ValidatedInput
+                placeholder="Email"
+                touched={formikProps.touched.email}
+                error={formikProps.errors.email}
+                handleChange={formikProps.handleChange("email")}
+                handleBlur={formikProps.handleBlur("email")}
+              />
 
-              <Animated.View
-                entering={FadeInUp.delay(200).duration(1000).springify()}
-                style={styles.inputWrapper}
-              >
-                <View
-                  style={[
-                    styles.inputContainer,
-                    formikProps.touched.password &&
-                      formikProps.errors.password &&
-                      styles.errorBorder,
-                  ]}
-                >
-                  <TextInput
-                    placeholder="Password"
-                    placeholderTextColor={"rgba(0, 0, 0, 0.5)"}
-                    style={styles.inputField}
-                    secureTextEntry
-                    onChangeText={formikProps.handleChange("password")}
-                    onBlur={formikProps.handleBlur("password")}
-                  />
-                </View>
-                {console.log(formikProps.errors.password)}
-                {formikProps.touched.password &&
-                  formikProps.errors.password && (
-                    <Text style={styles.validationText}>
-                      {formikProps.errors.password}
-                    </Text>
-                  )}
-              </Animated.View>
+              <ValidatedInput
+                placeholder="Password"
+                touched={formikProps.touched.password}
+                error={formikProps.errors.password}
+                handleChange={formikProps.handleChange("password")}
+                handleBlur={formikProps.handleBlur("password")}
+                isPassword={true}
+              />
 
               {formikProps.isSubmitting ? (
                 <ActivityIndicator color={colors.accent} />
@@ -176,29 +137,6 @@ const styles = StyleSheet.create({
   inputArea: {
     width: "100%",
     paddingHorizontal: 20,
-  },
-  inputWrapper: {
-    marginBottom: 15,
-  },
-  inputContainer: {
-    backgroundColor: "#D5C8B8",
-    borderRadius: 12,
-    padding: 10,
-    elevation: 5,
-  },
-  errorBorder: {
-    borderWidth: 1,
-    borderColor: "darkred",
-  },
-  inputField: {
-    fontWeight: "700",
-    fontSize: 12,
-    color: "black",
-  },
-  validationText: {
-    color: "darkred",
-    marginTop: 3,
-    paddingLeft: 5,
   },
   lineContainer: {
     flexDirection: "row",
