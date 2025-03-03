@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   errorBorder: {
     // borderWidth: 1,
     //   borderColor: "darkred",
-    backgroundColor: "#f09898",
+    backgroundColor: "#f6b1b1",
   },
   inputField: {
     fontSize: 16,
