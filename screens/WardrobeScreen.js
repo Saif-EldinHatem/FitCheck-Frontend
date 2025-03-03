@@ -3,9 +3,9 @@ import ItemDetailScreen from "./ItemDetailScreen";
 
 function WardrobeScreen() {
   return (
-    <View>
+    
       <ItemDetailScreen/>
-      </View>
+      
   );
 }
 

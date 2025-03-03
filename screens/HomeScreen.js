@@ -1,11 +1,12 @@
 import { StyleSheet, View, TextInput, Text } from "react-native";
+import WeatherCard from "../components/WeatherCard";
 
 
 function HomeScreen() {
   return (
-    <View>
-      <Text>this is the HomeScreen</Text>
-    </View>
+    
+         <WeatherCard/>
+    
   );
 }
 
