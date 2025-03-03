@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   text: {
     textAlign: "center",
     fontSize: 30,
-    color: colors.accent,
+    color: "#414E42",
   },
 });
 
