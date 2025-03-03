@@ -28,32 +28,34 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <StatusBar style="auto" />
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.main },
-          headerStyle: { backgroundColor: colors.main},
-          headerTitleAlign: "center",
-        }}
-      >
-        <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen
-          name="UserRegisteration"
-          component={UserRegisterationScreen}
-        />
-        <Stack.Screen
-          name="Verification"
-          component={VerificationScreen}
-          options={{
-            headerShown: true,
-            title: "Verify Account",
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   <StatusBar style="auto" />
+    //   <Stack.Navigator
+    //     screenOptions={{
+    //       headerShown: false,
+    //       contentStyle: { backgroundColor: colors.main },
+    //       headerStyle: { backgroundColor: colors.main},
+    //       headerTitleAlign: "center",
+    //     }}
+    //   >
+    //     <Stack.Screen name="Signup" component={SignupScreen} />
+    //     <Stack.Screen name="Login" component={LoginScreen} />
+    //     <Stack.Screen
+    //       name="UserRegisteration"
+    //       component={UserRegisterationScreen}
+    //     />
+    //     <Stack.Screen
+    //       name="Verification"
+    //       component={VerificationScreen}
+    //       options={{
+    //         headerShown: true,
+    //         title: "Verify Account",
+    //       }}
+    //     />
+    //   </Stack.Navigator>
+    // </NavigationContainer>
+    <NavBar/>
+    // <ItemDetailScreen/>
   );
 }
 
