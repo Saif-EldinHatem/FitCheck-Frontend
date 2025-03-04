@@ -6,6 +6,7 @@ import LoginScreen from "./screens/LoginScreen";
 import UserRegisterationScreen from './screens/UserRegistertaionScreen';
 import ItemDetailScreen from './screens/ItemDetailScreen';
 
+import BoxDetails from "./components/BoxDetails";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import NavBar from "./components/NavBar";
