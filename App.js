@@ -54,7 +54,10 @@ export default function App() {
     //     />
     //   </Stack.Navigator>
     // </NavigationContainer>
+    <>
+    <StatusBar style="auto"/>
     <NavBar/>
+    </>
     // <ItemDetailScreen/>
   );
 }
