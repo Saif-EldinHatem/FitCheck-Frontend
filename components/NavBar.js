@@ -70,7 +70,7 @@ const NavBar = () => {
 const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: colors.main,
-    height:55,
+    height:75,  
   }
 })
 
