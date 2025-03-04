@@ -30,13 +30,13 @@ const WeatherCard = () => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#E8DDCC',
+    width: 340,
+    height :150,
     padding: 16,
     borderRadius: 12,
-    width: 300,
-    elevation: 6,
-    height :120,
     justifyContent:'space-between',
+    elevation: 6,
+    backgroundColor: '#E8DDCC',
   },
   locationRow: {
     flexDirection: 'row',
