@@ -10,11 +10,12 @@ import {
   Image,
   Pressable,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import TopBar from "../components/TopBar";
 import WeatherCard from "../components/WeatherCard";
+import BoxDetails from "../components/BoxDetails";
 import colors from "../assets/colors/colors";
-import { Ionicons } from "@expo/vector-icons";
 
 function HomeScreen() {
   return (
@@ -52,9 +53,9 @@ function HomeScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
           >
-            <View style={styles.outfitItem}></View>
-            <View style={styles.outfitItem}></View>
-            <View style={styles.outfitItem}></View>
+            <BoxDetails />
+            <BoxDetails />
+            <BoxDetails />
           </ScrollView>
         </View>
 
@@ -74,9 +75,9 @@ function HomeScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
           >
-            <View style={styles.outfitItem}></View>
-            <View style={styles.outfitItem}></View>
-            <View style={styles.outfitItem}></View>
+            <BoxDetails />
+            <BoxDetails />
+            <BoxDetails />
           </ScrollView>
         </View>
       </ScrollView>
@@ -87,7 +88,7 @@ function HomeScreen() {
 const styles = StyleSheet.create({
   safeScreenWrapper: {
     flex: 1,
-    backgroundColor: colors.main
+    backgroundColor: colors.main,
   },
   screen: {
     // minHeight: "100%",
@@ -97,11 +98,9 @@ const styles = StyleSheet.create({
     gap: 18,
     paddingVertical: 10,
     paddingHorizontal: 14,
-    // backgroundColor:"green",
   },
   section: {
-    marginVertical: 15,
-    // backgroundColor: "red",
+    marginVertical: 10,
   },
   sectionHeading: {
     flexDirection: "row",
@@ -111,18 +110,18 @@ const styles = StyleSheet.create({
     marginBottom: 11,
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "500",
   },
   pressableText: {
     color: colors.accent,
-    textDecorationLine: "underline",
-    fontSize: 18,
+    // textDecorationLine: "underline",
+    fontSize: 15,
     fontWeight: "700",
   },
   sectionContent: {
     gap: 10.5,
-    paddingVertical: 10,
+    paddingBottom: 10,
     paddingHorizontal: 10,
   },
   outfitItem: {
