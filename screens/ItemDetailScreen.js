@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import colors from "../assets/colors/colors";
 import PrimaryButton from "../components/PrimaryButton";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function ItemDetailScreen() {
   const handleDelete = () => {
@@ -20,7 +21,7 @@ function ItemDetailScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Hide the status bar */}
       <StatusBar />
 
@@ -48,7 +49,7 @@ function ItemDetailScreen() {
           <Text style={styles.deleteButtonText}>Delete Item</Text>
         </Pressable>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

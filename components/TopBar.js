@@ -3,21 +3,23 @@ import {
   View,
   Text,
   Image,
+  TouchableOpacity
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import colors from "../assets/colors/colors";
 import { Ionicons } from "@expo/vector-icons";
 
 function TopBar() {
+  const navigation = useNavigation();
   return (
     <View style={styles.barContainer}>
       <Text style={styles.logo}>FitCheck</Text>
       <View style={styles.rightRow}>
-        <Ionicons name="notifications-outline" size={32} color="#1D1B20" />
-        <Image
-          style={styles.userAvatar}
-          source={require("../assets/images/home screen/user-avatar.png")}
-        />
+        <Ionicons name="notifications-outline" size={27} color="#1D1B20" />
+        <TouchableOpacity onPress={() => navigation.navigate("You")}>
+           <Image style={styles.userAvatar} source={require("../assets/images/home screen/user-avatar.png")}/>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -36,6 +38,7 @@ const styles = StyleSheet.create({
   logo: {
     fontFamily: "higuen",
     fontSize: 32,
+    paddingTop: 10
   },
   rightRow: {
     flexDirection: "row",
@@ -44,8 +47,8 @@ const styles = StyleSheet.create({
     // backgroundColor: colors.secondary,
   },
   userAvatar: {
-    width: 44,
-    height: 44,
+    width: 33,
+    height: 33,
   },
 });
 

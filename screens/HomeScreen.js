@@ -92,8 +92,7 @@ const styles = StyleSheet.create({
   },
   screen: {
     // minHeight: "100%",
-    paddingTop: 15 + (Platform.OS === "android" ? StatusBar.currentHeight : 0),
-  },
+    paddingTop: 15 + (Platform.OS === "android" ? StatusBar.currentHeight : 0)  },
   weatherRow: {
     gap: 18,
     paddingVertical: 10,

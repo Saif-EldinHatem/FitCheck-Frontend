@@ -1,11 +1,12 @@
 import { StyleSheet, View, TextInput, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 function OutfitsScreen() {
   return (
-    <View>
+    <SafeAreaView>
       <Text>this is the OutfitsScreen</Text>
-    </View>
+    </SafeAreaView>
   );
 }
 
