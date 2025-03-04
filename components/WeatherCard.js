@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     height :150,
     padding: 16,
     borderRadius: 12,
+    marginLeft: 0,
     justifyContent:'space-between',
     elevation: 6,
     backgroundColor: '#E8DDCC',

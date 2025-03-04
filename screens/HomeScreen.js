@@ -8,16 +8,17 @@ import {
   Platform,
   ScrollView,
   Image,
-  Pressable,
+  Pressable
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
+import { useNavigation } from "@react-navigation/native";
 import TopBar from "../components/TopBar";
 import WeatherCard from "../components/WeatherCard";
 import BoxDetails from "../components/BoxDetails";
 import colors from "../assets/colors/colors";
 
 function HomeScreen() {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.safeScreenWrapper}>
       <ScrollView
@@ -31,6 +32,8 @@ function HomeScreen() {
           contentContainerStyle={styles.weatherRow}
           horizontal
           showsHorizontalScrollIndicator={false}
+          snapToInterval={348}
+          decelerationRate="fast"
         >
           <WeatherCard />
           <WeatherCard />
@@ -80,6 +83,10 @@ function HomeScreen() {
             <BoxDetails />
           </ScrollView>
         </View>
+
+        <Pressable onPress={() => navigation.navigate("Outfits")}>
+              <Text style={styles.generateOutfitText}>Generate New</Text>
+            </Pressable>
       </ScrollView>
     </SafeAreaView>
   );
@@ -130,6 +137,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#bbbbbb",
     elevation: 4,
   },
+  generateOutfitText: {
+    alignContent: "center",
+    textAlign: "center",
+    fontSize: 20,
+    fontFamily: "GlacialIndifference-Italic",
+    textDecorationLine: "underline",
+    padding: 10,
+    color: colors.accent,
+  }
 });
 
 export default HomeScreen;
