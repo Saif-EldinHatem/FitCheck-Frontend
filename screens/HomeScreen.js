@@ -8,7 +8,7 @@ import {
   Platform,
   ScrollView,
   Image,
-  Pressable
+  Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -84,9 +84,15 @@ function HomeScreen() {
           </ScrollView>
         </View>
 
-        <Pressable onPress={() => navigation.navigate("Outfits")}>
-              <Text style={styles.generateOutfitText}>Generate New</Text>
-            </Pressable>
+        {/* <Pressable onPress={() => navigation.navigate("Outfits")}>
+          <Text style={styles.generateOutfitText}>Generate New</Text>
+        </Pressable> */}
+        <View style={styles.plusButton}>
+          <Image
+            style={styles.plusIcon}
+            source={require("../assets/images/add - shitBrown .png")}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -99,7 +105,8 @@ const styles = StyleSheet.create({
   },
   screen: {
     // minHeight: "100%",
-    paddingTop: 15 + (Platform.OS === "android" ? StatusBar.currentHeight : 0)  },
+    paddingTop: 15 + (Platform.OS === "android" ? StatusBar.currentHeight : 0),
+  },
   weatherRow: {
     gap: 18,
     paddingVertical: 10,
@@ -126,7 +133,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   sectionContent: {
-    gap: 10.5,
+    gap: 11.5,
     paddingBottom: 10,
     paddingHorizontal: 10,
   },
@@ -145,7 +152,25 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
     padding: 10,
     color: colors.accent,
-  }
+  },
+  plusButton: {
+    height: 60,
+    width: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E8DDCC",
+    elevation: 6,
+    borderRadius: "50%",
+    padding:8,
+    position: 'absolute',
+    left: 340,
+    top: 740,
+
+  },
+  plusIcon: {
+    height: "100%",
+    width: "100%",
+  },
 });
 
 export default HomeScreen;
