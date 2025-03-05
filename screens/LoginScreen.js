@@ -9,7 +9,8 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import colors from "../assets/colors/colors";
 import LoginForm from "../components/LoginForm";
 
-function LoginScreen({setIsAuthenticated}) {
+function LoginScreen({route}) {
+  const {setIsAuthenticated} = route.params;
   return (
     <KeyboardAvoidingView style={{height:"100%", width:"100%",}}>
       <ScrollView contentContainerStyle={styles.screen}>

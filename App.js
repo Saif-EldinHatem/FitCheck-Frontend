@@ -46,7 +46,7 @@ export default function App() {
           }}
         >
           <Stack.Screen name="Signup" component={SignupScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} initialParams={{setIsAuthenticated}} />
           <Stack.Screen
             name="UserRegisteration"
             component={UserRegisterationScreen}
