@@ -9,7 +9,7 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import colors from "../assets/colors/colors";
 import LoginForm from "../components/LoginForm";
 
-function LoginScreen() {
+function LoginScreen({setIsAuthenticated}) {
   return (
     <KeyboardAvoidingView style={{height:"100%", width:"100%",}}>
       <ScrollView contentContainerStyle={styles.screen}>
@@ -23,7 +23,7 @@ function LoginScreen() {
         </View>
 
         {/* Form Area */}
-        <LoginForm />
+        <LoginForm setIsAuthenticated={setIsAuthenticated} />
       </ScrollView>
     </KeyboardAvoidingView>
   );
