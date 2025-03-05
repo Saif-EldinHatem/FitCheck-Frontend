@@ -19,32 +19,31 @@ import GoogleButton from "./GoogleButton";
 import ValidatedInput from "./ValidatedInput";
 
 const validationSchema = yup.object().shape({
-  email: yup.string().label("Email").email().required(),
-  password: yup
+  Email: yup.string().label("Email").email().required(),
+  Password: yup
     .string()
     .label("Password")
     .required()
-    .min(8, "Password too short!"),
+    .min(6, "Password too short!"),
 });
 
 function LoginForm() {
-  const navigation = useNavigation();
+  const navigation = useNavigation({setIsAuthenticated});
 
-  async function handleLogin() {
+  async function handleLogin(values) {
     try {
-      const res = await fetch("192.168.48.241:3000/auth/login", {
+      const res = await fetch(process.env.EXPO_PUBLIC_API_HOST + "/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ Email, Password }),
+        body: JSON.stringify(values),
       });
 
-      const data = await res.json();
-      setResponse(data.message || "Data sent successfully!");
+      const data = await res.json()
+      console.log(data)
     } catch (error) {
-      console.error(error);
-      setResponse("Error sending data");
+      console.error(error)
     }
   }
 
@@ -63,26 +62,26 @@ function LoginForm() {
       {/* Input Fields */}
       <View style={styles.inputArea}>
         <Formik
-          initialValues={{ email: "", password: "" }}
-          onSubmit={(values) => alert(JSON.stringify(values))}
+          initialValues={{ Email: "", Password: "" }}
+          onSubmit={ (values) => handleLogin(values) }
           validationSchema={validationSchema}
         >
           {(formikProps) => (
             <Fragment>
               <ValidatedInput
                 placeholder="Email"
-                touched={formikProps.touched.email}
-                error={formikProps.errors.email}
-                handleChange={formikProps.handleChange("email")}
-                handleBlur={formikProps.handleBlur("email")}
+                touched={formikProps.touched.Email}
+                error={formikProps.errors.Email}
+                handleChange={formikProps.handleChange("Email")}
+                handleBlur={formikProps.handleBlur("Email")}
               />
 
               <ValidatedInput
                 placeholder="Password"
-                touched={formikProps.touched.password}
-                error={formikProps.errors.password}
-                handleChange={formikProps.handleChange("password")}
-                handleBlur={formikProps.handleBlur("password")}
+                touched={formikProps.touched.Password}
+                error={formikProps.errors.Password}
+                handleChange={formikProps.handleChange("Password")}
+                handleBlur={formikProps.handleBlur("Password")}
                 isPassword={true}
               />
 
