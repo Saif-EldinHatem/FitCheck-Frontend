@@ -31,7 +31,6 @@ const screenOptions = ({ route }) => ({
 
 const NavBar = () => {
   return (
-    <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
@@ -63,14 +62,12 @@ const NavBar = () => {
         <Tab.Screen name="Outfits" component={OutfitsScreen} />
         <Tab.Screen name="You" component={YouScreen} />
       </Tab.Navigator>
-    </NavigationContainer>
   );
 };
 
 const styles = StyleSheet.create({
   tabBar: {
     backgroundColor: colors.main,
-    height:75,  
   }
 })
 

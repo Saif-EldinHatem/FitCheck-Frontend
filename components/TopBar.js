@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import colors from "../assets/colors/colors";
 import { Ionicons } from "@expo/vector-icons";
 
 function TopBar() {

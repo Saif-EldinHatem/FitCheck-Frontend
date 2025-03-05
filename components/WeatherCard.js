@@ -17,7 +17,7 @@ const WeatherCard = () => {
      <View style = {styles.cardRow}>
       </View>
       <View style={styles.descriptionContainer}>
-        <Text style={styles.descriptionText}>Cloudy, currently 60°F</Text>
+        <Text style={styles.descriptionText}>Cloudy, 60°F</Text>
       </View>
       <View style={styles.weatherRow}>
         <Image source={require('../assets/cloud.png')} style={styles.weatherIcon} />
@@ -93,7 +93,7 @@ cardRow:{
     textAlign: 'left',
     width: '100%',
     marginBottom: 10,
-    fontFamily: "higuen",
+    // fontFamily: "higuen",
   },
 });
 
