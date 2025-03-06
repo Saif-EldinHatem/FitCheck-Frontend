@@ -70,13 +70,9 @@ function AppContent() {
 
 export default function App() {
   return (
-    // <AuthProvider>
-    //   <AppContent />
-    // </AuthProvider>
-    <NavigationContainer>
-
-    <NavBar/>
-    </NavigationContainer>
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
