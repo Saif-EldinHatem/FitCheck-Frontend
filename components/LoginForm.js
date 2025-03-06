@@ -9,7 +9,7 @@ import {
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { verticalScale } from "react-native-size-matters";
-import { useState, Fragment } from "react";
+import { useState, Fragment, useContext } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 
@@ -17,6 +17,7 @@ import colors from "../assets/colors/colors";
 import PrimaryButton from "./PrimaryButton";
 import GoogleButton from "./GoogleButton";
 import ValidatedInput from "./ValidatedInput";
+import { AuthContext } from "../store/context/AuthContext";
 
 const validationSchema = yup.object().shape({
   Email: yup.string().label("Email").email().required(),
@@ -28,23 +29,28 @@ const validationSchema = yup.object().shape({
 });
 
 function LoginForm() {
-  const navigation = useNavigation({setIsAuthenticated});
+  const navigation = useNavigation();
+
+  const AuthCtx = useContext(AuthContext);
 
   async function handleLogin(values) {
-    try {
-      const res = await fetch(process.env.EXPO_PUBLIC_API_HOST + "/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
+    console.log("here"),
+    console.log(AuthCtx.isAuthenticated),
+    AuthCtx.setIsAuthenticated(true);
+    // try {
+    //   const res = await fetch(process.env.EXPO_PUBLIC_API_HOST + "/auth/login", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(values),
+    //   });
 
-      const data = await res.json()
-      console.log(data)
-    } catch (error) {
-      console.error(error)
-    }
+    //   const data = await res.json()
+    //   console.log(data)
+    // } catch (error) {
+    //   console.error(error)
+    // }
   }
 
   return (
