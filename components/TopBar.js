@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     justifyContent: "space-between",
     marginBottom: 17,
+    alignItems: "flex-end",
     // backgroundColor: colors.accent,
   },
   logo: {
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
   userAvatar: {
     width: 33,
     height: 33,
+    
   },
 });
 

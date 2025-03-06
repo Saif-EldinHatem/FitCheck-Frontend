@@ -11,6 +11,7 @@ import {
 import colors from "../assets/colors/colors";
 import PrimaryButton from "../components/PrimaryButton";
 import { SafeAreaView } from "react-native-safe-area-context";
+import TopBarItemDetails from "../components/TopBarItemDetails";
 
 function ItemDetailScreen() {
   const handleDelete = () => {
@@ -21,9 +22,10 @@ function ItemDetailScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} >
       {/* Hide the status bar */}
-      <StatusBar />
+      {/* <StatusBar /> */}
+      <TopBarItemDetails title="Item Details" />
 
       {/* Product Image */}
       <Image
@@ -60,8 +62,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.main,
   },
   image: {
+    height: "50%",
     width: "100%",
-    height: 300,
     resizeMode: "cover",
     borderRadius: 8,
     elevation: 6,
