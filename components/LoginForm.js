@@ -12,6 +12,7 @@ import { verticalScale } from "react-native-size-matters";
 import { useState, Fragment, useContext } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
+import Toast from "react-native-toast-message";
 
 import colors from "../assets/colors/colors";
 import PrimaryButton from "./PrimaryButton";
@@ -29,28 +30,42 @@ const validationSchema = yup.object().shape({
 });
 
 function LoginForm() {
+  const showToast = (msg1, msg2) => {
+    Toast.show({
+      type: "error",
+      text1: msg1,
+      text2: msg2,
+      position: "bottom",
+    });
+  };
   const navigation = useNavigation();
 
   const AuthCtx = useContext(AuthContext);
 
   async function handleLogin(values) {
-    console.log("here"),
-    console.log(AuthCtx.isAuthenticated),
-    AuthCtx.setIsAuthenticated(true);
-    // try {
-    //   const res = await fetch(process.env.EXPO_PUBLIC_API_HOST + "/auth/login", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(values),
-    //   });
+    console.log(process.env.EXPO_PUBLIC_API_HOST);
 
-    //   const data = await res.json()
-    //   console.log(data)
-    // } catch (error) {
-    //   console.error(error)
-    // }
+    try {
+      const res = await fetch(
+        process.env.EXPO_PUBLIC_API_HOST + "/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
+
+      const data = await res.json();
+      if (data.Result == false) {
+        showToast("Error", data.Errors[0]);
+      } else {
+        navigation.replace("MainApp");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -69,7 +84,7 @@ function LoginForm() {
       <View style={styles.inputArea}>
         <Formik
           initialValues={{ Email: "", Password: "" }}
-          onSubmit={ (values) => handleLogin(values) }
+          onSubmit={(values) => handleLogin(values)}
           validationSchema={validationSchema}
         >
           {(formikProps) => (
@@ -121,6 +136,7 @@ function LoginForm() {
           </Pressable>
         </Animated.View>
       </View>
+      <Toast />
     </View>
   );
 }

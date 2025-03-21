@@ -5,7 +5,6 @@ import colors from "../assets/colors/colors";
 const TopBarItemDetails = ({ title }) => {
   return (
     <View style={styles.topBarItemDetails}>
-      <StatusBar backgroundColor={colors.main} barStyle="light-content" />
       <Text style={styles.header}>{title}</Text>
     </View>
   );

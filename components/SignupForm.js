@@ -33,7 +33,6 @@ const isSmallWidth = width < 480;
 const isSmallHeight = height < 900;
 
 function SignupForm() {
-  console.log("Width: " + width);
   const navigation = useNavigation();
   return (
     <View style={styles.signupForm}>
