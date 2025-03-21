@@ -93,7 +93,7 @@ cardRow:{
     textAlign: 'left',
     width: '100%',
     marginBottom: 10,
-    // fontFamily: "higuen",
+    // fontFamily: "poppins",
   },
 });
 

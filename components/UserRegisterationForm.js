@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Animated, { FadeInUp } from "react-native-reanimated";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   scale,
   verticalScale,
@@ -16,10 +16,12 @@ import {
   moderateVerticalScale,
 } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 import colors from "../assets/colors/colors";
 import PrimaryButton from "./PrimaryButton";
 import GoogleButton from "./GoogleButton";
+import { AuthContext } from "../store/context/AuthContext";
 
 // Responsive design related code
 const { width, height } = Dimensions.get("window");
@@ -27,6 +29,54 @@ const isSmallWidth = width < 480;
 const isSmallHeight = height < 900;
 
 function UserRegisterationForm() {
+
+  const AuthCtx = useContext(AuthContext);
+  const showToast = (msg1, msg2) => {
+    Toast.show({
+      type: "error",
+      text1: msg1,
+      text2: msg2,
+      position: "bottom",
+    });
+  };
+
+
+  async function handleSignup() {
+  values = {
+    FirstName: "Saif",
+    LastName: "Hatem",
+    Email: "saifhatem76@gmail.com",
+    Password: "123123123",
+    PasswordConfirm: "123123123",
+    BirthDate: "2003-09-25",
+    Gender: "M",
+    // PhoneNum: "01092312669",
+  };
+
+  try {
+    const res = await fetch(
+      process.env.EXPO_PUBLIC_API_HOST + "/auth/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    );
+
+    // const data = await res.json();
+    // if (data.Result == false) {
+    //   showToast("Error", data.Errors[0]);
+    // } else {
+      navigation.push("Verification")
+    // }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
@@ -162,12 +212,13 @@ function UserRegisterationForm() {
         {/* Button */}
         <View style={styles.button}>
           <PrimaryButton
-            onPress={() => navigation.navigate("Verification")}
+            onPress={handleSignup}
           >
             Sign Up
           </PrimaryButton>
         </View>
       </View>
+      <Toast/>
     </View>
   );
 }

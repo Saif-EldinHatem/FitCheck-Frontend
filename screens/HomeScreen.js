@@ -9,6 +9,7 @@ import {
   ScrollView,
   Image,
   Pressable,
+  Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -17,6 +18,7 @@ import WeatherCard from "../components/WeatherCard";
 import BoxDetails from "../components/BoxDetails";
 import colors from "../assets/colors/colors";
 
+const { height, width } = Dimensions.get("screen");
 function HomeScreen() {
   const navigation = useNavigation();
   return (
@@ -106,6 +108,7 @@ const styles = StyleSheet.create({
   screen: {
     // minHeight: "100%",
     paddingTop: 15 + (Platform.OS === "android" ? StatusBar.currentHeight : 0),
+    position: "static",
   },
   weatherRow: {
     gap: 18,
@@ -154,18 +157,19 @@ const styles = StyleSheet.create({
     color: colors.accent,
   },
   plusButton: {
-    height: 60,
-    width: 60,
+    height: 50,
+    width: 50,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#E8DDCC",
     elevation: 6,
     borderRadius: "50%",
-    padding:8,
-    position: 'absolute',
-    left: 340,
-    top: 740,
-
+    padding: 4.5,
+    position: "absolute",
+    // left: 340,
+    // top: 740,
+    right: 0.05 * width,
+    bottom: 0.04 * height,
   },
   plusIcon: {
     height: "100%",
