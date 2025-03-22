@@ -7,7 +7,8 @@ import OutfitsScreen from "../screens/OutfitsScreen";
 import YouScreen from "../screens/YouScreen";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
-import AccountNavigator from "./AccountNavigator";
+import AccountTab from "./AccountTab";
+import HomeTab from "./HomeTab";
 
 const Tab = createBottomTabNavigator();
 
@@ -38,13 +39,13 @@ const NavBar = () => {
         tabBarStyle: styles.tabBar,
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Home" component={HomeTab} />
       <Tab.Screen name="Wardrobe" component={WardrobeScreen} />
       <Tab.Screen name="Outfits" component={OutfitsScreen} />
       <Tab.Screen
         name="Account"
-        component={AccountNavigator}
-        // options={{ popToTopOnBlur: true }} 
+        component={AccountTab}
+        options={{ title: "You" }} 
       />
     </Tab.Navigator>
   );

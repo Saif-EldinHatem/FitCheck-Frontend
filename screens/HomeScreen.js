@@ -15,7 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import TopBar from "../components/TopBar";
 import WeatherCard from "../components/WeatherCard";
-import BoxDetails from "../components/BoxDetails";
+import OutfitCard from "../components/OutfitCard";
 import colors from "../assets/colors/colors";
 
 const { height, width } = Dimensions.get("screen");
@@ -58,9 +58,9 @@ function HomeScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
           >
-            <BoxDetails />
-            <BoxDetails />
-            <BoxDetails />
+            <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+            <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+            <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
           </ScrollView>
         </View>
 
@@ -80,9 +80,9 @@ function HomeScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
           >
-            <BoxDetails />
-            <BoxDetails />
-            <BoxDetails />
+            <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+            <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+            <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
           </ScrollView>
         </View>
 
