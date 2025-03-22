@@ -14,6 +14,7 @@ import colors from "../assets/colors/colors";
 import ItemCard from "../components/ItemCard";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
+import Card from "../components/Card";
 
 const dummyData = [
   { id: "1", image: require("../assets/images/clothes/black-tshirt.png") },
@@ -23,14 +24,8 @@ const dummyData = [
   { id: "5", image: require("../assets/images/clothes/sunglasses.png") },
 ];
 
-const specialItem = {
-  id: "last",
-  image: require("../assets/images/tools/add-Item.png"),
-};
-
 function OutfitDetailsScreen() {
   const [data, setData] = useState(dummyData);
-  const combinedData = [...data, specialItem];
   const [editMode, setEditMode] = useState(false);
   const [selectedList, setSelectedList] = useState([]);
 
@@ -73,46 +68,47 @@ function OutfitDetailsScreen() {
         </View>
       </View>
 
-      <FlatList
-        data={combinedData}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        renderItem={({ item }) => (
-          <View style={styles.itemContainer}>
-            <ItemCard
-              img={item.image}
-              onLongPress={() => {
-                handleEditMode();
-                setSelectedList((prev) => [...prev, item.id]);
-              }}
-            />
-            {item.id != "last" && editMode == true && (
-              <Pressable
-                style={styles.selectArea}
-                onPress={handleItemPress.bind(this, item.id)}
-              >
-                <View style={styles.selectIcon}>
-                  <Ionicons
-                    name={
-                      selectedList.includes(item.id)
-                        ? "checkmark-circle"
-                        : "ellipse-outline"
-                    }
-                    size={21}
-                    color={colors.accent}
-                  />
-                </View>
-              </Pressable>
-            )}
-          </View>
-        )}
-        columnWrapperStyle={{
-          justifyContent: "space-between",
-          paddingHorizontal: 20,
-          width: "100%",
-        }}
-        contentContainerStyle={{ gap: 15 }}
-      />
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.grid}>
+          {data.map((item) => (
+            <View key={item.id} style={styles.itemContainer}>
+              <ItemCard
+                img={item.image}
+                onLongPress={() => {
+                  handleEditMode();
+                  setSelectedList((prev) => [...prev, item.id]);
+                }}
+              />
+              {item.id != "last" && editMode == true && (
+                <Pressable
+                  style={styles.selectArea}
+                  onPress={handleItemPress.bind(this, item.id)}
+                >
+                  <View style={styles.selectIcon}>
+                    <Ionicons
+                      name={
+                        selectedList.includes(item.id)
+                          ? "checkmark-circle"
+                          : "ellipse-outline"
+                      }
+                      size={21}
+                      color={colors.accent}
+                    />
+                  </View>
+                </Pressable>
+              )}
+            </View>
+          ))}
+
+          {!editMode && (
+            <View style={styles.itemContainer}>
+              <Card>
+                <Ionicons name="add" size={60} />
+              </Card>
+            </View>
+          )}
+        </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -155,14 +151,21 @@ const styles = StyleSheet.create({
     fontFamily: "inter-medium",
     fontSize: 18,
   },
+
+  grid: {
+    paddingHorizontal: 20,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
   itemContainer: {
     width: "48%",
     aspectRatio: 1,
+    marginBottom: 15,
   },
   selectArea: {
     position: "absolute",
     inset: 0,
-    // backgroundColor: "red",
   },
   selectIcon: {
     position: "absolute",
