@@ -1,10 +1,11 @@
 import React from "react";
 import { View, StyleSheet, Image } from "react-native";
+import Card from "./Card";
 
-const BoxDetails = () => {
+function OutfitCard({ onPress }) {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <Card onPress={onPress}>
         <View style={styles.leftContainer}>
           <View style={styles.smallBox}>
             <Image
@@ -21,46 +22,37 @@ const BoxDetails = () => {
         </View>
 
         <View style={styles.rightContainer}>
-        <Image style={styles.img} source={require("../assets/images/clothes/grayPants.webp")}/>
+          <Image
+            style={styles.img}
+            source={require("../assets/images/clothes/grayPants.webp")}
+          />
         </View>
-      </View>
+      </Card>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    backgroundColor: "#bbbbbb",
     height: 160,
     width: 160,
-    justifyContent: "space-between",
-    borderRadius: 10,
-    elevation: 4,
-    overflow: "hidden",
   },
   leftContainer: {
     flexDirection: "column",
-    width: "50%",
-    height: "100%",
+    flex: 1,
     justifyContent: "space-between",
   },
   rightContainer: {
-    width: "50%",
-    height: "100%",
-    backgroundColor: "#EEEDEB",
+    flex: 1,
   },
   smallBox: {
-    height: "50%",
-    width: "100%",
-    backgroundColor: "#EEEDEB",
+    flex: 1,
   },
-  img:{
+  img: {
     objectFit: "cover",
     height: "100%",
     width: "100%,",
-    // backgroundColor:"red",
-  }
+  },
 });
 
-export default BoxDetails;
+export default OutfitCard;

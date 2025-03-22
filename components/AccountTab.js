@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import YouScreen from "../screens/YouScreen";
 import AccountSettings from "../screens/AccountSettings";
 import colors from "../assets/colors/colors";
@@ -6,7 +7,7 @@ import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 
 const Stack = createNativeStackNavigator();
 
-function AccountNavigator() {
+function AccountTab() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="You" component={YouScreen} />
@@ -37,4 +38,4 @@ function AccountNavigator() {
   );
 }
 
-export default AccountNavigator;
+export default AccountTab;
