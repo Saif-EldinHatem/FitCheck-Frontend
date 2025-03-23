@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Pressable, StyleSheet, Image, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "../screens/HomeScreen";
@@ -51,7 +51,32 @@ const NavBar = () => {
           headerShadowVisible: false,
         }}
       />
-      <Tab.Screen name="Outfits" component={OutfitsScreen} />
+      <Tab.Screen
+        name="Outfits"
+        component={OutfitsScreen}
+        options={{
+          headerShown: true,
+          headerStyle: { backgroundColor: colors.main },
+          headerTitle: "All Outfits",
+          headerTitleStyle: { fontFamily: "higuen", fontSize: 32 },
+          headerShadowVisible: false,
+          headerRight: () => (
+            <View style={{ height: "100%", aspectRatio: 1 }}>
+              <Pressable
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onPress={()=>console.log("settings pressed")}
+              >
+                <Image source={require("../assets/images/tools/customizer.png")} style={{ height: "30", width: "30" }} />
+              </Pressable>
+            </View>
+          ),
+        }}
+      />
       <Tab.Screen
         name="Account"
         component={AccountTab}

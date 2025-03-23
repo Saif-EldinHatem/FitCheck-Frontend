@@ -58,9 +58,15 @@ function HomeScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
           >
-            <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
-            <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
-            <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+            <View style={styles.cardWrapper}>
+              <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+            </View>
+            <View style={styles.cardWrapper}>
+              <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+            </View>
+            <View style={styles.cardWrapper}>
+              <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+            </View>
           </ScrollView>
         </View>
 
@@ -80,9 +86,15 @@ function HomeScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
           >
-            <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
-            <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
-            <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+            <View style={styles.cardWrapper}>
+              <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+            </View>
+            <View style={styles.cardWrapper}>
+              <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+            </View>
+            <View style={styles.cardWrapper}>
+              <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+            </View>
           </ScrollView>
         </View>
 
@@ -140,21 +152,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingHorizontal: 10,
   },
-  outfitItem: {
-    width: 150,
-    height: 150,
-    borderRadius: 10,
-    backgroundColor: "#bbbbbb",
-    elevation: 4,
-  },
-  generateOutfitText: {
-    alignContent: "center",
-    textAlign: "center",
-    fontSize: 20,
-    fontFamily: "GlacialIndifference-Italic",
-    textDecorationLine: "underline",
-    padding: 10,
-    color: colors.accent,
+  cardWrapper: {
+    width: "160",
+    aspectRatio: 1,
   },
   plusButton: {
     height: 50,

@@ -6,7 +6,6 @@ import {
   ScrollView,
   Platform,
   Pressable,
-  FlatList,
   TextInput,
 } from "react-native";
 
