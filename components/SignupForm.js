@@ -24,7 +24,7 @@ import ValidatedInput from "./ValidatedInput";
 import { Fragment } from "react";
 
 const validationSchema = yup.object().shape({
-  email: yup.string().label("Email").email().required(),
+  Email: yup.string().label("Email").email().required(),
 });
 
 // Responsive design related code
@@ -32,8 +32,36 @@ const { width, height } = Dimensions.get("window");
 const isSmallWidth = width < 480;
 const isSmallHeight = height < 900;
 
-function SignupForm() {
+function SignupForm({ showToast }) {
   const navigation = useNavigation();
+
+  async function handleSignup(values) {
+    return navigation.push("UserRegisteration", { values });
+    console.log(process.env.EXPO_PUBLIC_API_HOST);
+
+    try {
+      const res = await fetch(
+        process.env.EXPO_PUBLIC_API_HOST + "/auth/checkemail",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
+
+      const data = await res.json();
+      if (data.Result == false) {
+        showToast("Error", data.Errors[0]);
+      } else {
+        navigation.push("UserRegisteration", { values });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <View style={styles.signupForm}>
       {/* title Area */}
@@ -47,18 +75,18 @@ function SignupForm() {
       </View>
       <View style={styles.inputArea}>
         <Formik
-          initialValues={{ email: "" }}
-          onSubmit={() => navigation.navigate("UserRegisteration")}
+          initialValues={{ Email: "" }}
+          onSubmit={(values) => handleSignup(values)}
           validationSchema={validationSchema}
         >
           {(formikProps) => (
             <Fragment>
               <ValidatedInput
                 placeholder={"Email"}
-                error={formikProps.errors.email}
-                touched={formikProps.touched.email}
-                handleChange={formikProps.handleChange("email")}
-                handleBlur={formikProps.handleBlur("email")}
+                error={formikProps.errors.Email}
+                touched={formikProps.touched.Email}
+                handleChange={formikProps.handleChange("Email")}
+                handleBlur={formikProps.handleBlur("Email")}
                 // isPassword={false}
               />
               {/* Button */}

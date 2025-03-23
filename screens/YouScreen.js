@@ -91,7 +91,7 @@ function YouScreen() {
       </View>
 
       {/* Username */}
-      <Text style={styles.username}>Cover</Text>
+      <Text style={styles.username}>Saif</Text>
 
       {/* Avatar Section */}
       <SectionWrapper title={"Avatar"}>

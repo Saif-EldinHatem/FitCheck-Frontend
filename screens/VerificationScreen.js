@@ -14,6 +14,8 @@ import { scale, verticalScale } from "react-native-size-matters";
 import colors from "../assets/colors/colors";
 import OTPInput from "../components/OTPInput";
 import PrimaryButton from "../components/PrimaryButton";
+import { useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 // Responsive design related code
 const { width, height } = Dimensions.get("window");
@@ -21,6 +23,40 @@ const isSmallWidth = width < 480;
 const isSmallHeight = height < 900;
 
 function VerificationScreen() {
+  const route = useRoute();
+  const { Email } = route.params;
+  const navigation = useNavigation();
+  async function handleVerification() {
+    const values = {
+      VerifyCode: value,
+    };
+    console.log(process.env.EXPO_PUBLIC_API_HOST);
+
+    try {
+      const res = await fetch(
+        process.env.EXPO_PUBLIC_API_HOST + "/auth/verifyemail",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
+
+      const data = await res.json();
+      if (data.Result == false) {
+        // showToast("Error", data.Errors[0]);
+        console.log("Error", data.Errors[0]);
+      } else {
+        navigation.replace("MainApp");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const [value, setValue] = useState("");
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : ""}
@@ -43,19 +79,15 @@ function VerificationScreen() {
           <Text style={styles.textHeader}>Enter Your Verification Code</Text>
           <Text style={styles.textInfo}>
             We sent a verification code {"\n"}
-            to <Text style={styles.emailText}>JohnDoe@gmail.com</Text>
+            to <Text style={styles.emailText}>{Email}</Text>
           </Text>
         </View>
         <View style={styles.formArea}>
           <View style={styles.otpContainer}>
-            <OTPInput />
+            <OTPInput value={value} setValue={setValue} />
           </View>
           <View style={styles.buttonContainer}>
-            <PrimaryButton
-              onPress={() => {
-                console.log("value");
-              }}
-            >
+            <PrimaryButton onPress={handleVerification}>
               Verify OTP
             </PrimaryButton>
           </View>

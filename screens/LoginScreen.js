@@ -5,13 +5,22 @@ import {
   ScrollView,
 } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
+import Toast from "react-native-toast-message";
 
 import colors from "../assets/colors/colors";
 import LoginForm from "../components/LoginForm";
 
 function LoginScreen() {
+  const showToast = (msg1, msg2) => {
+    Toast.show({
+      type: "error",
+      text1: msg1,
+      text2: msg2,
+      position: "bottom",
+    });
+  };
   return (
-    <KeyboardAvoidingView style={{height:"100%", width:"100%",}}>
+    <KeyboardAvoidingView style={{ height: "100%", width: "100%" }}>
       <ScrollView contentContainerStyle={styles.screen}>
         {/* Icon Area */}
         <View style={styles.iconArea}>
@@ -23,7 +32,8 @@ function LoginScreen() {
         </View>
 
         {/* Form Area */}
-        <LoginForm />
+        <LoginForm showToast={showToast}/>
+        <Toast />
       </ScrollView>
     </KeyboardAvoidingView>
   );

@@ -22,11 +22,8 @@ import { AuthContext } from "../store/context/AuthContext";
 
 const validationSchema = yup.object().shape({
   Email: yup.string().label("Email").email().required(),
-  Password: yup
-    .string()
-    .label("Password")
-    .required()
-    .min(6, "Password too short!"),
+  Password: yup.string().label("Password").required(),
+  // .min(6, "Password too short!"),
 });
 
 function LoginForm() {
@@ -61,7 +58,11 @@ function LoginForm() {
       if (data.Result == false) {
         showToast("Error", data.Errors[0]);
       } else {
-        navigation.replace("MainApp");
+        if (data.Verified == false) {
+          navigation.push("Verification", {Email: values.Email});
+        } else {
+          navigation.replace("MainApp");
+        }
       }
     } catch (error) {
       console.error(error);

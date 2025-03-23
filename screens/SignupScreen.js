@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { scale, verticalScale } from "react-native-size-matters";
+import Toast from "react-native-toast-message";
 
 import colors from "../assets/colors/colors";
 import SignupForm from "../components/SignupForm";
@@ -17,6 +18,14 @@ const isSmallWidth = width < 480;
 const isSmallHeight = height < 900;
 
 function SignupScreen() {
+  const showToast = (msg1, msg2) => {
+    Toast.show({
+      type: "error",
+      text1: msg1,
+      text2: msg2,
+      position: "bottom",
+    });
+  };
   return (
     <KeyboardAvoidingView style={styles.screen}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -30,14 +39,15 @@ function SignupScreen() {
         </View>
 
         {/* Form Area */}
-        <SignupForm />
+        <SignupForm showToast={showToast}/>
+        <Toast />
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  screen:{
+  screen: {
     flex: 1,
   },
   container: {
