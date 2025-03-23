@@ -40,12 +40,22 @@ const NavBar = () => {
       })}
     >
       <Tab.Screen name="Home" component={HomeTab} />
-      <Tab.Screen name="Wardrobe" component={WardrobeScreen} />
+      <Tab.Screen
+        name="Wardrobe"
+        component={WardrobeScreen}
+        options={{
+          headerShown: true,
+          headerStyle: { backgroundColor: colors.main },
+          headerTitle: "Wardrobe",
+          headerTitleStyle: { fontFamily: "higuen", fontSize: 32 },
+          headerShadowVisible: false,
+        }}
+      />
       <Tab.Screen name="Outfits" component={OutfitsScreen} />
       <Tab.Screen
         name="Account"
         component={AccountTab}
-        options={{ title: "You" }} 
+        options={{ title: "You" }}
       />
     </Tab.Navigator>
   );
