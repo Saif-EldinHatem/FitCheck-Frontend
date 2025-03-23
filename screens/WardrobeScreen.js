@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   },
   itemCard: {
     width: "48%",
-    gap: 2,
+    gap: 3,
   },
   imageBox: {
     width: "100%",

@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f6b1b1",
   },
   inputField: {
+    fontFamily: "inter",
     fontSize: 16,
     height: 32,
     paddingVertical: 0,

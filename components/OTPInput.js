@@ -10,14 +10,13 @@ import colors from "../assets/colors/colors";
 
 const CELL_COUNT = 4;
 
-function OTPInput() {
-  const [value, setValue] = useState("");
+function OTPInput({value, setValue}) {
+  // const [value, setValue] = useState("");
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
-
   return (
     <View style={styles.root}>
       <CodeField

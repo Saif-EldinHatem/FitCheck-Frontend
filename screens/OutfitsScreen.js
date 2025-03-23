@@ -104,7 +104,7 @@ function OutfitsScreen() {
               onPress={toggleFavorite.bind(this, item.outfitId)}
             >
               {item.favorites ? (
-                <Ionicons name="bookmark" size={28} color={"#D8A518"} />
+                <Ionicons name="bookmark" size={28} color={colors.accent} />
               ) : (
                 <Ionicons name="bookmark-outline" size={28} />
               )}
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   },
   bookmark: {
     position: "absolute",
-    right: 6,
+    right: 2,
     bottom: -10,
   },
   bottomButtonContainer: {

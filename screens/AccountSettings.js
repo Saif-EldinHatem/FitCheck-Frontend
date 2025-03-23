@@ -47,7 +47,7 @@ function AccountSettings() {
             <Text style={styles.rowTitle}>username</Text>
 
             <View style={styles.rowContent}>
-              <LightInput content={"cover_bomba"} />
+              <LightInput content={"Saif Hatem"} />
             </View>
           </View>
 
@@ -55,7 +55,7 @@ function AccountSettings() {
             <Text style={styles.rowTitle}>Email</Text>
 
             <View style={styles.rowContent}>
-              <LightInput content={"cover_bombony@gmail.com"} />
+              <LightInput content={"Saifhatem76@gmail.com"} />
             </View>
           </View>
 
@@ -81,7 +81,7 @@ function AccountSettings() {
             <Text style={styles.rowTitle}>Name</Text>
 
             <View style={styles.rowContent}>
-              <LightInput content={"Ahmed Ibrahim"} />
+              <LightInput content={"Saif Hatem"} />
             </View>
           </View>
 
