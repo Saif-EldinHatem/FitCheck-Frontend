@@ -195,13 +195,13 @@ const styles = StyleSheet.create({
   },
   bottomButtonInner: {
     backgroundColor: colors.accent,
-    paddingVertical: 8,
+    paddingVertical: 13,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
   bottomButtonText: {
-    fontFamily: "inter-semibold",
+    fontFamily: "higuen",
     fontSize: 24,
     fontStyle: 20,
     color: "white",
