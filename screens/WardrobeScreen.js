@@ -8,11 +8,14 @@ import {
   Pressable,
   FlatList,
 } from "react-native";
-import colors from "../assets/colors/colors";
-
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+
+import CollapsibleRow from "../components/CollapsibleRow";
 import ItemCard from "../components/ItemCard";
+import CustomBottomSheet from "../components/CustomBottomSheet";
+import colors from "../assets/colors/colors";
+import { filtersData } from "../store/data";
 
 const dummyData = [
   {
@@ -59,9 +62,28 @@ const dummyData = [
   },
 ];
 
+const rows = [
+  { id: 1, title: "Ocasion" },
+  { id: 2, title: "Color" },
+  { id: 3, title: "Type" },
+];
+
 function WardrobeScreen() {
   const [isFiltered, setIsFiltered] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState(dummyData);
+
+  const bottomSheetModalRef = useRef(null);
+
+  const handlePresentModalPress = useCallback(() => {
+    setIsModalOpen((prev) => !prev);
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleSheetChanges = useCallback((index) => {
+    console.log("handleSheetChanges", index);
+  }, []);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -78,12 +100,15 @@ function WardrobeScreen() {
         <View
           style={[
             styles.iconWrapper,
-            isFiltered && { backgroundColor: colors.accent },
+            isFiltered && { backgroundColor: "#A9A59D" },
           ]}
         >
           <Pressable
             style={styles.iconWrapperInner}
-            onPress={() => setIsFiltered((prev) => !prev)}
+            onPress={() => {
+              setIsFiltered((prev) => !prev);
+              handlePresentModalPress();
+            }}
           >
             {isFiltered ? (
               <Ionicons name="funnel-outline" size={24} color={"white"} />
@@ -131,6 +156,17 @@ function WardrobeScreen() {
           <Ionicons name="camera-outline" size={30} color={colors.accent} />
         </Pressable>
       </View>
+      <CustomBottomSheet
+        ref={bottomSheetModalRef}
+        onSheetChanges={handleSheetChanges}
+      >
+        {filtersData.map((filter) => (
+          <CollapsibleRow
+            key={filter.id}
+            title={filter.filterGroup}
+          />
+        ))}
+      </CustomBottomSheet>
     </KeyboardAvoidingView>
   );
 }

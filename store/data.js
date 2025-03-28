@@ -218,3 +218,35 @@ export const outfitsDummyData = [
     ],
   },
 ];
+
+export const filtersData = [
+  {
+    id: 1,
+    filterGroup: "Occasion",
+    options: ["Formal", "Casual", "Sport"],
+  },
+  {
+    id: 2,
+    filterGroup: "Type",
+    options: ["Tops", "Bottoms", "Shoes", "Accessories"],
+  },
+  {
+    id: 3,
+    filterGroup: "Color",
+    options: [
+      "Black",
+      "White",
+      "Blue",
+      "Red",
+      "Green",
+      "Beige",
+      "Gray",
+      "Orange",
+    ],
+  },
+  {
+    id: 4,
+    filterGroup: "Season",
+    options: ["Winter", "Spring", "Summer", "Fall"],
+  },
+];
