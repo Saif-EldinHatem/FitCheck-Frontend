@@ -65,7 +65,7 @@ function YouScreen() {
           onPress={() => navigation.push("Settings")}
         >
           <Image
-            source={require("../assets/images/YouScreen/settings.png")}
+            source={require("../assets/images/Youscreen/settings.png")}
             style={styles.settingsIcon}
           />
         </Pressable>
@@ -75,7 +75,7 @@ function YouScreen() {
       <View style={styles.profile}>
         <View style={styles.profileImageWrapper}>
           <Image
-            source={require("../assets/images/YouScreen/user-avatar.png")}
+            source={require("../assets/images/Youscreen/user-avatar.png")}
             style={styles.profileImage}
           />
         </View>
@@ -83,7 +83,7 @@ function YouScreen() {
         <View style={styles.editIconWrapper}>
           <Pressable onPress={() => console.log("edit-icon pressed")}>
             <Image
-              source={require("../assets/images/YouScreen/edit-icon.png")}
+              source={require("../assets/images/Youscreen/edit-icon.png")}
               style={styles.editIcon}
             />
           </Pressable>
