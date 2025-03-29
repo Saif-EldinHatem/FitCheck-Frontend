@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import colors from "../assets/colors/colors";
 import AccountTab from "./AccountTab";
 import HomeTab from "./HomeTab";
+import WardrobeTab from "./WardrobeTab";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +25,7 @@ const NavBar = () => {
 
           if (route.name === "Home") {
             iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Wardrobe") {
+          } else if (route.name === "WardrobeTab") {
             iconName = focused
               ? "file-tray-stacked"
               : "file-tray-stacked-outline";
@@ -41,14 +42,10 @@ const NavBar = () => {
     >
       <Tab.Screen name="Home" component={HomeTab} />
       <Tab.Screen
-        name="Wardrobe"
-        component={WardrobeScreen}
+        name="WardrobeTab"
+        component={WardrobeTab}
         options={{
-          headerShown: true,
-          headerStyle: { backgroundColor: colors.main },
-          headerTitle: "Wardrobe",
-          headerTitleStyle: { fontFamily: "higuen", fontSize: 32 },
-          headerShadowVisible: false,
+          title: "Wardrobe",
         }}
       />
       <Tab.Screen

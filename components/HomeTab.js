@@ -5,6 +5,7 @@ import HomeScreen from "../screens/HomeScreen";
 import OutfitDetailsScreen from "../screens/OutfitDetailsScreen";
 import { Pressable } from "react-native";
 import colors from "../assets/colors/colors";
+import ItemScreen from "../screens/ItemScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,8 @@ function HomeTab() {
           ),
         }}
       />
+        <Stack.Screen name="ItemScreen" component={ItemScreen} />
+
     </Stack.Navigator>
   );
 }

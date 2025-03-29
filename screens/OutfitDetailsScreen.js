@@ -14,6 +14,7 @@ import ItemCard from "../components/ItemCard";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import Card from "../components/Card";
+import { useNavigation } from "@react-navigation/native";
 
 const dummyData = [
   { id: "1", image: require("../assets/images/clothes/black-tshirt.png") },
@@ -27,7 +28,7 @@ function OutfitDetailsScreen() {
   const [data, setData] = useState(dummyData);
   const [editMode, setEditMode] = useState(false);
   const [selectedList, setSelectedList] = useState([]);
-
+  const navigation = useNavigation();
   function handleItemPress(id) {
     if (selectedList.includes(id)) {
       setSelectedList((prev) => prev.filter((itemId) => itemId != id));
@@ -73,6 +74,8 @@ function OutfitDetailsScreen() {
             <View key={item.id} style={styles.itemContainer}>
               <ItemCard
                 img={item.image}
+                onPress={() => {
+                  navigation.navigate("ItemScreen");}}
                 onLongPress={() => {
                   handleEditMode();
                   setSelectedList((prev) => [...prev, item.id]);
