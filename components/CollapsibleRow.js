@@ -25,7 +25,7 @@ function CollapsibleRow({ title }) {
       if (title == "Occasion") {
         toggleCollapse();
       }
-    }, 200);
+    }, 500);
     return () => clearTimeout(timeoutId);
   }, []);
 
@@ -66,7 +66,7 @@ function CollapsibleRow({ title }) {
         </Pressable>
       </View>
       <Collapsible
-        renderChildrenCollapsed={true}
+        // renderChildrenCollapsed={true}
         collapsed={isCollapsed}
         style={styles.collapsibleWrapper}
       >

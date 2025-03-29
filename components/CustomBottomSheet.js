@@ -22,7 +22,7 @@ const CustomBottomSheet = forwardRef(({ onSheetChanges, children }, ref) => {
           opacity={0.5}
         />
       )}
-      backgroundStyle={{ backgroundColor: "#EBDFCF" }}
+      backgroundStyle={{ backgroundColor: "#EBDFCF"}}
       // handleIndicatorStyle={{ backgroundColor: colors.accent }}
     >
       <BottomSheetScrollView contentContainerStyle={styles.bottomSheetView}>{children}</BottomSheetScrollView>
