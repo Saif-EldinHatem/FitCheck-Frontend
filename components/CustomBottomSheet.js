@@ -6,6 +6,7 @@ import {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 import { forwardRef } from "react";
+import colors from "../assets/colors/colors";
 
 const CustomBottomSheet = forwardRef(({ onSheetChanges, children }, ref) => {
   return (

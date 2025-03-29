@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback, useRef } from "react";
 import {
   View,
   Text,
@@ -12,15 +12,28 @@ import colors from "../assets/colors/colors";
 import PrimaryButton from "../components/PrimaryButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TopBarItemDetails from "../components/TopBarItemDetails";
+import CustomBottomSheet from "../components/CustomBottomSheet";
+
 
 function ItemScreen() {
-  const handleDelete = () => {
-    Alert.alert("Delete Item", "Are you sure you want to delete this item?", [
-      { text: "Cancel", style: "cancel" },
-      { text: "Delete", onPress: () => console.log("Item deleted") },
-    ]);
-  };
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    
+    const handleDelete = () => {
+    handlePresentModalPress();
+    };
 
+    const handlePresentModalPress = useCallback(() => {
+      setIsModalOpen((prev) => !prev);
+      bottomSheetModalRef.current?.present();
+    }, []);
+
+    const handleSheetChanges = useCallback((index) => {
+        console.log("handleSheetChanges", index);
+      }, []);
+
+      const bottomSheetModalRef = useRef(null);
+    
+  
   return (
     <SafeAreaView style={styles.container}>
     <Text style={styles.pageTitle}>Item</Text>
@@ -39,6 +52,33 @@ function ItemScreen() {
         >
           <Text style={styles.deleteButtonText}>Delete Item</Text>
         </Pressable>
+
+        <CustomBottomSheet
+        ref={bottomSheetModalRef}
+        onSheetChanges={handleSheetChanges}
+        >
+            <View style= {styles.bottomSheetText}> 
+                <Text style = {styles.areYouSureText}>Are you sure?</Text>
+                <Text style = {styles.aboutToDeleteText}>You're about to delete</Text>
+                <Text style = {styles.bottomSheetItemName}>Black T-shirt</Text>
+                <Text style = {styles.aboutToDeleteText}>This action cannot be undone.</Text>
+            </View>
+            <View style={styles.bottomSheetDeleteButtonContainer}>
+                    <Pressable
+                        style={styles.bottomSheetDeleteButton}
+                        >
+                    <Text style={styles.bottomSheetDeleteButtonText}>Yes, Delete</Text>
+                    </Pressable>
+            </View>
+            <View style={styles.bottomSheetCancelButtonContainer}>
+                    <Pressable
+                        style={styles.bottomSheetCancelButton}
+                        >
+                    <Text style={styles.bottomSheetCancelButtonText}>Cancel</Text>
+                    </Pressable>
+            </View>
+      </CustomBottomSheet>
+    
   </SafeAreaView>
   );
 }
@@ -67,6 +107,32 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 0, // Distance between text and underline
   },
+  bottomSheetText: {
+    padding: 20,
+    backgroundColor: colors.mainDark,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
+  areYouSureText: {
+    fontSize: 27,
+    fontFamily: "higuen",
+    color: "#000",
+    textAlign: "center",
+    paddingBottom: 25,
+  },
+  aboutToDeleteText: {
+    fontSize: 14,
+    fontFamily: "inter",
+    color: "#000",
+    textAlign: "center",
+    paddingTop: 10,
+  },
+    bottomSheetItemName: {
+        fontSize: 14,
+        fontFamily: "inter-bold",
+        color: "#000",
+        textAlign: "center",
+    },
   imageContainer: {
         marginTop: 30,
         aspectRatio: 1,
@@ -100,6 +166,47 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#f00",
     textDecorationLine: "underline",
+  },
+
+  bottomSheetDeleteButtonContainer: {
+    height: 53,
+    // marginTop: 15,
+    backgroundColor: "#EB4141",
+    elevation: 1,
+    borderRadius: 12,
+    overflow: "hidden",
+    // width: "100%",
+  },
+  bottomSheetDeleteButton: {
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 120,
+  },
+  bottomSheetDeleteButtonText: {
+    fontFamily: "poppins-semibold",
+    color: "white",
+    fontSize: 16,
+  },
+    bottomSheetCancelButtonContainer: {
+    height: 53,
+    // marginTop: 15,
+    backgroundColor: colors.secondary,
+    elevation: 1,
+    borderRadius: 12,
+    overflow: "hidden",
+    // width: "100%",
+  },
+  bottomSheetCancelButton: {
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 120,
+  },
+  bottomSheetCancelButtonText: {
+    fontFamily: "poppins-semibold",
+    color: "white",
+    fontSize: 16,
   },
 });
 
