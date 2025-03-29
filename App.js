@@ -1,11 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Gesture, GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 
 import AuthProvider from "./store/context/AuthContext";
 import RootNavigator from "./components/RootNavigator";
 import { StatusBar } from "expo-status-bar";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import ItemScreen from "./screens/ItemScreen";
 
 export default function App() {
   const [fontsLoaded] = useFonts({

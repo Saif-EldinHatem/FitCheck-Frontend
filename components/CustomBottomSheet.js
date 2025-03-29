@@ -6,6 +6,7 @@ import {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 import { forwardRef } from "react";
+import colors from "../assets/colors/colors";
 
 const CustomBottomSheet = forwardRef(({ onSheetChanges, children }, ref) => {
   return (
@@ -22,7 +23,7 @@ const CustomBottomSheet = forwardRef(({ onSheetChanges, children }, ref) => {
           opacity={0.5}
         />
       )}
-      backgroundStyle={{ backgroundColor: "#EBDFCF" }}
+      backgroundStyle={{ backgroundColor: "#FFF3E3" }}
       // handleIndicatorStyle={{ backgroundColor: colors.accent }}
     >
       <BottomSheetScrollView contentContainerStyle={styles.bottomSheetView}>{children}</BottomSheetScrollView>
