@@ -16,6 +16,7 @@ import ItemCard from "../components/ItemCard";
 import CustomBottomSheet from "../components/CustomBottomSheet";
 import colors from "../assets/colors/colors";
 import { filtersData } from "../store/data";
+import { useNavigation } from "@react-navigation/native";
 
 const dummyData = [
   {
@@ -72,7 +73,7 @@ function WardrobeScreen() {
   const [isFiltered, setIsFiltered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState(dummyData);
-
+  const navigation = useNavigation();
   const bottomSheetModalRef = useRef(null);
 
   const handlePresentModalPress = useCallback(() => {
@@ -140,7 +141,8 @@ function WardrobeScreen() {
         renderItem={({ item }) => (
           <View style={styles.itemCard}>
             <View style={styles.imageBox}>
-              <ItemCard img={item.image} />
+              <ItemCard img={item.image} 
+              onPress={()=>navigation.navigate("ItemScreen")}/>
             </View>
             <Text style={styles.itemBrand}>{item.brand}</Text>
             <Text style={styles.itemName}>{item.name}</Text>

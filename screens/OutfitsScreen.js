@@ -122,6 +122,7 @@ function OutfitsScreen() {
           >
             <Text style={styles.bottomButtonText}>Generate</Text>
           </Pressable>
+          <Ionicons name="sparkles-sharp" color="white" size ={20} style={styles.sparkles}/>
         </View>
       </View>
     </View>
@@ -205,6 +206,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontStyle: 20,
     color: "white",
+  },
+  sparkles:{
+    position: "absolute",
+    right: 120,
+    top: 7 ,
   },
 });
 
