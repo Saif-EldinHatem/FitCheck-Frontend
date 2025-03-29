@@ -161,10 +161,7 @@ function WardrobeScreen() {
         onSheetChanges={handleSheetChanges}
       >
         {filtersData.map((filter) => (
-          <CollapsibleRow
-            key={filter.id}
-            title={filter.filterGroup}
-          />
+          <CollapsibleRow key={filter.id} title={filter.filterGroup} />
         ))}
       </CustomBottomSheet>
     </KeyboardAvoidingView>
