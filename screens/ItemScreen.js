@@ -13,83 +13,78 @@ import PrimaryButton from "../components/PrimaryButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TopBarItemDetails from "../components/TopBarItemDetails";
 import CustomBottomSheet from "../components/CustomBottomSheet";
-
+import { TextInput } from "react-native-gesture-handler";
 
 function ItemScreen() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    
-    const handleDelete = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDelete = () => {
     handlePresentModalPress();
-    };
+  };
 
-    const handlePresentModalPress = useCallback(() => {
-      setIsModalOpen((prev) => !prev);
-      bottomSheetModalRef.current?.present();
-    }, []);
+  const handlePresentModalPress = useCallback(() => {
+    setIsModalOpen((prev) => !prev);
+    bottomSheetModalRef.current?.present();
+  }, []);
 
-    const handleSheetChanges = useCallback((index) => {
-        console.log("handleSheetChanges", index);
-      }, []);
+  const handleSheetChanges = useCallback((index) => {
+    console.log("handleSheetChanges", index);
+  }, []);
 
-      const bottomSheetModalRef = useRef(null);
-    
-  
+  const bottomSheetModalRef = useRef(null);
+
   return (
     <SafeAreaView style={styles.container}>
-    <Text style={styles.pageTitle}>Item</Text>
-    <View style={styles.underline} />
-    <View style= {styles.imageContainer}>
-    <Image
-        source={require("../assets/images/clothes/black-tshirt.png")}
-        style={styles.image}
-      />
+      <Text style={styles.pageTitle}>Item</Text>
+      <View style={styles.underline} />
+      <View style={styles.imageContainer}>
+        <Image
+          source={require("../assets/images/clothes/black-tshirt.png")}
+          style={styles.image}
+        />
       </View>
-    <Text style={styles.itemBrand}>H&M</Text>
-    <Text style={styles.itemName}>Black T-shirt</Text>
-    <Pressable
-          onPress={handleDelete}
-          style={styles.deleteButton}
-        >
-          <Text style={styles.deleteButtonText}>Delete Item</Text>
-        </Pressable>
+      <Text style={styles.itemBrand}>H&M</Text>
+      <Text style={styles.itemName}>Black T-shirt</Text>
+      <Pressable onPress={handleDelete} style={styles.deleteButton}>
+        <Text style={styles.deleteButtonText}>Delete Item</Text>
+      </Pressable>
 
-        <CustomBottomSheet
+      <CustomBottomSheet
         ref={bottomSheetModalRef}
         onSheetChanges={handleSheetChanges}
-        >
-            <View style= {styles.bottomSheetText}> 
-                <Text style = {styles.areYouSureText}>Are you sure?</Text>
-                <Text style = {styles.aboutToDeleteText}>You're about to delete</Text>
-                <Text style = {styles.bottomSheetItemName}>Black T-shirt</Text>
-                <Text style = {styles.aboutToDeleteText}>This action cannot be undone.</Text>
-            </View>
-            <View style={styles.bottomSheetDeleteButtonContainer}>
-                    <Pressable
-                        style={styles.bottomSheetDeleteButton}
-                        >
-                    <Text style={styles.bottomSheetDeleteButtonText}>Yes, Delete</Text>
-                    </Pressable>
-            </View>
-            <View style={styles.bottomSheetCancelButtonContainer}>
-                    <Pressable
-                        style={styles.bottomSheetCancelButton}
-                        >
-                    <Text style={styles.bottomSheetCancelButtonText}>Cancel</Text>
-                    </Pressable>
-            </View>
+      >
+        <View style={styles.bottomSheetText}>
+          <Text style={styles.areYouSureText}>Are you sure?</Text>
+          <Text style={styles.aboutToDeleteText}>You're about to delete</Text>
+          <Text style={styles.bottomSheetItemName}>Black T-shirt</Text>
+          <Text style={styles.aboutToDeleteText}>
+            This action cannot be undone.
+          </Text>
+        </View>
+        <View style={styles.bottomSheetDeleteButtonContainer}>
+          <Pressable style={styles.bottomSheetDeleteButton}>
+            <Text style={styles.bottomSheetDeleteButtonText}>Yes, Delete</Text>
+          </Pressable>
+        </View>
+        <View style={styles.bottomSheetCancelButtonContainer}>
+          <Pressable style={styles.bottomSheetCancelButton}>
+            <Text style={styles.bottomSheetCancelButtonText}>Cancel</Text>
+          </Pressable>
+        </View>
       </CustomBottomSheet>
-    
-  </SafeAreaView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    // padding: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     backgroundColor: colors.main,
   },
-  pageTitle: { 
+  pageTitle: {
     fontSize: 26,
     fontFamily: "higuen",
     color: "#000",
@@ -127,18 +122,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingTop: 10,
   },
-    bottomSheetItemName: {
-        fontSize: 14,
-        fontFamily: "inter-bold",
-        color: "#000",
-        textAlign: "center",
-    },
+  bottomSheetItemName: {
+    fontSize: 14,
+    fontFamily: "inter-bold",
+    color: "#000",
+    textAlign: "center",
+  },
   imageContainer: {
-        marginTop: 30,
-        aspectRatio: 1,
-        width: "100%",
-        borderRadius: 8,
-        elevation: 6,
+    backgroundColor: "white",
+    marginTop: 30,
+    aspectRatio: 1,
+    width: "100%",
+    borderRadius: 5,
+    elevation: 4,
   },
   image: {
     objectFit: "contain",
@@ -188,7 +184,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
   },
-    bottomSheetCancelButtonContainer: {
+  bottomSheetCancelButtonContainer: {
     height: 53,
     // marginTop: 15,
     backgroundColor: colors.secondary,

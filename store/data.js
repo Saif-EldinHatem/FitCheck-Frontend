@@ -114,7 +114,7 @@ export const outfitsDummyData = [
         id: "2",
         image: require("../assets/images/clothes/grayPants.webp"),
         brand: "pull & bear",
-        name: "Green Pants",
+        name: "Gray Pants",
       },
       {
         id: "5",

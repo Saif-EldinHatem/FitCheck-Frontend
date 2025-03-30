@@ -153,7 +153,7 @@ function WardrobeScreen() {
       <View style={styles.floatingButton}>
         <Pressable
           style={styles.floatingButtonInner}
-          onPress={() => console.log("floating button pressed")}
+          onPress={() => navigation.navigate("UploadItemScreen")}
         >
           <Ionicons name="camera-outline" size={30} color={colors.accent} />
         </Pressable>

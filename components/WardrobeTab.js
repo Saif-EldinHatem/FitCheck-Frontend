@@ -1,28 +1,46 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import {Text, View } from 'react-native'
+import { Text, View } from "react-native";
 import WardrobeScreen from "../screens/WardrobeScreen";
 import ItemScreen from "../screens/ItemScreen";
 import colors from "../assets/colors/colors";
+import UploadItemScreen from "../screens/UploadItemScreen";
 
 const Stack = createNativeStackNavigator();
 
-
-
 function WardrobeTab() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Wardrobe"
+        component={WardrobeScreen}
+        options={{
+          headerShown: true,
+          headerStyle: { backgroundColor: colors.main },
+          headerTitle: "Wardrobe",
+          headerTitleStyle: { fontFamily: "higuen", fontSize: 32 },
+          headerShadowVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="ItemScreen"
+        component={ItemScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen 
+        name="UploadItemScreen"
+        component={UploadItemScreen}
+        options={{
+            title: "Add New Item",
+            headerShadowVisible: false,
+            headerStyle: {backgroundColor: colors.main},
+            headerTitleStyle: {fontFamily: "higuen", fontSize: 32},
+            headerTitleAlign: "center",
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
 
-    return (
-        <Stack.Navigator>
-            <Stack.Screen name="Wardrobe" component={WardrobeScreen} 
-            options={{
-                headerShown: true,
-                headerStyle: { backgroundColor: colors.main },
-                headerTitle: "Wardrobe",
-                headerTitleStyle: { fontFamily: "higuen", fontSize: 32 },
-                headerShadowVisible: false,
-        }}/>
-            <Stack.Screen name="ItemScreen" component={ItemScreen}  />
-        </Stack.Navigator>
-    )
-  }
-
-  export default WardrobeTab;
+export default WardrobeTab;
