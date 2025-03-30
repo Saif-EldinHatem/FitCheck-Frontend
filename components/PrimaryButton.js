@@ -41,8 +41,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonTitle: {
-    // fontFamily: "higuen",
-    fontFamily: "glacial-bold",
+    fontFamily: "inter-bold",
     // fontWeight: "700",
     fontSize: moderateScale(16 * (350 / 412)), // Responsive font size
     color: "white",
