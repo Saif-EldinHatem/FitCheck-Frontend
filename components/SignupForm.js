@@ -36,7 +36,6 @@ function SignupForm({ showToast }) {
   const navigation = useNavigation();
 
   async function handleSignup(values) {
-    return navigation.push("UserRegisteration", { values });
     console.log(process.env.EXPO_PUBLIC_API_HOST);
 
     try {
