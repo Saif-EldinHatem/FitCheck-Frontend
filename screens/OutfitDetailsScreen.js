@@ -75,7 +75,8 @@ function OutfitDetailsScreen() {
               <ItemCard
                 img={item.image}
                 onPress={() => {
-                  navigation.navigate("ItemScreen");}}
+                  navigation.navigate("ItemScreen", { itemId: item.id });
+                }}
                 onLongPress={() => {
                   handleEditMode();
                   setSelectedList((prev) => [...prev, item.id]);

@@ -20,11 +20,18 @@ export default function App() {
     "poppins-medium": require("./assets/Fonts/Poppins/Poppins-Medium.ttf"),
     "poppins-semibold": require("./assets/Fonts/Poppins/Poppins-SemiBold.ttf"),
     "poppins-bold": require("./assets/Fonts/Poppins/Poppins-Bold.ttf"),
+
     "inter-light": require("./assets/Fonts/inter/Inter-Light.otf"),
     inter: require("./assets/Fonts/inter/Inter-Regular.otf"),
     "inter-medium": require("./assets/Fonts/inter/Inter-Medium.otf"),
     "inter-semibold": require("./assets/Fonts/inter/Inter-SemiBold.otf"),
     "inter-bold": require("./assets/Fonts/inter/Inter-Bold.otf"),
+
+    "roboto-light": require("./assets/Fonts/roboto/Roboto-Light.ttf"),
+    roboto: require("./assets/Fonts/roboto/Roboto-Regular.ttf"),
+    "roboto-medium": require("./assets/Fonts/roboto/Roboto-Medium.ttf"),
+    "roboto-semibold": require("./assets/Fonts/roboto/Roboto-SemiBold.ttf"),
+    "roboto-bold": require("./assets/Fonts/roboto/Roboto-Bold.ttf"),
   });
 
   return (

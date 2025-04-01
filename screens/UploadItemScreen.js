@@ -15,10 +15,13 @@ import Card from "../components/Card";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import PrimaryButton from "../components/PrimaryButton";
+import { itemsDummyData } from "../store/data";
+import { useNavigation } from "@react-navigation/native";
 
 const deviceWidth = Dimensions.get("window").width;
 
 function UploadItemScreen() {
+  const navigation = useNavigation();
   const [images, setImages] = useState([]);
 
   async function requestPermissions() {
@@ -81,6 +84,21 @@ function UploadItemScreen() {
   async function handleUpload() {
     console.log(process.env.EXPO_PUBLIC_API_HOST);
 
+    images.forEach((image, index) => {
+      var newItem;
+      if (image.isSelected) {
+        newItem = {
+          id: itemsDummyData.length + 1 + index,
+          image: { uri: image.uri },
+          name: "New Item",
+          brand: "processing...",
+        };
+        itemsDummyData.push(newItem);
+      }
+    });
+    navigation.pop();
+    return;
+
     const formData = new FormData();
     console.log(images);
     // formData.append("ItemImages", JSON.stringify(images));
@@ -95,9 +113,6 @@ function UploadItemScreen() {
         process.env.EXPO_PUBLIC_API_HOST + "/wardrobe/add",
         {
           method: "POST",
-          // headers: {
-          //   "Content-Type": "multipart/form-data",
-          // },
           body: formData,
         }
       );
@@ -107,6 +122,7 @@ function UploadItemScreen() {
         console.log("Error", data.Errors[0]);
       } else {
         console.log("ALL GOOD!");
+
         setImages([]);
       }
     } catch (error) {

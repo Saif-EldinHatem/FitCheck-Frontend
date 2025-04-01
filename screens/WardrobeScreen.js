@@ -10,69 +10,18 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback, useMemo, useRef, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 import CollapsibleRow from "../components/CollapsibleRow";
 import ItemCard from "../components/ItemCard";
 import CustomBottomSheet from "../components/CustomBottomSheet";
 import colors from "../assets/colors/colors";
-import { filtersData } from "../store/data";
-import { useNavigation } from "@react-navigation/native";
-
-const dummyData = [
-  {
-    id: "1",
-    image: require("../assets/images/clothes/black-tshirt.png"),
-    brand: "H&M",
-    name: "Black T-Shirt",
-  },
-  {
-    id: "2",
-    image: require("../assets/images/clothes/grayPants.webp"),
-    brand: "pull & bear",
-    name: "Green Pants",
-  },
-  {
-    id: "3",
-    image: require("../assets/images/clothes/green-converse.png"),
-    brand: "Converse",
-    name: "Green Converse",
-  },
-  {
-    id: "4",
-    image: require("../assets/images/clothes/beanie.png"),
-    brand: "pull & bear",
-    name: "Black Beanie",
-  },
-  {
-    id: "5",
-    image: require("../assets/images/clothes/sunglasses.png"),
-    brand: "Louis Vuitton",
-    name: "Sunglasses",
-  },
-  {
-    id: "6",
-    image: require("../assets/images/clothes/plaid-shirt.png"),
-    brand: "pull & bear",
-    name: "Red Plaid Shirt",
-  },
-  {
-    id: "7",
-    image: require("../assets/images/clothes/olivegreen-pants.png"),
-    brand: "pull & bear",
-    name: "Gray Sweatpants",
-  },
-];
-
-const rows = [
-  { id: 1, title: "Ocasion" },
-  { id: 2, title: "Color" },
-  { id: 3, title: "Type" },
-];
+import { itemsDummyData, filtersData } from "../store/data";
 
 function WardrobeScreen() {
   const [isFiltered, setIsFiltered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [data, setData] = useState(dummyData);
+  const [data, setData] = useState(itemsDummyData);
   const navigation = useNavigation();
   const bottomSheetModalRef = useRef(null);
 
@@ -141,8 +90,10 @@ function WardrobeScreen() {
         renderItem={({ item }) => (
           <View style={styles.itemCard}>
             <View style={styles.imageBox}>
-              <ItemCard img={item.image} 
-              onPress={()=>navigation.navigate("ItemScreen")}/>
+              <ItemCard
+                img={item.image}
+                onPress={() => navigation.navigate("ItemScreen", {itemId: item.id})}
+              />
             </View>
             <Text style={styles.itemBrand}>{item.brand}</Text>
             <Text style={styles.itemName}>{item.name}</Text>
