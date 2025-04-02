@@ -18,7 +18,6 @@ import colors from "../assets/colors/colors";
 import PrimaryButton from "./PrimaryButton";
 import GoogleButton from "./GoogleButton";
 import ValidatedInput from "./ValidatedInput";
-import { AuthContext } from "../store/context/AuthContext";
 
 const validationSchema = yup.object().shape({
   Email: yup.string().label("Email").email().required(),
@@ -37,7 +36,6 @@ function LoginForm() {
   };
   const navigation = useNavigation();
 
-  const AuthCtx = useContext(AuthContext);
 
   async function handleLogin(values) {
     console.log(process.env.EXPO_PUBLIC_API_HOST);

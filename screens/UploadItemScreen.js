@@ -84,21 +84,6 @@ function UploadItemScreen() {
   async function handleUpload() {
     console.log(process.env.EXPO_PUBLIC_API_HOST);
 
-    images.forEach((image, index) => {
-      var newItem;
-      if (image.isSelected) {
-        newItem = {
-          id: itemsDummyData.length + 1 + index,
-          image: { uri: image.uri },
-          name: "New Item",
-          brand: "processing...",
-        };
-        itemsDummyData.push(newItem);
-      }
-    });
-    navigation.pop();
-    return;
-
     const formData = new FormData();
     console.log(images);
     // formData.append("ItemImages", JSON.stringify(images));
@@ -121,7 +106,19 @@ function UploadItemScreen() {
       if (data.Result == false) {
         console.log("Error", data.Errors[0]);
       } else {
-        console.log("ALL GOOD!");
+        images.forEach((image, index) => {
+        var newItem;
+          if (image.isSelected) {
+            newItem = {
+              id: itemsDummyData.length + 1 + index,
+              image: { uri: image.uri },
+              name: "New Item",
+              brand: "processing...",
+            };
+            itemsDummyData.push(newItem);
+          }
+        });
+        navigation.pop();
 
         setImages([]);
       }

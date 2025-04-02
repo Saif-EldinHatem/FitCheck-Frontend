@@ -7,9 +7,11 @@ import {
   Platform,
   Pressable,
   FlatList,
+  Button,
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import CollapsibleRow from "../components/CollapsibleRow";
@@ -17,13 +19,25 @@ import ItemCard from "../components/ItemCard";
 import CustomBottomSheet from "../components/CustomBottomSheet";
 import colors from "../assets/colors/colors";
 import { itemsDummyData, filtersData } from "../store/data";
+import { RefreshControl } from "react-native-gesture-handler";
+import { useWardrobeStore } from "../store/wardrobeStore";
 
 function WardrobeScreen() {
+  const [refreshing, setRefreshing] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [data, setData] = useState(itemsDummyData);
+  // const [wardrobeItems, setWardrobeItems] = useState(itemsDummyData);
+  const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
+  const setWardrobeItems = useWardrobeStore((state) => state.setWardrobeItems);
   const navigation = useNavigation();
   const bottomSheetModalRef = useRef(null);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const handlePresentModalPress = useCallback(() => {
     setIsModalOpen((prev) => !prev);
@@ -32,6 +46,31 @@ function WardrobeScreen() {
 
   const handleSheetChanges = useCallback((index) => {
     console.log("handleSheetChanges", index);
+  }, []);
+
+  async function handleFetchData() {
+    console.log(process.env.EXPO_PUBLIC_API_HOST);
+
+    try {
+      const res = await fetch(process.env.EXPO_PUBLIC_API_HOST + "/wardrobe", {
+        method: "GET",
+      });
+
+      const data = await res.json();
+      if (data.Result == false) {
+        console.log("Error", data.Errors[0]);
+      } else {
+        console.log(data.Items);
+        setWardrobeItems(data.Items);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    handleFetchData();
+    // setWardrobeItems(itemsDummyData);
   }, []);
 
   return (
@@ -78,8 +117,12 @@ function WardrobeScreen() {
       )}
 
       <FlatList
-        data={data}
-        keyExtractor={(item) => item.id}
+        data={wardrobeItems}
+        keyExtractor={(item) => item.ItemID}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleFetchData} />
+        }
+        refreshing={true}
         numColumns={2}
         columnWrapperStyle={{
           justifyContent: "space-between",
@@ -91,12 +134,19 @@ function WardrobeScreen() {
           <View style={styles.itemCard}>
             <View style={styles.imageBox}>
               <ItemCard
-                img={item.image}
-                onPress={() => navigation.navigate("ItemScreen", {itemId: item.id})}
+                img={{
+                  uri:
+                    process.env.EXPO_PUBLIC_API_HOST +
+                    "/asset?file=" +
+                    item.ImagePath,
+                }}
+                onPress={() =>
+                  navigation.navigate("ItemScreen", { itemId: item.ItemID })
+                }
               />
             </View>
-            <Text style={styles.itemBrand}>{item.brand}</Text>
-            <Text style={styles.itemName}>{item.name}</Text>
+            <Text style={styles.itemBrand}>{item.BrandName || "Unknown"}</Text>
+            <Text style={styles.itemName}>{item.ItemName || "Unknown"}</Text>
           </View>
         )}
       />
