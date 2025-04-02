@@ -2,7 +2,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Gesture, GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 
-import AuthProvider from "./store/context/AuthContext";
 import RootNavigator from "./components/RootNavigator";
 import { StatusBar } from "expo-status-bar";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -38,11 +37,9 @@ export default function App() {
     <GestureHandlerRootView>
       <StatusBar style="dark" />
       <BottomSheetModalProvider>
-        <AuthProvider>
-          <NavigationContainer>
-            <RootNavigator />
-          </NavigationContainer>
-        </AuthProvider>
+        <NavigationContainer>
+          <RootNavigator />
+        </NavigationContainer>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -15,11 +15,13 @@ import { Ionicons } from "@expo/vector-icons";
 import ProcessingScreen from "../components/ProcessingScreen";
 import CollapsibleRow from "../components/CollapsibleRow";
 import { ScrollView } from "react-native-gesture-handler";
+import { useWardrobeStore } from "../store/wardrobeStore";
 
 function ItemScreen({ route }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const item = itemsDummyData.find((item) => item.id === route.params.itemId);
+  const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
+  const item = wardrobeItems.find((item) => item.ItemID === route.params.itemId);
 
   const handleDelete = () => {
     toggleModal();
@@ -38,6 +40,14 @@ function ItemScreen({ route }) {
     console.log("handleSheetChanges", index);
   }, []);
 
+  useEffect(() => {
+    console.log(item);
+
+    if (item.Status == 2) {
+      setIsProcessing(true);
+    }
+  }, []);
+
   const bottomSheetModalRef = useRef(null);
 
   return (
@@ -50,10 +60,18 @@ function ItemScreen({ route }) {
         <Text style={styles.pageTitle}>Item</Text>
         <View style={styles.underline} />
         <View style={styles.imageContainer}>
-          <Image source={item.image} style={styles.image} />
+          <Image
+            source={{
+              uri:
+                process.env.EXPO_PUBLIC_API_HOST +
+                "/asset?file=" +
+                item.ImagePath,
+            }}
+            style={styles.image}
+          />
         </View>
-        <Text style={styles.itemBrand}>{item.brand}</Text>
-        <Text style={styles.itemName}>{item.name}</Text>
+        <Text style={styles.itemBrand}>{item.BrandName || "Unknown"}</Text>
+        <Text style={styles.itemName}>{item.ItemName || "Unknown"}</Text>
         <View style={styles.alterTagsArea}>
           {filtersData.map((filter) => (
             <CollapsibleRow key={filter.id} title={filter.filterGroup} />

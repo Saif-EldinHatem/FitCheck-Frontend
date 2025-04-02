@@ -15,7 +15,6 @@ import colors from "../assets/colors/colors";
 import SectionWrapper from "../components/SectionWrapper";
 import ColorItem from "../components/you screen/ColorItem";
 import Pill from "../components/you screen/Pill";
-import { AuthContext } from "../store/context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
 
 function YouScreen() {
@@ -54,7 +53,6 @@ function YouScreen() {
     }
   }
 
-  const AuthCtx = useContext(AuthContext);
   return (
     <SafeAreaView style={styles.screen}>
       {/* Top Bar */}

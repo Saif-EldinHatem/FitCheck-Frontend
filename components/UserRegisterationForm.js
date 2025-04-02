@@ -22,7 +22,6 @@ import * as yup from "yup";
 import colors from "../assets/colors/colors";
 import PrimaryButton from "./PrimaryButton";
 import GoogleButton from "./GoogleButton";
-import { AuthContext } from "../store/context/AuthContext";
 import ValidatedInput from "./ValidatedInput";
 
 // Responsive design related code
@@ -52,7 +51,6 @@ const validationSchema = yup.object().shape({
 function UserRegisterationForm({ showToast }) {
   const navigation = useNavigation();
   const Email = useRoute().params.values.Email;
-  const AuthCtx = useContext(AuthContext);
 
   async function handleRegister(values) {
     const birthDate = values.Year + "-" + values.Month + "-" + values.Day;
