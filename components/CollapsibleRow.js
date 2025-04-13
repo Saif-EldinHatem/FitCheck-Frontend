@@ -12,10 +12,13 @@ import FilterPill from "./FilterPill";
 import colors from "../assets/colors/colors";
 
 import { filtersData } from "../store/data";
+import { useFilterStore } from "../store/FilterationStore";
 
-function CollapsibleRow({ title }) {
+function CollapsibleRow({ title, list = [], updateList }) {
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [filterList, setFilterList] = useState([]);
+
+  // const filters = useFilterStore((state) => state.filters[title]);
+  // const updateFilter = useFilterStore((state) => state.updateFilter);
 
   const rotation = useSharedValue(0);
 
@@ -35,11 +38,10 @@ function CollapsibleRow({ title }) {
   }
 
   function handleList(newItem) {
-    setFilterList((prev) => {
-      if (prev.includes(newItem)) return prev.filter((item) => item != newItem);
-      return [...prev, newItem];
-    });
-    console.log(filterList);
+    const updatedFilter = list?.includes(newItem)
+      ? list.filter((item) => item !== newItem)
+      : [...list, newItem];
+    updateList(title, updatedFilter);
   }
 
   const animatedChevronStyle = useAnimatedStyle(() => ({
@@ -53,9 +55,9 @@ function CollapsibleRow({ title }) {
           <Text style={styles.itemTitle}>{title}</Text>
           <View style={styles.rightRow}>
             <View style={styles.filterItems}>
-              {filterList.map((item) => (
+              {list?.map((item) => (
                 <Text key={item} style={styles.filterItem}>
-                  {item}
+                  {item},
                 </Text>
               ))}
             </View>
@@ -74,7 +76,12 @@ function CollapsibleRow({ title }) {
           {filtersData
             .find((filter) => filter.filterGroup == title)
             ?.options.map((option) => (
-              <FilterPill key={option} title={option} handleList={handleList} />
+              <FilterPill
+                key={option}
+                title={option}
+                handleList={handleList}
+                isSelected={list?.includes(option)}
+              />
             ))}
         </View>
       </Collapsible>
@@ -111,7 +118,7 @@ const styles = StyleSheet.create({
   filterItem: {
     fontFamily: "inter-medium",
     fontSize: 14,
-    color: colors.accent,
+    color: colors.pineGreen,
   },
   itemTitle: {
     fontFamily: "inter",

@@ -1,9 +1,12 @@
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import colors from "../assets/colors/colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function FilterPill({ title, isSelected = false, handleList }) {
-  const [isPillSelected, setIsPillSelected] = useState(isSelected);
+function FilterPill({ title, isSelected, handleList }) {
+  const [isPillSelected, setIsPillSelected] = useState(false);
+  useEffect(() => {
+    setIsPillSelected(isSelected);
+  }, [isSelected]);
   return (
     <View style={[styles.wrapper, isPillSelected && styles.wrapperSelected]}>
       <Pressable
@@ -30,8 +33,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   wrapperSelected: {
-    borderColor: colors.accent,
-    backgroundColor: colors.accent,
+    borderColor: colors.pineGreen,
+    backgroundColor: colors.pineGreen,
   },
   container: {
     paddingVertical: 3,
