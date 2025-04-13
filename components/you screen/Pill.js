@@ -25,8 +25,9 @@ const styles = StyleSheet.create({
     // backgroundColor: colors.main,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 20,
+    borderRadius: 15,
     minWidth: 70,
+
     overflow: "hidden",
   },
   pill: {
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "green",
   },
   pillSelected: {
-    backgroundColor: colors.accent,
+    backgroundColor: colors.pineGreen,
     borderWidth: 0,
     elevation: 4,
   },
