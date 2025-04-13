@@ -8,22 +8,56 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Collapsible from "react-native-collapsible";
 
 import colors from "../assets/colors/colors";
 import Pill from "../components/you screen/Pill";
 import { Ionicons } from "@expo/vector-icons";
-import LottieView from "lottie-react-native";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 function GenerationScreen() {
-  const [dressCode, setDressCode] = useState();
-  const [style, setStyle] = useState();
-  const [theme, setTheme] = useState();
-  const [weather, setWeather] = useState();
+  const navigation = useNavigation();
   const [isAuto, setIsAuto] = useState(true);
 
-  const navigation = useNavigation();
+  const validationSchema = useMemo(() => {
+    return yup.object().shape({
+      dressCode: yup.string().required(),
+      style: yup.string().required(),
+      theme: yup.string().required(),
+      weather: isAuto ? yup.string() : yup.string().required(),
+    });
+  }, [isAuto]);
+  const formik = useFormik({
+    initialValues: {
+      dressCode: "",
+      style: "",
+      theme: "",
+      weather: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        navigation.push("GeneratedOutfit");
+      } catch (error) {
+        console.error("Submission error");
+      } finally {
+        setSubmitting(false);
+      }
+    },
+  });
+
+  useEffect(() => {
+    formik.validateForm();
+  }, [isAuto]);
+  //   const [dressCode, setDressCode] = useState();
+  //   const [style, setStyle] = useState();
+  //   const [theme, setTheme] = useState();
+  //   const [weather, setWeather] = useState();
+
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.generationSection}>
@@ -31,18 +65,20 @@ function GenerationScreen() {
         <View style={styles.generationInput}>
           <Pill
             title={"Casual"}
-            isSelected={"Casual" === dressCode}
-            setIsSelected={setDressCode}
+            isSelected={"Casual" === formik.values.dressCode}
+            setIsSelected={() => formik.setFieldValue("dressCode", "Casual")}
           />
           <Pill
             title={"Formal"}
-            isSelected={"Formal" === dressCode}
-            setIsSelected={setDressCode}
+            isSelected={"Formal" === formik.values.dressCode}
+            setIsSelected={() => formik.setFieldValue("dressCode", "Formal")}
           />
           <Pill
             title={"Semi-Formal"}
-            isSelected={"Semi-Formal" === dressCode}
-            setIsSelected={setDressCode}
+            isSelected={"Semi-Formal" === formik.values.dressCode}
+            setIsSelected={() =>
+              formik.setFieldValue("dressCode", "Semi-Formal")
+            }
           />
         </View>
         <Text style={styles.generationHeader}>
@@ -51,45 +87,51 @@ function GenerationScreen() {
         <View style={styles.generationInput}>
           <Pill
             title={"Old Money"}
-            isSelected={"Old Money" === style}
-            setIsSelected={setStyle}
+            isSelected={"Old Money" === formik.values.style}
+            setIsSelected={() => formik.setFieldValue("style", "Old Money")}
           />
           <Pill
             title={"Oversize"}
-            isSelected={"Oversize" === style}
-            setIsSelected={setStyle}
+            isSelected={"Oversize" === formik.values.style}
+            setIsSelected={() => formik.setFieldValue("style", "Oversize")}
           />
           <Pill
             title={"Streetwear"}
-            isSelected={"Streetwear" === style}
-            setIsSelected={setStyle}
+            isSelected={"Streetwear" === formik.values.style}
+            setIsSelected={() => formik.setFieldValue("style", "Streetwear")}
           />
         </View>
         <Text style={styles.generationHeader}>Color Theme:</Text>
         <View style={styles.generationInput}>
           <Pill
             title={"Vintage"}
-            isSelected={"Vintage" === theme}
-            setIsSelected={setTheme}
+            isSelected={"Vintage" === formik.values.theme}
+            setIsSelected={() => formik.setFieldValue("theme", "Vintage")}
           />
           <Pill
             title={"Pastel"}
-            isSelected={"Pastel" === theme}
-            setIsSelected={setTheme}
+            isSelected={"Pastel" === formik.values.theme}
+            setIsSelected={() => formik.setFieldValue("theme", "Pastel")}
           />
           <Pill
             title={"Warm"}
-            isSelected={"Warm" === theme}
-            setIsSelected={setTheme}
+            isSelected={"Warm" === formik.values.theme}
+            setIsSelected={() => formik.setFieldValue("theme", "Warm")}
           />
           <Pill
             title={"Cool"}
-            isSelected={"Cool" === theme}
-            setIsSelected={setTheme}
+            isSelected={"Cool" === formik.values.theme}
+            setIsSelected={() => formik.setFieldValue("theme", "Cool")}
           />
         </View>
         <View style={styles.automaticWeather}>
-          <Pressable onPress={() => setIsAuto((prev) => !prev)}>
+          <Pressable
+            onPress={() => {
+              setIsAuto((prev) => !prev);
+
+              console.log(formik.isValid);
+            }}
+          >
             {isAuto ? (
               <Ionicons name="checkbox" size={20} color={colors.pineGreen} />
             ) : (
@@ -116,24 +158,24 @@ function GenerationScreen() {
             </View>
             <View style={styles.generationInput}>
               <Pill
-                title={"Indoors"}
-                isSelected={"Indoors" === weather}
-                setIsSelected={setWeather}
+                title={"Spring"}
+                isSelected={"Spring" === formik.values.weather}
+                setIsSelected={() => formik.setFieldValue("weather", "Spring")}
               />
               <Pill
-                title={"Spring/Fall"}
-                isSelected={"Spring/Fall" === weather}
-                setIsSelected={setWeather}
+                title={"Fall"}
+                isSelected={"Fall" === formik.values.weather}
+                setIsSelected={() => formik.setFieldValue("weather", "Fall")}
               />
               <Pill
                 title={"Summer"}
-                isSelected={"Summer" === weather}
-                setIsSelected={setWeather}
+                isSelected={"Summer" === formik.values.weather}
+                setIsSelected={() => formik.setFieldValue("weather", "Summer")}
               />
               <Pill
                 title={"Winter"}
-                isSelected={"Winter" === weather}
-                setIsSelected={setWeather}
+                isSelected={"Winter" === formik.values.weather}
+                setIsSelected={() => formik.setFieldValue("weather", "Winter")}
               />
             </View>
           </View>
@@ -142,21 +184,30 @@ function GenerationScreen() {
       <Text style={[styles.subHeader]}>
         Note: Leaving options blank will use your general preferences.
       </Text>
-      <View style={styles.buttonWrapper}>
-        <Pressable
-          style={styles.buttonInner}
-          onPress={() => navigation.push("GeneratedOutfit")}
-        >
-          <Text style={styles.buttonTitle}>Generate</Text>
-        </Pressable>
-        <Ionicons
-          name="sparkles-sharp"
-          color="white"
-          size={20}
-          style={styles.sparkles}
-        />
-      </View>
-      <ActivityIndicator size={60} color={colors.pineGreen} />
+      {formik.isSubmitting ? (
+        <ActivityIndicator size={60} color={colors.accent} />
+      ) : (
+        <View style={styles.buttonWrapper}>
+          <Pressable
+            style={[
+              styles.buttonInner,
+              {
+                backgroundColor: formik.isValid ? colors.accent : "#878787",
+              },
+            ]}
+            onPress={formik.handleSubmit}
+            disabled={!formik.isValid}
+          >
+            <Text style={styles.buttonTitle}>Generate</Text>
+          </Pressable>
+          <Ionicons
+            name="sparkles-sharp"
+            color="white"
+            size={20}
+            style={styles.sparkles}
+          />
+        </View>
+      )}
       {/* <LottieView
         source={require("../assets/lottifiles/smeh.json")}
         autoPlay
@@ -210,7 +261,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   buttonInner: {
-    backgroundColor: colors.accent,
+    backgroundColor: "#878787",
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 12,
