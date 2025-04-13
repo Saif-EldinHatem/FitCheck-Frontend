@@ -6,8 +6,24 @@ import RootNavigator from "./components/RootNavigator";
 import { StatusBar } from "expo-status-bar";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import ItemScreen from "./screens/ItemScreen";
+import * as FileSystem from "expo-file-system";
+import { useEffect } from "react";
 
 export default function App() {
+  const ensureDirExists = async () => {
+    const diruri = FileSystem.documentDirectory + "wardrobe/";
+    const dirInfo = await FileSystem.getInfoAsync(diruri);
+    if (!dirInfo.exists) {
+      await FileSystem.makeDirectoryAsync(diruri, { intermediates: true });
+      console.log("wardrobe directory created");
+    } else {
+      console.log("wardrobe directory already exists");
+    }
+  };
+
+  useEffect(() => {
+    ensureDirExists();
+  }, []);
   const [fontsLoaded] = useFonts({
     higuen: require("./assets/Fonts/Higuen Serif.otf"),
     glacial: require("./assets/Fonts/GlacialIndifference-Regular.otf"),

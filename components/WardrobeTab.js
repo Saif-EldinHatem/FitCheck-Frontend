@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Text, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import WardrobeScreen from "../screens/WardrobeScreen";
 import ItemScreen from "../screens/ItemScreen";
 import colors from "../assets/colors/colors";
@@ -25,18 +25,22 @@ function WardrobeTab() {
         name="ItemScreen"
         component={ItemScreen}
         options={{
-          headerShown: false,
+          title: "Item",
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: colors.main },
+          headerTitleStyle: { fontFamily: "higuen", fontSize: 32 },
+          headerTitleAlign: "center",
         }}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name="UploadItemScreen"
         component={UploadItemScreen}
         options={{
-            title: "Add New Item",
-            headerShadowVisible: false,
-            headerStyle: {backgroundColor: colors.main},
-            headerTitleStyle: {fontFamily: "higuen", fontSize: 32},
-            headerTitleAlign: "center",
+          title: "Add New Item",
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: colors.main },
+          headerTitleStyle: { fontFamily: "higuen", fontSize: 32 },
+          headerTitleAlign: "center",
         }}
       />
     </Stack.Navigator>

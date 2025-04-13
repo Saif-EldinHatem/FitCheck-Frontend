@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 import colors from "../assets/colors/colors";
+import { SaveFormat, ImageManipulator } from "expo-image-manipulator";
 
 import * as ImagePicker from "expo-image-picker";
 import Card from "../components/Card";
@@ -23,6 +24,7 @@ const deviceWidth = Dimensions.get("window").width;
 function UploadItemScreen() {
   const navigation = useNavigation();
   const [images, setImages] = useState([]);
+  const { manipulate } = ImageManipulator;
 
   async function requestPermissions() {
     const { status: cameraStatus } =
@@ -41,16 +43,43 @@ function UploadItemScreen() {
     return true;
   }
 
+  async function resizeImage(context, width, height) {
+    console.log("width: " + width, "height: " + height);
+
+    if (width > height) {
+      context.resize({ width: 1024 });
+    } else {
+      context.resize({ height: 1024 });
+    }
+
+    const image = await context.renderAsync();
+    const result = await image.saveAsync({
+      format: SaveFormat.JPEG,
+    });
+    return result;
+  }
+
   async function openCamera() {
     const hasPermission = requestPermissions();
 
     if (!hasPermission) return;
 
-    const result = await ImagePicker.launchCameraAsync({});
+    const result = await ImagePicker.launchCameraAsync({
+      // quality: 0,
+      cameraType: ImagePicker.CameraType.back,
+    });
 
     if (!result.canceled) {
+      const context = manipulate(result.assets[0].uri);
+
+      const img = await resizeImage(
+        context,
+        result.assets[0].width,
+        result.assets[0].height
+      );
+
       const image = {
-        uri: result.assets[0].uri,
+        uri: img.uri,
         type: result.assets[0].mimeType,
         name: result.assets[0].fileName,
         isSelected: true,
@@ -69,15 +98,26 @@ function UploadItemScreen() {
     });
 
     if (!result.canceled) {
-      const selectedImages = result.assets.map((asset) => {
-        return {
-          uri: asset.uri,
-          type: asset.mimeType,
-          name: asset.fileName,
-          isSelected: true,
-        };
-      });
-      setImages((prev) => [...prev, ...selectedImages]);
+      try {
+        // Use Promise.all to process all images in parallel
+        const selectedImages = await Promise.all(
+          result.assets.map(async (asset) => {
+            const context = manipulate(asset.uri);
+            const img = await resizeImage(context, asset.width, asset.height);
+
+            return {
+              uri: img.uri,
+              type: asset.mimeType,
+              name: asset.fileName,
+              isSelected: true,
+            };
+          })
+        );
+
+        setImages((prev) => [...prev, ...selectedImages]);
+      } catch (error) {
+        console.error("Error processing images:", error);
+      }
     }
   }
 
@@ -107,7 +147,7 @@ function UploadItemScreen() {
         console.log("Error", data.Errors[0]);
       } else {
         images.forEach((image, index) => {
-        var newItem;
+          var newItem;
           if (image.isSelected) {
             newItem = {
               id: itemsDummyData.length + 1 + index,

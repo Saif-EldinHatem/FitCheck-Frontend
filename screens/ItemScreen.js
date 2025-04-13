@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+} from "react";
 import {
   View,
   Text,
@@ -6,6 +12,8 @@ import {
   StyleSheet,
   Pressable,
   SafeAreaView,
+  Button,
+  KeyboardAvoidingView,
 } from "react-native";
 
 import colors from "../assets/colors/colors";
@@ -14,17 +22,135 @@ import { filtersData, itemsDummyData } from "../store/data";
 import { Ionicons } from "@expo/vector-icons";
 import ProcessingScreen from "../components/ProcessingScreen";
 import CollapsibleRow from "../components/CollapsibleRow";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useWardrobeStore } from "../store/wardrobeStore";
+import { useNavigation } from "@react-navigation/native";
+import * as FileSystem from "expo-file-system";
 
 function ItemScreen({ route }) {
+  const navigation = useNavigation();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEdited, setIsEdited] = useState(false);
   const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
-  const item = wardrobeItems.find((item) => item.ItemID === route.params.itemId);
+  const item = wardrobeItems.find(
+    (item) => item.ItemID === route.params.itemId
+  );
+  const [itemName, setItemName] = useState(item.ItemName);
+  const [brandName, setBrandName] = useState(item.brandName);
+  const [tags, setTags] = useState({
+    Occasion: [],
+    Category: [],
+    Color: [],
+    Season: [],
+  });
 
-  const handleDelete = () => {
-    toggleModal();
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: (props) =>
+        isEdited ? (
+          <Pressable onPress={handleSave}>
+            <Text style={styles.saveChanges}>Save</Text>
+          </Pressable>
+        ) : null,
+    });
+  }, [isEdited, itemName, brandName, tags]);
+
+  const handleSelectTag = (filterGroup, updatedTags) => {
+    setTags((prev) => ({ ...prev, [filterGroup]: updatedTags || [] }));
+    setIsEdited(true);
+  };
+
+  const fillTags = () => {
+    var newtags = {
+      Occasion: [],
+      Category: [],
+      Color: [],
+      Season: [],
+    };
+
+    item.Tags?.forEach(({ Class, Tag }) => {
+      if (newtags[Class]) {
+        newtags[Class].push(Tag);
+      }
+    });
+    setTags(newtags);
+  };
+
+  useEffect(() => {
+    fillTags();
+  }, []);
+
+  const handleSave = async () => {
+    const Tags = Object.entries(tags)
+      .map(([Class, Tags]) => Tags.map((Tag) => ({ Class, Tag })))
+      .flat();
+
+    console.log("itemName: " + itemName);
+
+    console.log(process.env.EXPO_PUBLIC_API_HOST);
+    try {
+      const res = await fetch(
+        process.env.EXPO_PUBLIC_API_HOST + "/wardrobe/modify",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ItemID: item.ItemID,
+            ItemName: itemName,
+            BrandName: brandName,
+            Tags: Tags,
+          }),
+        }
+      );
+      console.log("route id: " + route.params.itemId);
+      console.log("fetched: " + item.ItemID);
+      console.log(
+        "JSON.Stringify: " + JSON.stringify({ ItemID: route.params.itemId })
+      );
+      const data = await res.json();
+      if (data.Result == false) {
+        console.log("Error", data.Errors[0]);
+      } else {
+        // navigation.pop();
+        setIsEdited(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDelete = async () => {
+    console.log(process.env.EXPO_PUBLIC_API_HOST);
+    try {
+      const res = await fetch(
+        process.env.EXPO_PUBLIC_API_HOST + "/wardrobe/delete",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ItemID: route.params.itemId }),
+        }
+      );
+      console.log("item id: " + route.params.itemId);
+      console.log(
+        "JSON.Stringify: " + JSON.stringify({ ItemID: route.params.itemId })
+      );
+      const data = await res.json();
+      if (data.Result == false) {
+        console.log("Error", data.Errors[0]);
+      } else {
+        FileSystem.deleteAsync(item.localImageUri);
+        console.log("deleted: " + item.localImageUri);
+
+        navigation.pop();
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const toggleModal = () => {
@@ -42,44 +168,96 @@ function ItemScreen({ route }) {
 
   useEffect(() => {
     console.log(item);
-
     if (item.Status == 2) {
       setIsProcessing(true);
+    } else {
+      setIsProcessing(false);
     }
-  }, []);
+  }, [item.Status]);
 
   const bottomSheetModalRef = useRef(null);
-
   return (
-    <SafeAreaView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       >
         {isProcessing && <ProcessingScreen />}
-        <Text style={styles.pageTitle}>Item</Text>
-        <View style={styles.underline} />
+        {/* <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            // backgroundColor: "red",
+            marginTop: 32,
+          }}
+        >
+          <Ionicons name="chevron-back" size={28} />
+          <Text style={styles.pageTitle}>Item</Text>
+          <Pressable onPress={handleSave}>
+            <Text style={styles.saveChanges}>Save</Text>
+          </Pressable>
+        </View> */}
+        {/* <View style={styles.underline} /> */}
         <View style={styles.imageContainer}>
           <Image
             source={{
-              uri:
-                process.env.EXPO_PUBLIC_API_HOST +
-                "/asset?file=" +
-                item.ImagePath,
+              uri: item.localImageUri,
             }}
             style={styles.image}
           />
         </View>
-        <Text style={styles.itemBrand}>{item.BrandName || "Unknown"}</Text>
-        <Text style={styles.itemName}>{item.ItemName || "Unknown"}</Text>
+        <View style={styles.brandWrapper}>
+          <TextInput
+            value={brandName}
+            placeholder="Brand Name"
+            style={styles.itemBrand}
+            onChangeText={(text) => {
+              setBrandName(text);
+              setIsEdited(true);
+            }}
+          />
+          {/* <Text style={styles.itemBrand}>{item.BrandName || "Brand Name"}</Text> */}
+          {/* <Ionicons name="pencil-outline" size={16} /> */}
+          <Image
+            source={require("../assets/images/tools/pencil-outline.png")}
+            style={{ height: 13, width: 13 }}
+          />
+        </View>
+        <View style={styles.itemNameWrapper}>
+          <TextInput
+            value={itemName}
+            placeholder="Item Name"
+            placeholderTextColor={"#000"}
+            style={styles.itemName}
+            onChangeText={(text) => {
+              setItemName((prev) => text);
+              console.log("text: " + text);
+
+              setIsEdited(true);
+            }}
+          />
+          {/* <Text style={styles.itemName}>{item.ItemName || "Item Name"}</Text> */}
+
+          <Image
+            source={require("../assets/images/tools/pencil-outline.png")}
+            style={{ height: 15, width: 15 }}
+          />
+        </View>
+
         <View style={styles.alterTagsArea}>
           {filtersData.map((filter) => (
-            <CollapsibleRow key={filter.id} title={filter.filterGroup} />
+            <CollapsibleRow
+              key={filter.id}
+              title={filter.filterGroup}
+              list={tags[filter.filterGroup]}
+              updateList={handleSelectTag}
+            />
           ))}
         </View>
-        <Pressable onPress={handleDelete} style={styles.deleteButton}>
+        <Pressable style={styles.deleteButton} onPress={toggleModal}>
           <Text style={styles.deleteButtonText}>Delete Item</Text>
         </Pressable>
+
         <CustomBottomSheet
           ref={bottomSheetModalRef}
           onSheetChanges={handleSheetChanges}
@@ -88,13 +266,18 @@ function ItemScreen({ route }) {
           <View style={styles.bottomSheetText}>
             <Text style={styles.areYouSureText}>Are you sure?</Text>
             <Text style={styles.aboutToDeleteText}>You're about to delete</Text>
-            <Text style={styles.bottomSheetItemName}>Black T-shirt</Text>
+            <Text style={styles.bottomSheetItemName}>
+              {item.ItemName || "Item Name"}
+            </Text>
             <Text style={styles.aboutToDeleteText}>
               This action cannot be undone.
             </Text>
           </View>
           <View style={styles.bottomSheetDeleteButtonContainer}>
-            <Pressable style={styles.bottomSheetDeleteButton}>
+            <Pressable
+              style={styles.bottomSheetDeleteButton}
+              onPress={handleDelete}
+            >
               <Text style={styles.bottomSheetDeleteButtonText}>
                 Yes, Delete
               </Text>
@@ -110,83 +293,7 @@ function ItemScreen({ route }) {
           </View>
         </CustomBottomSheet>
       </ScrollView>
-    </SafeAreaView>
-    // <SafeAreaView style={styles.container}>
-    //   {isProcessing && <ProcessingScreen />}
-    //   <Text style={styles.pageTitle}>Item</Text>
-    //   <View style={styles.underline} />
-    //   <View style={styles.imageContainer}>
-    //     <Image source={item.image} style={styles.image} />
-    //   </View>
-    //   <Text style={styles.itemBrand}>{item.brand}</Text>
-    //   <Text style={styles.itemName}>{item.name}</Text>
-    //   <View style={styles.tagsArea}>
-    //     <View style={styles.tag}>
-    //       <Image
-    //         source={require("../assets/images/icons/casual.png")}
-    //         style={styles.tagIcon}
-    //       />
-    //       <Text style={styles.tagTitle}>Casual</Text>
-    //     </View>
-    //     <View style={styles.tag}>
-    //       <Image
-    //         source={require("../assets/images/icons/summer.png")}
-    //         style={styles.tagIcon}
-    //       />
-    //       <Text style={styles.tagTitle}>Summer</Text>
-    //     </View>
-
-    //     <View style={styles.tag}>
-    //       <Image
-    //         source={require("../assets/images/icons/t-shirt.png")}
-    //         style={styles.tagIcon}
-    //       />
-    //       <Text style={styles.tagTitle}>T-shirt</Text>
-    //     </View>
-
-    //     <View style={styles.tag}>
-    //       <View
-    //         style={{ width: 17, aspectRatio: 1, backgroundColor: "black" }}
-    //       />
-    //       <Text style={styles.tagTitle}>Black</Text>
-    //     </View>
-
-    //     <View style={[styles.tag, { backgroundColor: "#EBDFCF" }]}>
-    //       <Ionicons name="add-sharp" size={20} />
-    //       <Text style={styles.tagTitle}>Add Tag</Text>
-    //     </View>
-    //   </View>
-    // <Pressable onPress={handleDelete} style={styles.deleteButton}>
-    //   <Text style={styles.deleteButtonText}>Delete Item</Text>
-    // </Pressable>
-    // <CustomBottomSheet
-    //   ref={bottomSheetModalRef}
-    //   onSheetChanges={handleSheetChanges}
-    //   backgroundColor={"#FFF3E3"}
-    // >
-    //   <View style={styles.bottomSheetText}>
-    //     <Text style={styles.areYouSureText}>Are you sure?</Text>
-    //     <Text style={styles.aboutToDeleteText}>You're about to delete</Text>
-    //     <Text style={styles.bottomSheetItemName}>Black T-shirt</Text>
-    //     <Text style={styles.aboutToDeleteText}>
-    //       This action cannot be undone.
-    //     </Text>
-    //   </View>
-    //   <View style={styles.bottomSheetDeleteButtonContainer}>
-    //     <Pressable style={styles.bottomSheetDeleteButton}>
-    //       <Text style={styles.bottomSheetDeleteButtonText}>Yes, Delete</Text>
-    //     </Pressable>
-    //   </View>
-    //   <View style={styles.bottomSheetCancelButtonContainer}>
-    //     <Pressable
-    //       style={styles.bottomSheetCancelButton}
-    //       onPress={toggleModal}
-    //     >
-    //       <Text style={styles.bottomSheetCancelButtonText}>Cancel</Text>
-    //     </Pressable>
-    //   </View>
-    // </CustomBottomSheet>
-    // </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -206,12 +313,15 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontFamily: "higuen",
     color: "#000",
-    marginTop: 16,
     textAlign: "center",
     paddingBottom: 0,
-    paddingTop: 16,
     textDecorationLine: "none", // Remove default underline
     position: "relative",
+  },
+  saveChanges: {
+    fontFamily: "inter",
+    fontSize: 18,
+    // backgroundColor: "green",
   },
   underline: {
     height: 1, // Thickness of the underline
@@ -247,6 +357,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   bottomSheetText: {
+    marginTop: 20,
     padding: 20,
     backgroundColor: colors.mainDark,
     borderRadius: 10,
@@ -274,7 +385,6 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     backgroundColor: "white",
-    marginTop: 30,
     aspectRatio: 1,
     width: "100%",
     borderRadius: 5,
@@ -285,16 +395,33 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
   },
+  brandWrapper: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 3,
+    // backgroundColor: "green",
+    marginTop: 16,
+  },
   itemBrand: {
     fontSize: 16,
     color: "#777",
     fontFamily: "inter",
-    paddingTop: 17,
+    padding: 0,
+  },
+  itemNameWrapper: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 3,
+    marginTop: 2,
   },
   itemName: {
-    fontSize: 24,
+    fontSize: 22,
     color: "#000",
-    fontFamily: "inter-med",
+    fontFamily: "inter-medium",
+    padding: 0,
+    // backgroundColor: "red",
   },
   deleteButtonText: {
     fontFamily: "inter-semibold",

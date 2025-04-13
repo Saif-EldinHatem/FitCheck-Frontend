@@ -104,7 +104,7 @@ function OutfitsScreen() {
               onPress={toggleFavorite.bind(this, item.outfitId)}
             >
               {item.favorites ? (
-                <Ionicons name="bookmark" size={28} color={colors.accent} />
+                <Ionicons name="bookmark" size={28} color={"#D2A553"} />
               ) : (
                 <Ionicons name="bookmark-outline" size={28} />
               )}
@@ -122,7 +122,12 @@ function OutfitsScreen() {
           >
             <Text style={styles.bottomButtonText}>Generate</Text>
           </Pressable>
-          <Ionicons name="sparkles-sharp" color="white" size ={20} style={styles.sparkles}/>
+          <Ionicons
+            name="sparkles-sharp"
+            color="white"
+            size={20}
+            style={styles.sparkles}
+          />
         </View>
       </View>
     </View>
@@ -207,10 +212,10 @@ const styles = StyleSheet.create({
     fontStyle: 20,
     color: "white",
   },
-  sparkles:{
+  sparkles: {
     position: "absolute",
     right: 120,
-    top: 7 ,
+    top: 7,
   },
 });
 

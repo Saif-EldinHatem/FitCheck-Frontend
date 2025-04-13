@@ -37,7 +37,7 @@ const CustomBottomSheet = forwardRef(
 
 const styles = StyleSheet.create({
   bottomSheetView: {
-    paddingTop: 20,
+    // paddingTop: 20,
     paddingHorizontal: 20,
     gap: 15,
     // backgroundColor: "green",
