@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import OutfitsScreen from "../screens/OutfitsScreen";
 import OutfitDetailsScreen from "../screens/OutfitDetailsScreen";
+import GenerationScreen from "../screens/GenerationScreen";
 import colors from "../assets/colors/colors";
 
 const Stack = createNativeStackNavigator();
@@ -58,6 +59,21 @@ function OutfitsTab() {
               <Ionicons name="trash" size={20} />
             </Pressable>
           ),
+        }}
+      />
+      <Stack.Screen
+        name="GenertaionScreen"
+        component={GenerationScreen}
+        options={{
+          headerShown: true,
+          title: "Generate",
+          headerTitleStyle: {
+            fontFamily: "higuen",
+            fontSize: 30,
+          },
+          headerStyle: { backgroundColor: colors.main },
+          headerShadowVisible: false,
+          headerTitleAlign: "center",
         }}
       />
     </Stack.Navigator>
