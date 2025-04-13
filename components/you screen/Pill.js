@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     // backgroundColor: colors.main,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 15,
+    borderRadius: 14,
     minWidth: 70,
 
     overflow: "hidden",
@@ -37,8 +37,9 @@ const styles = StyleSheet.create({
   },
   pillTitle: {
     // fontFamily: "poppins-medium",
-    fontSize: 13,
+    fontSize: 14,
     color: "#49454F",
+    fontFamily: "inter",
     // color: colors.accent,
     // lineHeight: 20,
     // backgroundColor: "green",
