@@ -12,12 +12,14 @@ import { useEffect, useState } from "react";
 import OutfitCard from "../components/OutfitCard";
 import { Ionicons } from "@expo/vector-icons";
 import { outfitsDummyData } from "../store/data";
+import { useNavigation } from "@react-navigation/native";
 
 function OutfitsScreen() {
   const [isRecent, setIsRecent] = useState(false);
   const [isFavorites, setIsFavorites] = useState(false);
   const [outfits, setOutfits] = useState(outfitsDummyData);
   const [filteredOutfits, setFilteredOutfits] = useState(outfitsDummyData);
+  const navigation = useNavigation();
 
   function handleFiltering() {
     let filteredList;
@@ -98,7 +100,10 @@ function OutfitsScreen() {
         }}
         renderItem={({ item }) => (
           <View style={styles.cardWrapper}>
-            <OutfitCard outfitId={item.outfitId} />
+            <OutfitCard
+              outfitId={item.outfitId}
+              onPress={() => navigation.push("OutfitDetails")}
+            />
             <Pressable
               style={styles.bookmark}
               onPress={toggleFavorite.bind(this, item.outfitId)}
@@ -149,6 +154,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
     paddingHorizontal: 16,
+    paddingBottom: 8,
+    // backgroundColor:"green",
   },
   filter: {
     borderWidth: 1,

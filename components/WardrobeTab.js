@@ -1,5 +1,4 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Button, Text, View } from "react-native";
 import WardrobeScreen from "../screens/WardrobeScreen";
 import ItemScreen from "../screens/ItemScreen";
 import colors from "../assets/colors/colors";
