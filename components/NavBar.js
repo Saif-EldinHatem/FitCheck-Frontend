@@ -10,6 +10,7 @@ import colors from "../assets/colors/colors";
 import AccountTab from "./AccountTab";
 import HomeTab from "./HomeTab";
 import WardrobeTab from "./WardrobeTab";
+import OutfitsTab from "./OutfitsTab";
 
 const Tab = createBottomTabNavigator();
 
@@ -29,7 +30,7 @@ const NavBar = () => {
             iconName = focused
               ? "file-tray-stacked"
               : "file-tray-stacked-outline";
-          } else if (route.name === "Outfits") {
+          } else if (route.name === "OutfitsTab") {
             iconName = focused ? "shirt" : "shirt-outline";
           } else if (route.name === "Account") {
             iconName = focused ? "reorder-four" : "reorder-four-outline";
@@ -49,29 +50,10 @@ const NavBar = () => {
         }}
       />
       <Tab.Screen
-        name="Outfits"
-        component={OutfitsScreen}
+        name="OutfitsTab"
+        component={OutfitsTab}
         options={{
-          headerShown: true,
-          headerStyle: { backgroundColor: colors.main },
-          headerTitle: "All Outfits",
-          headerTitleStyle: { fontFamily: "higuen", fontSize: 32 },
-          headerShadowVisible: false,
-          headerRight: () => (
-            <View style={{ height: "100%", aspectRatio: 1 }}>
-              <Pressable
-                style={{
-                  height: "100%",
-                  width: "100%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onPress={()=>console.log("settings pressed")}
-              >
-                <Image source={require("../assets/images/tools/customizer.png")} style={{ height: "30", width: "30" }} />
-              </Pressable>
-            </View>
-          ),
+          title: "outfits",
         }}
       />
       <Tab.Screen
