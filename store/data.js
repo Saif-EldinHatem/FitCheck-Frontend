@@ -51,7 +51,7 @@ export const outfitsDummyData = [
     items: [
       {
         id: "1",
-        image: require("../assets/images/clothes/black-tshirt/black-tshirt.png"),
+        image: require("../assets/images/clothes/blackHoodie.png"),
         brand: "H&M",
         name: "Black T-Shirt",
       },
@@ -83,7 +83,7 @@ export const outfitsDummyData = [
     items: [
       {
         id: "1",
-        image: require("../assets/images/clothes/black-tshirt/black-tshirt.png"),
+        image: require("../assets/images/clothes/whiteHoodie.png"),
         brand: "H&M",
         name: "Black T-Shirt",
       },
@@ -95,7 +95,7 @@ export const outfitsDummyData = [
       },
       {
         id: "2",
-        image: require("../assets/images/clothes/grayPants.webp"),
+        image: require("../assets/images/clothes/blackPants.png"),
         brand: "pull & bear",
         name: "Green Pants",
       },
@@ -114,19 +114,19 @@ export const outfitsDummyData = [
     items: [
       {
         id: "1",
-        image: require("../assets/images/clothes/black-tshirt/black-tshirt.png"),
+        image: require("../assets/images/clothes/orangeShirt.png"),
         brand: "H&M",
         name: "Black T-Shirt",
       },
       {
         id: "3",
-        image: require("../assets/images/clothes/jordans.png"),
+        image: require("../assets/images/clothes/redJordans.png"),
         brand: "Nike",
         name: "Black Air Jordan",
       },
       {
         id: "2",
-        image: require("../assets/images/clothes/grayPants.webp"),
+        image: require("../assets/images/clothes/blackPants.png"),
         brand: "pull & bear",
         name: "Green Pants",
       },
@@ -151,7 +151,7 @@ export const outfitsDummyData = [
       },
       {
         id: "3",
-        image: require("../assets/images/clothes/jordans.png"),
+        image: require("../assets/images/clothes/blueJordans.png"),
         brand: "Nike",
         name: "Black Air Jordan",
       },
@@ -176,19 +176,19 @@ export const outfitsDummyData = [
     items: [
       {
         id: "1",
-        image: require("../assets/images/clothes/black-tshirt/black-tshirt.png"),
+        image: require("../assets/images/clothes/blueShirt.png"),
         brand: "H&M",
         name: "Black T-Shirt",
       },
       {
         id: "3",
-        image: require("../assets/images/clothes/jordans.png"),
+        image: require("../assets/images/clothes/blueJordans.png"),
         brand: "Nike",
         name: "Black Air Jordan",
       },
       {
         id: "2",
-        image: require("../assets/images/clothes/grayPants.webp"),
+        image: require("../assets/images/clothes/blackPants.png"),
         brand: "pull & bear",
         name: "Green Pants",
       },
@@ -207,19 +207,19 @@ export const outfitsDummyData = [
     items: [
       {
         id: "1",
-        image: require("../assets/images/clothes/black-tshirt/black-tshirt.png"),
+        image: require("../assets/images/clothes/whiteHoodie.png"),
         brand: "H&M",
         name: "Black T-Shirt",
       },
       {
         id: "3",
-        image: require("../assets/images/clothes/jordans.png"),
+        image: require("../assets/images/clothes/redJordans.png"),
         brand: "Nike",
         name: "Black Air Jordan",
       },
       {
         id: "2",
-        image: require("../assets/images/clothes/grayPants.webp"),
+        image: require("../assets/images/clothes/brownPants.png"),
         brand: "pull & bear",
         name: "Green Pants",
       },
