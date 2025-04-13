@@ -15,20 +15,11 @@ import colors from "../assets/colors/colors";
 import Pill from "../components/you screen/Pill";
 import { Ionicons } from "@expo/vector-icons";
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 function GenerationScreen() {
   const navigation = useNavigation();
   const [isAuto, setIsAuto] = useState(true);
 
-  const validationSchema = useMemo(() => {
-    return yup.object().shape({
-      dressCode: yup.string().required(),
-      style: yup.string().required(),
-      theme: yup.string().required(),
-      weather: isAuto ? yup.string() : yup.string().required(),
-    });
-  }, [isAuto]);
   const formik = useFormik({
     initialValues: {
       dressCode: "",
@@ -36,7 +27,6 @@ function GenerationScreen() {
       theme: "",
       weather: "",
     },
-    validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -50,9 +40,6 @@ function GenerationScreen() {
     },
   });
 
-  useEffect(() => {
-    formik.validateForm();
-  }, [isAuto]);
   //   const [dressCode, setDressCode] = useState();
   //   const [style, setStyle] = useState();
   //   const [theme, setTheme] = useState();
