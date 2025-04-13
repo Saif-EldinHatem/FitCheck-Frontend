@@ -101,12 +101,12 @@ function HomeScreen() {
         {/* <Pressable onPress={() => navigation.navigate("Outfits")}>
           <Text style={styles.generateOutfitText}>Generate New</Text>
         </Pressable> */}
-        <View style={styles.plusButton}>
+        {/* <View style={styles.plusButton}>
           <Image
             style={styles.plusIcon}
             source={require("../assets/images/add - shitBrown .png")}
           />
-        </View>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );
