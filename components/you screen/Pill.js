@@ -27,16 +27,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 15,
     minWidth: 70,
-
     overflow: "hidden",
   },
   pill: {
     paddingVertical: 5,
     paddingHorizontal: 12,
-    
   },
   pillTitle: {
-    // fontFamily: "poppins-medium",
+    fontFamily: "inter",
     fontSize: 13,
     color: "#49454F",
     // color: colors.accent,
@@ -46,7 +44,7 @@ const styles = StyleSheet.create({
   pillSelected: {
     backgroundColor: colors.pineGreen,
     borderWidth: 0,
-    elevation: 4,
+    elevation: 6,
   },
   titleSelected: {
     color: "white",
