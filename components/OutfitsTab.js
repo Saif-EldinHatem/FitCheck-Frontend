@@ -6,6 +6,7 @@ import OutfitsScreen from "../screens/OutfitsScreen";
 import OutfitDetailsScreen from "../screens/OutfitDetailsScreen";
 import GenerationScreen from "../screens/GenerationScreen";
 import colors from "../assets/colors/colors";
+import GeneratedOutfitScreen from "../screens/GeneratedOutfitScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -67,6 +68,21 @@ function OutfitsTab() {
         options={{
           headerShown: true,
           title: "Generate",
+          headerTitleStyle: {
+            fontFamily: "higuen",
+            fontSize: 30,
+          },
+          headerStyle: { backgroundColor: colors.main },
+          headerShadowVisible: false,
+          headerTitleAlign: "center",
+        }}
+      />
+            <Stack.Screen
+        name="GeneratedOutfit"
+        component={GeneratedOutfitScreen}
+        options={{
+          headerShown: true,
+          title: "Generated Outfit",
           headerTitleStyle: {
             fontFamily: "higuen",
             fontSize: 30,
