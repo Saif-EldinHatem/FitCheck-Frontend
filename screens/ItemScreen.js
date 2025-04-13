@@ -37,7 +37,7 @@ function ItemScreen({ route }) {
     (item) => item.ItemID === route.params.itemId
   );
   const [itemName, setItemName] = useState(item.ItemName);
-  const [brandName, setBrandName] = useState(item.brandName);
+  const [brandName, setBrandName] = useState(item.BrandName);
   const [tags, setTags] = useState({
     Occasion: [],
     Category: [],
@@ -78,6 +78,8 @@ function ItemScreen({ route }) {
   };
 
   useEffect(() => {
+    console.log("Brand Name: " + item.BrandName);
+
     fillTags();
   }, []);
 
@@ -231,8 +233,6 @@ function ItemScreen({ route }) {
             style={styles.itemName}
             onChangeText={(text) => {
               setItemName((prev) => text);
-              console.log("text: " + text);
-
               setIsEdited(true);
             }}
           />

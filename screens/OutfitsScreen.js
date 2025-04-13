@@ -121,8 +121,11 @@ function OutfitsScreen() {
         <View style={styles.bottomButton}>
           <Pressable
             style={styles.bottomButtonInner}
-            onPress={() => {
-              console.log("Generate");
+            onPress={() =>{
+              console.log("here");
+              navigation.push("GenertaionScreen");
+              console.log("here2");
+
             }}
           >
             <Text style={styles.bottomButtonText}>Generate</Text>
