@@ -7,7 +7,7 @@ function Pill({ title, isSelected, setIsSelected }) {
       <Pressable
         style={styles.pill}
         android_ripple={{ color: "rgba(0,0,0,0.1)" }}
-        onPress={() => setIsSelected(title)}
+        onPress={() => setIsSelected((prev) => console.log(prev))}
       >
         <Text style={[styles.pillTitle, isSelected && styles.titleSelected]}>
           {title}
@@ -45,11 +45,10 @@ const styles = StyleSheet.create({
   pillSelected: {
     backgroundColor: colors.pineGreen,
     borderWidth: 0,
-    elevation: 6,
+    elevation: 4,
   },
   titleSelected: {
     color: "white",
-
   },
 });
 

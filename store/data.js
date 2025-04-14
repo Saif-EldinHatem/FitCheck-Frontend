@@ -54,18 +54,21 @@ export const outfitsDummyData = [
         image: require("../assets/images/clothes/blackHoodie.png"),
         brand: "H&M",
         name: "Black T-Shirt",
+        color: "#000",
       },
       {
         id: "3",
         image: require("../assets/images/clothes/jordans.png"),
         brand: "Nike",
         name: "Black Air Jordan",
+        color: "#FFF",
       },
       {
         id: "2",
         image: require("../assets/images/clothes/grayPants.webp"),
         brand: "pull & bear",
         name: "Green Pants",
+        color: "#878787",
       },
       {
         id: "5",
@@ -86,18 +89,21 @@ export const outfitsDummyData = [
         image: require("../assets/images/clothes/whiteHoodie.png"),
         brand: "H&M",
         name: "Black T-Shirt",
+        color: "#FFF",
       },
       {
         id: "3",
         image: require("../assets/images/clothes/jordans.png"),
         brand: "Nike",
         name: "Black Air Jordan",
+        color: "#FFF",
       },
       {
         id: "2",
         image: require("../assets/images/clothes/blackPants.png"),
         brand: "pull & bear",
         name: "Green Pants",
+        color: "#000",
       },
       {
         id: "5",
@@ -117,18 +123,21 @@ export const outfitsDummyData = [
         image: require("../assets/images/clothes/orangeShirt.png"),
         brand: "H&M",
         name: "Black T-Shirt",
+        color: "#DB5616",
       },
       {
         id: "3",
         image: require("../assets/images/clothes/redJordans.png"),
         brand: "Nike",
         name: "Black Air Jordan",
+        color: "#DB5616",
       },
       {
         id: "2",
         image: require("../assets/images/clothes/blackPants.png"),
         brand: "pull & bear",
         name: "Green Pants",
+        color: "#000",
       },
       {
         id: "5",
@@ -268,10 +277,15 @@ export const filtersData = [
   {
     id: 1,
     filterGroup: "Occasion",
-    options: ["Formal", "Casual", "Sport"],
+    options: ["Casual", "Formal", "Semi-Formal", "Sport"],
   },
   {
     id: 2,
+    filterGroup: "style",
+    options: ["Oversize", "Slim Fit", "Old Money", "Streetwear"],
+  },
+  {
+    id: 3,
     filterGroup: "Category",
     options: [
       "Topwear",
@@ -293,7 +307,7 @@ export const filtersData = [
     ],
   },
   {
-    id: 3,
+    id: 4,
     filterGroup: "Color",
     options: [
       "Black",
@@ -307,8 +321,64 @@ export const filtersData = [
     ],
   },
   {
-    id: 4,
+    id: 5,
     filterGroup: "Season",
     options: ["Winter", "Spring", "Summer", "Fall"],
+  },
+];
+
+export const generationTags = [
+  {
+    id: 11,
+    filterGroup: "dressCode",
+    options: ["Casual", "Formal", "Semi-Formal", "Sport"],
+  },
+  {
+    id: 12,
+    filterGroup: "style",
+    options: ["Oversize", "Slim Fit", "Old Money", "Streetwear"],
+  },
+  {
+    id: 13,
+    filterGroup: "theme",
+    options: [
+      "Skin",
+      "Sunset",
+      "Winter",
+      "Christmas",
+      "Sea",
+      "Summer",
+      "Retro",
+      "Kids",
+      "Pastel",
+      "Gold",
+      "Light",
+      "Rainbow",
+      "Wedding",
+      "Food",
+      "Happy",
+      "Neon",
+      "Spring",
+      "Earth",
+      "Sky",
+      "Space",
+      "Nature",
+      "Warm",
+      "Dark",
+      "Halloween",
+      "Popular",
+      "Gradient",
+      "Cream",
+      "Coffee",
+      "Fall",
+      "Night",
+      "Cold",
+      "New",
+    ],
+  },
+  {
+    id: 14,
+    filterGroup: "weather",
+    options: ["Spring", "Fall", "Summer", "Winter"],
   },
 ];

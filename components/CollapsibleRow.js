@@ -40,6 +40,8 @@ function CollapsibleRow({ title, list = [], updateList }) {
   function handleList(newItem) {
     const updatedFilter = list?.includes(newItem)
       ? list.filter((item) => item !== newItem)
+      : title === "Category"
+      ? [newItem]
       : [...list, newItem];
     updateList(title, updatedFilter);
   }

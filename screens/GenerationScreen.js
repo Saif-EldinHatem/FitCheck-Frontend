@@ -6,10 +6,12 @@ import {
   Button,
   Pressable,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useMemo, useState } from "react";
 import Collapsible from "react-native-collapsible";
+import { generationTags } from "../store/data";
 
 import colors from "../assets/colors/colors";
 import Pill from "../components/you screen/Pill";
@@ -19,19 +21,19 @@ import { useFormik } from "formik";
 function GenerationScreen() {
   const navigation = useNavigation();
   const [isAuto, setIsAuto] = useState(true);
-
+  const [isExpanded, setIsExpanded] = useState(false);
   const formik = useFormik({
     initialValues: {
       dressCode: "",
       style: "",
-      theme: "",
+      theme: [],
       weather: "",
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        navigation.push("GeneratedOutfit");
+        navigation.push("GeneratedOutfit", { ...values });
       } catch (error) {
         console.error("Submission error");
       } finally {
@@ -40,83 +42,93 @@ function GenerationScreen() {
     },
   });
 
-  //   const [dressCode, setDressCode] = useState();
-  //   const [style, setStyle] = useState();
-  //   const [theme, setTheme] = useState();
-  //   const [weather, setWeather] = useState();
+  function selectTag(field, title) {
+    if (title === formik.values[field]) {
+      formik.setFieldValue(field, "");
+      return;
+    }
+    formik.setFieldValue(field, title);
+  }
+
+  function addTag(field, title) {
+    formik.values[field].includes(title)
+      ? formik.setFieldValue(
+          field,
+          formik.values[field].filter((item) => item !== title)
+        )
+      : formik.setFieldValue(field, [...formik.values.theme, title]);
+  }
 
   return (
-    <SafeAreaView style={styles.screen}>
+    <ScrollView contentContainerStyle={styles.screen}>
       <View style={styles.generationSection}>
         <Text style={styles.generationHeader}>What's the dress code</Text>
         <View style={styles.generationInput}>
-          <Pill
-            title={"Casual"}
-            isSelected={"Casual" === formik.values.dressCode}
-            setIsSelected={() => formik.setFieldValue("dressCode", "Casual")}
-          />
-          <Pill
-            title={"Formal"}
-            isSelected={"Formal" === formik.values.dressCode}
-            setIsSelected={() => formik.setFieldValue("dressCode", "Formal")}
-          />
-          <Pill
-            title={"Semi-Formal"}
-            isSelected={"Semi-Formal" === formik.values.dressCode}
-            setIsSelected={() =>
-              formik.setFieldValue("dressCode", "Semi-Formal")
-            }
-          />
+          {generationTags[0].options.map((option) => (
+            <Pill
+              key={option}
+              title={option}
+              isSelected={option === formik.values.dressCode}
+              setIsSelected={() => selectTag("dressCode", option)}
+            />
+          ))}
         </View>
         <Text style={styles.generationHeader}>
           What style are you going for?
         </Text>
         <View style={styles.generationInput}>
-          <Pill
-            title={"Old Money"}
-            isSelected={"Old Money" === formik.values.style}
-            setIsSelected={() => formik.setFieldValue("style", "Old Money")}
-          />
-          <Pill
-            title={"Oversize"}
-            isSelected={"Oversize" === formik.values.style}
-            setIsSelected={() => formik.setFieldValue("style", "Oversize")}
-          />
-          <Pill
-            title={"Streetwear"}
-            isSelected={"Streetwear" === formik.values.style}
-            setIsSelected={() => formik.setFieldValue("style", "Streetwear")}
-          />
+          {generationTags[1].options.map((option) => (
+            <Pill
+              key={option}
+              title={option}
+              isSelected={option === formik.values.style}
+              setIsSelected={() => selectTag("style", option)}
+            />
+          ))}
         </View>
-        <Text style={styles.generationHeader}>Color Theme:</Text>
+        <View style={styles.generationHeaderContianer}>
+          <Text style={styles.generationHeader}>Color Theme:</Text>
+          <Pressable onPress={() => setIsExpanded((prev) => !prev)}>
+            <Text style={styles.showText}>
+              {isExpanded ? "Show less" : "Show more"}
+            </Text>
+          </Pressable>
+        </View>
         <View style={styles.generationInput}>
-          <Pill
-            title={"Vintage"}
-            isSelected={"Vintage" === formik.values.theme}
-            setIsSelected={() => formik.setFieldValue("theme", "Vintage")}
-          />
-          <Pill
-            title={"Pastel"}
-            isSelected={"Pastel" === formik.values.theme}
-            setIsSelected={() => formik.setFieldValue("theme", "Pastel")}
-          />
-          <Pill
-            title={"Warm"}
-            isSelected={"Warm" === formik.values.theme}
-            setIsSelected={() => formik.setFieldValue("theme", "Warm")}
-          />
-          <Pill
-            title={"Cool"}
-            isSelected={"Cool" === formik.values.theme}
-            setIsSelected={() => formik.setFieldValue("theme", "Cool")}
-          />
+          {(isExpanded
+            ? generationTags[2].options
+            : generationTags[2].options.slice(0, 4)
+          ).map((option, index) => (
+            <Pill
+              key={option}
+              title={option}
+              isSelected={formik.values.theme.includes(option)}
+              setIsSelected={() => addTag("theme", option)}
+            />
+          ))}
+
+          {/* <Collapsible
+            renderChildrenCollapsed
+            duration={500}
+            easing={"easeInOutCubic"}
+            collapsed={!isExpanded}
+          >
+            <View style={[styles.generationInput, { maxHeight: 400 }]}>
+              {generationTags[2].options.slice(4).map((option) => (
+                <Pill
+                  key={option}
+                  title={option}
+                  isSelected={option === formik.values.theme}
+                  setIsSelected={() => selectTag("theme", option)}
+                />
+              ))}
+            </View>
+          </Collapsible> */}
         </View>
         <View style={styles.automaticWeather}>
           <Pressable
             onPress={() => {
               setIsAuto((prev) => !prev);
-
-              console.log(formik.isValid);
             }}
           >
             {isAuto ? (
@@ -144,26 +156,14 @@ function GenerationScreen() {
               </Text>
             </View>
             <View style={styles.generationInput}>
-              <Pill
-                title={"Spring"}
-                isSelected={"Spring" === formik.values.weather}
-                setIsSelected={() => formik.setFieldValue("weather", "Spring")}
-              />
-              <Pill
-                title={"Fall"}
-                isSelected={"Fall" === formik.values.weather}
-                setIsSelected={() => formik.setFieldValue("weather", "Fall")}
-              />
-              <Pill
-                title={"Summer"}
-                isSelected={"Summer" === formik.values.weather}
-                setIsSelected={() => formik.setFieldValue("weather", "Summer")}
-              />
-              <Pill
-                title={"Winter"}
-                isSelected={"Winter" === formik.values.weather}
-                setIsSelected={() => formik.setFieldValue("weather", "Winter")}
-              />
+              {generationTags[3].options.map((option) => (
+                <Pill
+                  key={option}
+                  title={option}
+                  isSelected={option === formik.values.weather}
+                  setIsSelected={() => selectTag("weather", option)}
+                />
+              ))}
             </View>
           </View>
         </Collapsible>
@@ -201,13 +201,13 @@ function GenerationScreen() {
         loop
         style={styles.lottieFile}
       /> */}
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: colors.main,
     paddingHorizontal: 16,
     paddingTop: 25,
@@ -217,15 +217,27 @@ const styles = StyleSheet.create({
     gap: 15,
     width: "100%",
   },
+  generationHeaderContianer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingRight: 8,
+  },
   generationHeader: {
     fontFamily: "inter-medium",
     fontSize: 18,
     lineHeight: 20,
   },
+  showText: {
+    fontFamily: "inter-semibold",
+    fontSize: 14,
+    color: colors.pineGreen,
+  },
   generationInput: {
     flexDirection: "row",
     gap: 4,
     paddingBottom: 5,
+    flexWrap: "wrap",
   },
   automaticWeather: {
     flexDirection: "row",
@@ -246,6 +258,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderRadius: 10,
     marginTop: 8,
+    marginVertical: 20,
   },
   buttonInner: {
     backgroundColor: "#878787",

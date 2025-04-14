@@ -71,6 +71,9 @@ function ItemScreen({ route }) {
 
     item.Tags?.forEach(({ Class, Tag }) => {
       if (newtags[Class]) {
+        if (Class === "Color" && !filtersData[2].options.includes(Tag)) {
+          filtersData[2].options.push(Tag);
+        }
         newtags[Class].push(Tag);
       }
     });
@@ -87,8 +90,6 @@ function ItemScreen({ route }) {
     const Tags = Object.entries(tags)
       .map(([Class, Tags]) => Tags.map((Tag) => ({ Class, Tag })))
       .flat();
-
-    console.log("itemName: " + itemName);
 
     console.log(process.env.EXPO_PUBLIC_API_HOST);
     try {
