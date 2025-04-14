@@ -7,10 +7,7 @@ const WeatherCard = () => {
      <View style = {styles.cardRow}>
 
       <Text style={styles.dateText}>Monday, March 4</Text>
-      <View style={styles.locationRow}>
-        <Image source={require('../assets/map-pointer.png')} style={styles.icon} />
-        <Text style={styles.locationText}>Abbaseya Square</Text>
-      </View>
+
 
 
      </View>
@@ -18,6 +15,10 @@ const WeatherCard = () => {
       </View>
       <View style={styles.descriptionContainer}>
         <Text style={styles.descriptionText}>Cloudy, 60°F</Text>
+      </View>
+      <View style={styles.locationRow}>
+      <Image source={require('../assets/map-pointer.png')} style={styles.icon} />
+      <Text style={styles.locationText}>Abbaseya Sq.</Text>
       </View>
       <View style={styles.weatherRow}>
         <Image source={require('../assets/cloud.png')} style={styles.weatherIcon} />
@@ -29,7 +30,7 @@ const WeatherCard = () => {
 
 const styles = StyleSheet.create({
   card: {
-    width: 340,
+    width: 375,
     height :150,
     padding: 16,
     borderRadius: 12,
@@ -41,6 +42,7 @@ const styles = StyleSheet.create({
   locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 18
   },
 cardRow:{
     flexDirection: 'row',
@@ -49,51 +51,56 @@ cardRow:{
 },
 
   icon: {
-    width: 16,
-    height: 16,
-    marginRight: 5,
+    width: 14,
+    height: 14,
+    marginRight: 2,
+    marginTop: 2,
   },
   locationText: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    // fontWeight: 'bold',
     alignItems:'flex-end',
-    fontFamily: "GlacialIndifference-Regular",
-
+    // fontFamily: "inter",
+    color: '#777',
+    
+    
   },
   dateText: {
     color: '#777',
-    fontSize: 14,
+    fontSize: 15,
     marginVertical: 5,
-    fontFamily: "GlacialIndifference-Regular",
+    fontFamily: "inter",
 
   },
   weatherRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: -21,
   },
   weatherIcon: {
     width: 24,
     height: 24,
     marginRight: 8,
+    marginLeft: 200,
+
   },
   descriptionContainer: {
     alignItems: 'center',
     width: '100%',
-    marginTop: 10,
   },
   tempText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#555',
     fontFamily: "GlacialIndifference-Regular",
-
   },
   descriptionText: {
-    fontSize: 28,
+    fontSize: 31,
     textAlign: 'left',
     width: '100%',
-    marginBottom: 10,
-    // fontFamily: "poppins",
+    paddingBottom: 6,
+    marginTop: 10,
+    fontFamily: "higuen",
   },
 });
 
