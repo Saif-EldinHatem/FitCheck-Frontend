@@ -19,11 +19,12 @@ import OutfitCard from "../components/OutfitCard";
 import colors from "../assets/colors/colors";
 import { useLocationStore } from "../store/locationStore";
 import { useEffect } from "react";
+import { useUserStore } from "../store/userStore";
 
 const { height, width } = Dimensions.get("screen");
 function HomeScreen() {
   const { city, getLocation, coords } = useLocationStore();
-
+  const FirstName = useUserStore((state) => state.FirstName);
   useEffect(() => {
     getLocation();
   }, []);
@@ -36,7 +37,9 @@ function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <TopBar />
-        <Text style={styles.helloText}>Hi Seif, Here's today's weather: </Text>
+        <Text style={styles.helloText}>
+          Hi {FirstName}, Here's today's weather:{" "}
+        </Text>
         {/* Weather Row */}
         <ScrollView
           contentContainerStyle={styles.weatherRow}

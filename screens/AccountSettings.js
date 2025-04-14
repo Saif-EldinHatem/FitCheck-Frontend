@@ -12,11 +12,16 @@ import {
 import colors from "../assets/colors/colors";
 import SectionWrapper from "../components/SectionWrapper";
 import LightInput from "../components/LightInput";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useUserStore } from "../store/userStore";
 
 function AccountSettings() {
   const navigation = useNavigation();
+
+  const userInfo = useUserStore();
+
+  console.log(userInfo);
 
   const [gender, setGender] = useState("M");
   const [isEdited, setIsEdited] = useState(false);
@@ -47,7 +52,9 @@ function AccountSettings() {
             <Text style={styles.rowTitle}>username</Text>
 
             <View style={styles.rowContent}>
-              <LightInput content={"Saif Hatem"} />
+              <LightInput
+                content={`${userInfo.FirstName} ${userInfo.LastName}`}
+              />
             </View>
           </View>
 
@@ -55,7 +62,7 @@ function AccountSettings() {
             <Text style={styles.rowTitle}>Email</Text>
 
             <View style={styles.rowContent}>
-              <LightInput content={"Saifhatem76@gmail.com"} />
+              <LightInput content={userInfo.Email} />
             </View>
           </View>
 
@@ -81,7 +88,9 @@ function AccountSettings() {
             <Text style={styles.rowTitle}>Name</Text>
 
             <View style={styles.rowContent}>
-              <LightInput content={"Saif Hatem"} />
+              <LightInput
+                content={`${userInfo.FirstName} ${userInfo.LastName}`}
+              />
             </View>
           </View>
 

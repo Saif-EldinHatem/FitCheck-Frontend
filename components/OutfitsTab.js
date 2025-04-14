@@ -7,6 +7,7 @@ import OutfitDetailsScreen from "../screens/OutfitDetailsScreen";
 import GenerationScreen from "../screens/GenerationScreen";
 import colors from "../assets/colors/colors";
 import GeneratedOutfitScreen from "../screens/GeneratedOutfitScreen";
+import ItemScreen from "../screens/ItemScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +64,17 @@ function OutfitsTab() {
         }}
       />
       <Stack.Screen
+        name="ItemScreen"
+        component={ItemScreen}
+        options={{
+          title: "Item",
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: colors.main },
+          headerTitleStyle: { fontFamily: "higuen", fontSize: 32 },
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
         name="GenertaionScreen"
         component={GenerationScreen}
         options={{
@@ -77,7 +89,7 @@ function OutfitsTab() {
           headerTitleAlign: "center",
         }}
       />
-            <Stack.Screen
+      <Stack.Screen
         name="GeneratedOutfit"
         component={GeneratedOutfitScreen}
         options={{

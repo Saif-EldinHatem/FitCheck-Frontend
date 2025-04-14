@@ -16,6 +16,7 @@ import SectionWrapper from "../components/SectionWrapper";
 import ColorItem from "../components/you screen/ColorItem";
 import Pill from "../components/you screen/Pill";
 import { useNavigation } from "@react-navigation/native";
+import { useUserStore } from "../store/userStore";
 
 function YouScreen() {
   const navigation = useNavigation();
@@ -23,6 +24,9 @@ function YouScreen() {
   const [selectedSkin, setSelectedSkin] = useState("");
   const [selectedStyle, setSelectedStyle] = useState("Neutral");
   const [selectedColorTone, setSelectedColorTone] = useState("Neutral");
+
+  const firstName = useUserStore((state) => state.FirstName);
+  const removeUser = useUserStore((state) => state.removeUser);
 
   async function handleLogout(values) {
     console.log(process.env.EXPO_PUBLIC_API_HOST);
@@ -42,7 +46,7 @@ function YouScreen() {
       if (data.Result == false) {
         showToast("Error", data.Errors[0]);
       } else {
-        // AuthCtx.setIsAuthenticated(false);
+        removeUser();
         navigation.reset({
           index: 0,
           routes: [{ name: "Auth", params: { screen: "Login" } }],
@@ -89,7 +93,7 @@ function YouScreen() {
       </View>
 
       {/* Username */}
-      <Text style={styles.username}>Saif</Text>
+      <Text style={styles.username}>{firstName}</Text>
 
       {/* Avatar Section */}
       <SectionWrapper title={"Avatar"}>

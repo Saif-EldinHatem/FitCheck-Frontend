@@ -108,7 +108,9 @@ function OutfitsScreen({ route }) {
           <View style={styles.cardWrapper}>
             <OutfitCard
               outfitId={item.outfitId}
-              onPress={() => navigation.push("OutfitDetails")}
+              onPress={() =>
+                navigation.push("OutfitDetails", { outfitId: item.outfitId })
+              }
             />
             <Pressable
               style={styles.bookmark}

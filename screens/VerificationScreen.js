@@ -16,6 +16,7 @@ import OTPInput from "../components/OTPInput";
 import PrimaryButton from "../components/PrimaryButton";
 import { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { useUserStore } from "../store/userStore";
 
 // Responsive design related code
 const { width, height } = Dimensions.get("window");
@@ -25,6 +26,7 @@ const isSmallHeight = height < 900;
 function VerificationScreen() {
   const route = useRoute();
   const { Email } = route.params;
+  const verify = useUserStore((state) => state.verify);
   const navigation = useNavigation();
   async function handleVerification() {
     const values = {
@@ -49,6 +51,7 @@ function VerificationScreen() {
         // showToast("Error", data.Errors[0]);
         console.log("Error", data.Errors[0]);
       } else {
+        verify();
         navigation.replace("MainApp");
       }
     } catch (error) {

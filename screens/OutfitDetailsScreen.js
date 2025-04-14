@@ -12,9 +12,10 @@ import {
 import colors from "../assets/colors/colors";
 import ItemCard from "../components/ItemCard";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "../components/Card";
 import { useNavigation } from "@react-navigation/native";
+import { outfitsDummyData } from "../store/data";
 
 const dummyData = [
   { id: "1", image: require("../assets/images/clothes/black-tshirt.png") },
@@ -24,10 +25,14 @@ const dummyData = [
   { id: "5", image: require("../assets/images/clothes/sunglasses.png") },
 ];
 
-function OutfitDetailsScreen() {
+function OutfitDetailsScreen({ route }) {
   const [data, setData] = useState(dummyData);
   const [editMode, setEditMode] = useState(false);
   const [selectedList, setSelectedList] = useState([]);
+  const outfitItems = outfitsDummyData.find(
+    (item) => item.outfitId === route.params?.outfitId
+  ).items;
+
   const navigation = useNavigation();
   function handleItemPress(id) {
     if (selectedList.includes(id)) {
@@ -70,7 +75,7 @@ function OutfitDetailsScreen() {
 
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.grid}>
-          {data.map((item) => (
+          {outfitItems.map((item) => (
             <View key={item.id} style={styles.itemContainer}>
               <ItemCard
                 img={item.image}

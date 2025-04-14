@@ -121,6 +121,8 @@ function WardrobeScreen() {
       if (data.Result == false) {
         console.log("Error", data.Errors[0]);
       } else {
+        // console.log("tags", data?.["Items"]);
+
         const itemsWithLocalImages = await Promise.all(
           data.Items.map(async (item) => {
             const localImageUri = await downloadImage(

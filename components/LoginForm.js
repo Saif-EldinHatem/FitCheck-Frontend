@@ -9,7 +9,7 @@ import {
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import { verticalScale } from "react-native-size-matters";
-import { useState, Fragment, useContext } from "react";
+import { useState, Fragment, useContext, useEffect } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import Toast from "react-native-toast-message";
@@ -18,7 +18,7 @@ import colors from "../assets/colors/colors";
 import PrimaryButton from "./PrimaryButton";
 import GoogleButton from "./GoogleButton";
 import ValidatedInput from "./ValidatedInput";
-
+import { useUserStore } from "../store/userStore";
 const validationSchema = yup.object().shape({
   Email: yup.string().label("Email").email().required(),
   Password: yup.string().label("Password").required(),
@@ -26,6 +26,8 @@ const validationSchema = yup.object().shape({
 });
 
 function LoginForm() {
+  const setUser = useUserStore((state) => state.setUser);
+
   const showToast = (msg1, msg2) => {
     Toast.show({
       type: "error",
@@ -35,7 +37,6 @@ function LoginForm() {
     });
   };
   const navigation = useNavigation();
-
 
   async function handleLogin(values) {
     console.log(process.env.EXPO_PUBLIC_API_HOST);
@@ -56,8 +57,9 @@ function LoginForm() {
       if (data.Result == false) {
         showToast("Error", data.Errors[0]);
       } else {
+        setUser({ ...data });
         if (data.Verified == false) {
-          navigation.push("Verification", {Email: values.Email});
+          navigation.push("Verification", { Email: values.Email });
         } else {
           navigation.replace("MainApp");
         }
