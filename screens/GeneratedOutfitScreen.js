@@ -20,7 +20,9 @@ const { width } = Dimensions.get("window");
 function GeneratedOutfitScreen({ route }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [outfitColors, setOutfitColors] = useState([]);
-  const tags = Object.values(route.params).filter((tag) => tag !== "");
+  const tags = Object.entries(route.params).filter(
+    ([key, values]) => values !== ""
+  );
   const generatedOutfits = outfitsDummyData.slice(0, 3);
 
   const handleScroll = (event) => {
@@ -59,14 +61,25 @@ function GeneratedOutfitScreen({ route }) {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.pillStyles}
           >
-            {tags.map((tag) => (
-              <Pill
-                key={tag}
-                title={tag}
-                isSelected={true}
-                setIsSelected={() => {}}
-              />
-            ))}
+            {tags.map(([key, values]) =>
+              key === "theme" ? (
+                values.map((value) => (
+                  <Pill
+                    key={`${key}-${value}`}
+                    title={value}
+                    isSelected={true}
+                    setIsSelected={() => {}}
+                  />
+                ))
+              ) : (
+                <Pill
+                  key={`${key}-${values}`}
+                  title={values}
+                  isSelected={true}
+                  setIsSelected={() => {}}
+                />
+              )
+            )}
           </ScrollView>
         </View>
       )}

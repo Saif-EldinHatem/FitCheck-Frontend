@@ -34,10 +34,10 @@ function ItemScreen({ route }) {
   const [isEdited, setIsEdited] = useState(false);
   const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
   const item = wardrobeItems.find(
-    (item) => item.ItemID === route.params.itemId
+    (item) => item?.ItemID === route.params.itemId
   );
-  const [itemName, setItemName] = useState(item.ItemName);
-  const [brandName, setBrandName] = useState(item.BrandName);
+  const [itemName, setItemName] = useState(item?.ItemName);
+  const [brandName, setBrandName] = useState(item?.BrandName);
   const [tags, setTags] = useState({
     Occasion: [],
     Category: [],
@@ -64,16 +64,25 @@ function ItemScreen({ route }) {
   const fillTags = () => {
     var newtags = {
       Occasion: [],
+      style: [],
       Category: [],
       Color: [],
       Season: [],
     };
 
-    item.Tags?.forEach(({ Class, Tag }) => {
+    item?.Tags?.forEach(({ Class, Tag }) => {
+      console.log("Outer");
+      console.log({ Class, Tag });
+      console.log("this: ", newtags[Class]);
+
       if (newtags[Class]) {
-        if (Class === "Color" && !filtersData[2].options.includes(Tag)) {
-          filtersData[2].options.push(Tag);
+        if (Class === "Color" && !filtersData[3].options.includes(Tag)) {
+          filtersData[3].options.push(Tag);
         }
+        console.log("inner");
+
+        console.log({ Class, Tag });
+
         newtags[Class].push(Tag);
       }
     });
@@ -81,7 +90,7 @@ function ItemScreen({ route }) {
   };
 
   useEffect(() => {
-    console.log("Brand Name: " + item.BrandName);
+    console.log("Brand Name: " + item?.BrandName);
 
     fillTags();
   }, []);
@@ -101,17 +110,17 @@ function ItemScreen({ route }) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            ItemID: item.ItemID,
+            ItemID: item?.ItemID,
             ItemName: itemName,
             BrandName: brandName,
             Tags: Tags,
           }),
         }
       );
-      console.log("route id: " + route.params.itemId);
-      console.log("fetched: " + item.ItemID);
+      console.log("route id: " + route.params?.itemId);
+      console.log("fetched: " + item?.ItemID);
       console.log(
-        "JSON.Stringify: " + JSON.stringify({ ItemID: route.params.itemId })
+        "JSON.Stringify: " + JSON.stringify({ ItemID: route.params?.itemId })
       );
       const data = await res.json();
       if (data.Result == false) {
@@ -135,12 +144,12 @@ function ItemScreen({ route }) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ItemID: route.params.itemId }),
+          body: JSON.stringify({ ItemID: route.params?.itemId }),
         }
       );
-      console.log("item id: " + route.params.itemId);
+      console.log("item id: " + route.params?.itemId);
       console.log(
-        "JSON.Stringify: " + JSON.stringify({ ItemID: route.params.itemId })
+        "JSON.Stringify: " + JSON.stringify({ ItemID: route.params?.itemId })
       );
       const data = await res.json();
       if (data.Result == false) {
@@ -171,12 +180,12 @@ function ItemScreen({ route }) {
 
   useEffect(() => {
     console.log(item);
-    if (item.Status == 2) {
+    if (item?.Status == 2) {
       setIsProcessing(true);
     } else {
       setIsProcessing(false);
     }
-  }, [item.Status]);
+  }, [item?.Status]);
 
   const bottomSheetModalRef = useRef(null);
   return (
@@ -204,7 +213,7 @@ function ItemScreen({ route }) {
         <View style={styles.imageContainer}>
           <Image
             source={{
-              uri: item.localImageUri,
+              uri: item?.localImageUri,
             }}
             style={styles.image}
           />
@@ -268,7 +277,7 @@ function ItemScreen({ route }) {
             <Text style={styles.areYouSureText}>Are you sure?</Text>
             <Text style={styles.aboutToDeleteText}>You're about to delete</Text>
             <Text style={styles.bottomSheetItemName}>
-              {item.ItemName || "Item Name"}
+              {item?.ItemName || "Item Name"}
             </Text>
             <Text style={styles.aboutToDeleteText}>
               This action cannot be undone.

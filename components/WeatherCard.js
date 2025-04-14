@@ -1,27 +1,37 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React, { useEffect } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
+import { useLocationStore } from "../store/locationStore";
 
 const WeatherCard = () => {
+  const city = useLocationStore((state) => state.city);
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+
   return (
     <View style={styles.card}>
-     <View style = {styles.cardRow}>
-
-      <Text style={styles.dateText}>Monday, March 4</Text>
-
-
-
-     </View>
-     <View style = {styles.cardRow}>
+      <View style={styles.cardRow}>
+        <Text style={styles.dateText}>{formattedDate}</Text>
       </View>
+      <View style={styles.cardRow}></View>
       <View style={styles.descriptionContainer}>
         <Text style={styles.descriptionText}>Cloudy, 60°F</Text>
       </View>
       <View style={styles.locationRow}>
-      <Image source={require('../assets/map-pointer.png')} style={styles.icon} />
-      <Text style={styles.locationText}>Abbaseya Sq.</Text>
+        <Image
+          source={require("../assets/map-pointer.png")}
+          style={styles.icon}
+        />
+        <Text style={styles.locationText}>{city || "Unknown"}</Text>
       </View>
       <View style={styles.weatherRow}>
-        <Image source={require('../assets/cloud.png')} style={styles.weatherIcon} />
+        <Image
+          source={require("../assets/cloud.png")}
+          style={styles.weatherIcon}
+        />
         <Text style={styles.tempText}>L: 55° H: 73° F</Text>
       </View>
     </View>
@@ -31,24 +41,24 @@ const WeatherCard = () => {
 const styles = StyleSheet.create({
   card: {
     width: 375,
-    height :150,
+    height: 150,
     padding: 16,
     borderRadius: 12,
     marginLeft: 0,
-    justifyContent:'space-between',
+    justifyContent: "space-between",
     elevation: 6,
-    backgroundColor: '#E8DDCC',
+    backgroundColor: "#E8DDCC",
   },
   locationRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 18
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 18,
   },
-cardRow:{
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-between',
-},
+  cardRow: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+  },
 
   icon: {
     width: 14,
@@ -59,22 +69,19 @@ cardRow:{
   locationText: {
     fontSize: 14,
     // fontWeight: 'bold',
-    alignItems:'flex-end',
+    alignItems: "flex-end",
     // fontFamily: "inter",
-    color: '#777',
-    
-    
+    color: "#777",
   },
   dateText: {
-    color: '#777',
+    color: "#777",
     fontSize: 15,
     marginVertical: 5,
     fontFamily: "inter",
-
   },
   weatherRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: -21,
   },
   weatherIcon: {
@@ -82,22 +89,21 @@ cardRow:{
     height: 24,
     marginRight: 8,
     marginLeft: 200,
-
   },
   descriptionContainer: {
-    alignItems: 'center',
-    width: '100%',
+    alignItems: "center",
+    width: "100%",
   },
   tempText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#555',
+    fontWeight: "bold",
+    color: "#555",
     fontFamily: "GlacialIndifference-Regular",
   },
   descriptionText: {
     fontSize: 31,
-    textAlign: 'left',
-    width: '100%',
+    textAlign: "left",
+    width: "100%",
     paddingBottom: 6,
     marginTop: 10,
     fontFamily: "higuen",

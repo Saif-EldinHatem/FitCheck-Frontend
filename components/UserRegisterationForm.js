@@ -23,6 +23,7 @@ import colors from "../assets/colors/colors";
 import PrimaryButton from "./PrimaryButton";
 import GoogleButton from "./GoogleButton";
 import ValidatedInput from "./ValidatedInput";
+import { useUserStore } from "../store/userStore";
 
 // Responsive design related code
 const { width, height } = Dimensions.get("window");
@@ -51,7 +52,7 @@ const validationSchema = yup.object().shape({
 function UserRegisterationForm({ showToast }) {
   const navigation = useNavigation();
   const Email = useRoute().params.values.Email;
-
+  const setUser = useUserStore((state) => state.setUser);
   async function handleRegister(values) {
     const birthDate = values.Year + "-" + values.Month + "-" + values.Day;
     values = { ...values, BirthDate: birthDate, Email };
@@ -75,6 +76,7 @@ function UserRegisterationForm({ showToast }) {
       if (data.Result == false) {
         showToast("Error", data.Errors[0]);
       } else {
+        setUser({ ...data });
         navigation.push("Verification", { Email });
       }
     } catch (error) {
