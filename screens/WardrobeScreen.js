@@ -248,12 +248,13 @@ function WardrobeScreen() {
 
       {isFiltered && (
         <View style={styles.subHeader}>
+          <Text style={styles.subHeaderText}>Filtered:</Text>
           {Object.values(filters)
             .flat(2)
             .map((option, index) => {
               return (
                 <Text key={option + "-" + index} style={styles.subHeaderText}>
-                  {option}
+                  {option},
                 </Text>
               );
             })}

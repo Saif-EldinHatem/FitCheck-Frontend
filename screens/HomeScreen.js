@@ -36,17 +36,15 @@ function HomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <TopBar />
-
+        <Text style={styles.helloText}>Hi Seif, Here's today's weather: </Text>
         {/* Weather Row */}
         <ScrollView
           contentContainerStyle={styles.weatherRow}
           horizontal
           showsHorizontalScrollIndicator={false}
-          snapToInterval={348}
+          // snapToInterval={360}
           decelerationRate="fast"
         >
-          <WeatherCard />
-          <WeatherCard />
           <WeatherCard />
         </ScrollView>
 
@@ -147,7 +145,7 @@ const styles = StyleSheet.create({
   weatherRow: {
     gap: 18,
     paddingVertical: 10,
-    paddingHorizontal: 14,
+    paddingHorizontal: 19,
   },
   section: {
     marginVertical: 10,
@@ -196,6 +194,15 @@ const styles = StyleSheet.create({
   plusIcon: {
     height: "100%",
     width: "100%",
+  },
+  helloText: {
+    fontSize: 18,
+    fontWeight: "500",
+    paddingHorizontal: 20,
+    paddingVertical: 3,
+    marginTop: 10,
+    color: "#49454F",
+    fontFamily: "inter-medium",
   },
 });
 
