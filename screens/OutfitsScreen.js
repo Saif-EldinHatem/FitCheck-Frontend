@@ -14,12 +14,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { outfitsDummyData } from "../store/data";
 import { useNavigation } from "@react-navigation/native";
 
-function OutfitsScreen() {
+function OutfitsScreen({ route }) {
   const [isRecent, setIsRecent] = useState(false);
   const [isFavorites, setIsFavorites] = useState(false);
   const [outfits, setOutfits] = useState(outfitsDummyData);
   const [filteredOutfits, setFilteredOutfits] = useState(outfitsDummyData);
+
   const navigation = useNavigation();
+
+  useEffect(() => {
+    setIsRecent(route.params?.isRecent || false);
+    setIsFavorites(route.params?.isFavorites || false);
+  }, [route]);
 
   function handleFiltering() {
     let filteredList;
@@ -121,11 +127,10 @@ function OutfitsScreen() {
         <View style={styles.bottomButton}>
           <Pressable
             style={styles.bottomButtonInner}
-            onPress={() =>{
+            onPress={() => {
               console.log("here");
               navigation.push("GenertaionScreen");
               console.log("here2");
-
             }}
           >
             <Text style={styles.bottomButtonText}>Generate</Text>

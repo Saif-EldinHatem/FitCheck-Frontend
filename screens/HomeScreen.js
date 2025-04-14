@@ -17,9 +17,17 @@ import TopBar from "../components/TopBar";
 import WeatherCard from "../components/WeatherCard";
 import OutfitCard from "../components/OutfitCard";
 import colors from "../assets/colors/colors";
+import { useLocationStore } from "../store/locationStore";
+import { useEffect } from "react";
 
 const { height, width } = Dimensions.get("screen");
 function HomeScreen() {
+  const { city, getLocation, coords } = useLocationStore();
+
+  useEffect(() => {
+    getLocation();
+  }, []);
+
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.safeScreenWrapper}>
@@ -47,7 +55,14 @@ function HomeScreen() {
           {/* Section Heading */}
           <View style={styles.sectionHeading}>
             <Text style={styles.sectionTitle}>Recent Outfits</Text>
-            <Pressable onPress={() => console.log("view more pressed")}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate("OutfitsTab", {
+                  screen: "Outfits",
+                  params: { isRecent: true, isFavorites: false },
+                })
+              }
+            >
               <Text style={styles.pressableText}>View More</Text>
             </Pressable>
           </View>
@@ -75,7 +90,14 @@ function HomeScreen() {
           {/* Section Heading */}
           <View style={styles.sectionHeading}>
             <Text style={styles.sectionTitle}>Favorite Outfits</Text>
-            <Pressable onPress={() => console.log("view more pressed")}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate("OutfitsTab", {
+                  screen: "Outfits",
+                  params: { isRecent: false, isFavorites: true },
+                })
+              }
+            >
               <Text style={styles.pressableText}>View More</Text>
             </Pressable>
           </View>

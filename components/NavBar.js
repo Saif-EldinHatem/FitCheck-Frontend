@@ -53,7 +53,7 @@ const NavBar = () => {
         name="OutfitsTab"
         component={OutfitsTab}
         options={{
-          title: "outfits",
+          title: "Outfits",
         }}
       />
       <Tab.Screen
