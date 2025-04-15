@@ -17,11 +17,13 @@ import colors from "../assets/colors/colors";
 import Pill from "../components/you screen/Pill";
 import { Ionicons } from "@expo/vector-icons";
 import { useFormik } from "formik";
+import { useOutfitsSore } from "../store/outfitsStore";
 
 function GenerationScreen() {
   const navigation = useNavigation();
   const [isAuto, setIsAuto] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
+  const setIsHidden = useOutfitsSore((state) => state.setIsHidden);
   const formik = useFormik({
     initialValues: {
       dressCode: "",
@@ -30,6 +32,7 @@ function GenerationScreen() {
       weather: "",
     },
     onSubmit: async (values, { setSubmitting }) => {
+      setIsHidden(false);
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000));
 

@@ -18,18 +18,20 @@ import { useNavigation } from "@react-navigation/native";
 const { width } = Dimensions.get("window");
 
 function GeneratedOutfitScreen({ route }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(1);
   const [outfitColors, setOutfitColors] = useState([]);
   const tags = Object.entries(route.params).filter(
     ([key, values]) => values !== ""
   );
-  const generatedOutfits = outfitsDummyData.slice(0, 3);
+  const generatedOutfits = outfitsDummyData.slice(1, 4);
+
+  const [isSaved, setIsSaved] = useState(outfitsDummyData[1].favorites);
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
     const index = Math.max(Math.round(scrollPosition / width));
-    if (index !== currentIndex) {
-      setCurrentIndex(index);
+    if (index + 1 !== currentIndex) {
+      setCurrentIndex(index + 1);
       console.log("Current index: ", index);
     }
   };
@@ -37,7 +39,7 @@ function GeneratedOutfitScreen({ route }) {
   const getOutfitColors = () => {
     const uniqueColors = [
       ...new Set(
-        generatedOutfits[currentIndex].items
+        generatedOutfits[currentIndex - 1].items
           .map((item) => item.color)
           .filter((color) => color !== undefined)
       ),
@@ -48,6 +50,7 @@ function GeneratedOutfitScreen({ route }) {
 
   useEffect(() => {
     getOutfitColors();
+    setIsSaved(outfitsDummyData[currentIndex].favorites);
   }, [currentIndex]);
 
   const navigation = useNavigation();
@@ -117,20 +120,17 @@ function GeneratedOutfitScreen({ route }) {
             style={[
               styles.saveButton,
               {
-                backgroundColor: generatedOutfits[currentIndex].favorites
-                  ? "black"
-                  : colors.accent,
+                backgroundColor: isSaved ? "black" : colors.accent,
               },
             ]}
             android_ripple={{ color: "rgba(0,0,0,0.1)" }}
-            onPress={() =>
-              (generatedOutfits[currentIndex].favorites =
-                !generatedOutfits[currentIndex].favorites)
-            }
+            onPress={() => {
+              outfitsDummyData[currentIndex].favorites =
+                !outfitsDummyData[currentIndex].favorites;
+              setIsSaved(outfitsDummyData[currentIndex].favorites);
+            }}
           >
-            <Text style={styles.buttonText}>
-              {generatedOutfits[currentIndex].favorites ? "Unsave" : "Save"}
-            </Text>
+            <Text style={styles.buttonText}>{isSaved ? "Unsave" : "Save"}</Text>
           </Pressable>
         </View>
 
