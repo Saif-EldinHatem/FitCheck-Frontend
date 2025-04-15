@@ -7,12 +7,13 @@ import {
   FlatList,
 } from "react-native";
 import colors from "../assets/colors/colors";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import OutfitCard from "../components/OutfitCard";
 import { Ionicons } from "@expo/vector-icons";
 import { outfitsDummyData } from "../store/data";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useOutfitsSore } from "../store/outfitsStore";
 
 function OutfitsScreen({ route }) {
   const [isRecent, setIsRecent] = useState(false);
@@ -20,12 +21,20 @@ function OutfitsScreen({ route }) {
   const [outfits, setOutfits] = useState(outfitsDummyData);
   const [filteredOutfits, setFilteredOutfits] = useState(outfitsDummyData);
 
+  const isHidden = useOutfitsSore((state) => state.isHidden);
+
   const navigation = useNavigation();
 
   useEffect(() => {
     setIsRecent(route.params?.isRecent || false);
     setIsFavorites(route.params?.isFavorites || false);
   }, [route]);
+
+  useFocusEffect(
+    useCallback(() => {
+      setOutfits([...outfitsDummyData]);
+    }, [])
+  );
 
   function handleFiltering() {
     let filteredList;
@@ -90,7 +99,7 @@ function OutfitsScreen({ route }) {
       </View>
 
       <FlatList
-        data={filteredOutfits}
+        data={isHidden ? filteredOutfits.slice(0, 1) : filteredOutfits}
         keyExtractor={(item) => item.outfitId}
         numColumns={2}
         style={{ width: "100%" }}

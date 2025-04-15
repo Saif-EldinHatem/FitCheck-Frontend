@@ -45,6 +45,31 @@ export const itemsDummyData = [
 
 export const outfitsDummyData = [
   {
+    outfitId: "104",
+    recent: true,
+    favorites: true,
+    items: [
+      {
+        id: "1",
+        image: require("../assets/images/clothes/black-tshirt/black-tshirt.png"),
+        brand: "H&M",
+        name: "Black T-Shirt",
+      },
+      {
+        id: "3",
+        image: require("../assets/images/clothes/blueJordans.png"),
+        brand: "Nike",
+        name: "Black Air Jordan",
+      },
+      {
+        id: "2",
+        image: require("../assets/images/clothes/grayPants.webp"),
+        brand: "pull & bear",
+        name: "Gray Pants",
+      },
+    ],
+  },
+  {
     outfitId: "101",
     recent: true,
     favorites: false,
@@ -70,23 +95,17 @@ export const outfitsDummyData = [
         name: "Green Pants",
         color: "#878787",
       },
-      {
-        id: "5",
-        image: require("../assets/images/clothes/sunglasses.png"),
-        brand: "Louis Vuitton",
-        name: "Sunglasses",
-      },
     ],
   },
   {
     outfitId: "102",
     recent: true,
-    favorites: true,
+    favorites: false,
 
     items: [
       {
         id: "1",
-        image: require("../assets/images/clothes/whiteHoodie.png"),
+        image: require("../assets/images/clothes/whiteHoodiiie.png"),
         brand: "H&M",
         name: "Black T-Shirt",
         color: "#FFF",
@@ -105,18 +124,12 @@ export const outfitsDummyData = [
         name: "Green Pants",
         color: "#000",
       },
-      {
-        id: "5",
-        image: require("../assets/images/clothes/sunglasses.png"),
-        brand: "Louis Vuitton",
-        name: "Sunglasses",
-      },
     ],
   },
   {
     outfitId: "103",
-    recent: false,
-    favorites: true,
+    recent: true,
+    favorites: false,
     items: [
       {
         id: "1",
@@ -139,138 +152,102 @@ export const outfitsDummyData = [
         name: "Green Pants",
         color: "#000",
       },
-      {
-        id: "5",
-        image: require("../assets/images/clothes/sunglasses.png"),
-        brand: "Louis Vuitton",
-        name: "Sunglasses",
-      },
     ],
   },
-  {
-    outfitId: "104",
-    recent: true,
-    favorites: false,
-    items: [
-      {
-        id: "1",
-        image: require("../assets/images/clothes/black-tshirt/black-tshirt.png"),
-        brand: "H&M",
-        name: "Black T-Shirt",
-      },
-      {
-        id: "3",
-        image: require("../assets/images/clothes/blueJordans.png"),
-        brand: "Nike",
-        name: "Black Air Jordan",
-      },
-      {
-        id: "2",
-        image: require("../assets/images/clothes/grayPants.webp"),
-        brand: "pull & bear",
-        name: "Gray Pants",
-      },
-      {
-        id: "5",
-        image: require("../assets/images/clothes/sunglasses.png"),
-        brand: "Louis Vuitton",
-        name: "Sunglasses",
-      },
-    ],
-  },
-  {
-    outfitId: "105",
-    recent: false,
-    favorites: false,
-    items: [
-      {
-        id: "1",
-        image: require("../assets/images/clothes/blueShirt.png"),
-        brand: "H&M",
-        name: "Black T-Shirt",
-      },
-      {
-        id: "3",
-        image: require("../assets/images/clothes/blueJordans.png"),
-        brand: "Nike",
-        name: "Black Air Jordan",
-      },
-      {
-        id: "2",
-        image: require("../assets/images/clothes/blackPants.png"),
-        brand: "pull & bear",
-        name: "Green Pants",
-      },
-      {
-        id: "5",
-        image: require("../assets/images/clothes/sunglasses.png"),
-        brand: "Louis Vuitton",
-        name: "Sunglasses",
-      },
-    ],
-  },
-  {
-    outfitId: "106",
-    recent: false,
-    favorites: false,
-    items: [
-      {
-        id: "1",
-        image: require("../assets/images/clothes/whiteHoodie.png"),
-        brand: "H&M",
-        name: "Black T-Shirt",
-      },
-      {
-        id: "3",
-        image: require("../assets/images/clothes/redJordans.png"),
-        brand: "Nike",
-        name: "Black Air Jordan",
-      },
-      {
-        id: "2",
-        image: require("../assets/images/clothes/brownPants.png"),
-        brand: "pull & bear",
-        name: "Green Pants",
-      },
-      {
-        id: "5",
-        image: require("../assets/images/clothes/sunglasses.png"),
-        brand: "Louis Vuitton",
-        name: "Sunglasses",
-      },
-    ],
-  },
-  {
-    outfitId: "107",
-    recent: false,
-    favorites: false,
-    items: [
-      {
-        id: "1",
-        image: require("../assets/images/clothes/black-tshirt/black-tshirt.png"),
-        brand: "H&M",
-        name: "Black T-Shirt",
-      },
-      {
-        id: "3",
-        image: require("../assets/images/clothes/jordans.png"),
-        brand: "Nike",
-        name: "Black Air Jordan",
-      },
-      {
-        id: "2",
-        image: require("../assets/images/clothes/grayPants.webp"),
-        brand: "pull & bear",
-        name: "Green Pants",
-      },
-      {
-        id: "5",
-        image: require("../assets/images/clothes/sunglasses.png"),
-        brand: "Louis Vuitton",
-        name: "Sunglasses",
-      },
-    ],
-  },
+
+  // {
+  //   outfitId: "105",
+  //   recent: false,
+  //   favorites: false,
+  //   items: [
+  //     {
+  //       id: "1",
+  //       image: require("../assets/images/clothes/blueShirt.png"),
+  //       brand: "H&M",
+  //       name: "Black T-Shirt",
+  //     },
+  //     {
+  //       id: "3",
+  //       image: require("../assets/images/clothes/blueJordans.png"),
+  //       brand: "Nike",
+  //       name: "Black Air Jordan",
+  //     },
+  //     {
+  //       id: "2",
+  //       image: require("../assets/images/clothes/blackPants.png"),
+  //       brand: "pull & bear",
+  //       name: "Green Pants",
+  //     },
+  //     {
+  //       id: "5",
+  //       image: require("../assets/images/clothes/sunglasses.png"),
+  //       brand: "Louis Vuitton",
+  //       name: "Sunglasses",
+  //     },
+  //   ],
+  // },
+  // {
+  //   outfitId: "106",
+  //   recent: false,
+  //   favorites: false,
+  //   items: [
+  //     {
+  //       id: "1",
+  //       image: require("../assets/images/clothes/whiteHoodie.png"),
+  //       brand: "H&M",
+  //       name: "Black T-Shirt",
+  //     },
+  //     {
+  //       id: "3",
+  //       image: require("../assets/images/clothes/redJordans.png"),
+  //       brand: "Nike",
+  //       name: "Black Air Jordan",
+  //     },
+  //     {
+  //       id: "2",
+  //       image: require("../assets/images/clothes/brownPants.png"),
+  //       brand: "pull & bear",
+  //       name: "Green Pants",
+  //     },
+  //     {
+  //       id: "5",
+  //       image: require("../assets/images/clothes/sunglasses.png"),
+  //       brand: "Louis Vuitton",
+  //       name: "Sunglasses",
+  //     },
+  //   ],
+  // },
+  // {
+  //   outfitId: "107",
+  //   recent: false,
+  //   favorites: false,
+  //   items: [
+  //     {
+  //       id: "1",
+  //       image: require("../assets/images/clothes/black-tshirt/black-tshirt.png"),
+  //       brand: "H&M",
+  //       name: "Black T-Shirt",
+  //     },
+  //     {
+  //       id: "3",
+  //       image: require("../assets/images/clothes/jordans.png"),
+  //       brand: "Nike",
+  //       name: "Black Air Jordan",
+  //     },
+  //     {
+  //       id: "2",
+  //       image: require("../assets/images/clothes/grayPants.webp"),
+  //       brand: "pull & bear",
+  //       name: "Green Pants",
+  //     },
+  //     {
+  //       id: "5",
+  //       image: require("../assets/images/clothes/sunglasses.png"),
+  //       brand: "Louis Vuitton",
+  //       name: "Sunglasses",
+  //     },
+  //   ],
+  // },
 ];
 
 export const filtersData = [
