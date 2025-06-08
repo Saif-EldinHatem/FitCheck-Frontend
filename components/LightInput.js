@@ -1,15 +1,25 @@
 import { useState } from "react";
 import { StyleSheet, View, Text, TextInput } from "react-native";
+import { useField } from "formik";
 
-function LightInput({ content, isPassword = false, alignCenter = false }) {
+function LightInput({
+  name,
+  content,
+  isPassword = false,
+  alignCenter = false,
+}) {
   const [value, setValue] = useState(content);
+  const [field, meta, helpers] = useField(name);
+  // console.log("here: ", field);
 
   return (
-    <View style={[styles.inputContainer, alignCenter && {alignItems: "center"}]}>
+    <View
+      style={[styles.inputContainer, alignCenter && { alignItems: "center" }]}
+    >
       <TextInput
         secureTextEntry={isPassword}
-        value={value}
-        onChangeText={(text) => setValue(text)}
+        value={field.value}
+        onChangeText={(text) => helpers.setValue(text)}
         style={styles.inputField}
       />
     </View>

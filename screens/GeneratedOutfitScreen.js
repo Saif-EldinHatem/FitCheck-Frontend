@@ -14,16 +14,42 @@ import OutfitCard from "../components/OutfitCard";
 import { outfitsDummyData } from "../store/data";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useWardrobeStore } from "../store/wardrobeStore";
 
 const { width } = Dimensions.get("window");
 
 function GeneratedOutfitScreen({ route }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [outfitColors, setOutfitColors] = useState([]);
-  const tags = Object.entries(route.params).filter(
-    ([key, values]) => values !== ""
+  const getItem = useWardrobeStore((state) => state.getItem);
+  const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
+  const { suggestions, tags } = route.params;
+  // console.log({ tags });
+  // console.log("route.params: ", route.params);
+
+  // console.log({ suggestions });
+
+  console.log({ suggestions });
+
+  const generatedOutfits = Object.values(
+    suggestions.reduce((acc, { SugID, ItemID }) => {
+      if (!acc[SugID]) {
+        acc[SugID] = { SugID, items: [] }; // Initialize an array for this SugID if it doesn't exist
+      }
+      acc[SugID].items.push(
+        wardrobeItems.find((item) => item.ItemID === ItemID)
+      ); // Add the ItemID to the corresponding SugID array
+      return acc;
+    }, {})
   );
-  const generatedOutfits = outfitsDummyData.slice(0, 3);
+  console.log(generatedOutfits[0]);
+
+  // console.log("object values", Object.values(groupedData[currentIndex]));
+
+  // const tags = Object.entries(route.params).filter(
+  //   ([key, values]) => values !== ""
+  // );
+  // const generatedOutfits = outfitsDummyData.slice(0, 3);
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
@@ -37,12 +63,12 @@ function GeneratedOutfitScreen({ route }) {
   const getOutfitColors = () => {
     const uniqueColors = [
       ...new Set(
-        generatedOutfits[currentIndex].items
-          .map((item) => item.color)
+        generatedOutfits[currentIndex]?.items
+          .map((item) => item?.Color)
           .filter((color) => color !== undefined)
       ),
     ];
-    console.log(uniqueColors);
+    console.log({ uniqueColors });
     setOutfitColors(uniqueColors);
   };
 
@@ -61,25 +87,14 @@ function GeneratedOutfitScreen({ route }) {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.pillStyles}
           >
-            {tags.map(([key, values]) =>
-              key === "theme" ? (
-                values.map((value) => (
-                  <Pill
-                    key={`${key}-${value}`}
-                    title={value}
-                    isSelected={true}
-                    setIsSelected={() => {}}
-                  />
-                ))
-              ) : (
-                <Pill
-                  key={`${key}-${values}`}
-                  title={values}
-                  isSelected={true}
-                  setIsSelected={() => {}}
-                />
-              )
-            )}
+            {tags.map((tag, index) => (
+              <Pill
+                key={`${tag}-${index}`}
+                title={tag}
+                isSelected={true}
+                setIsSelected={() => {}}
+              />
+            ))}
           </ScrollView>
         </View>
       )}
@@ -94,11 +109,15 @@ function GeneratedOutfitScreen({ route }) {
           snapToInterval={width * 0.9 + 11.5 / 2}
           decelerationRate="fast"
         >
-          {generatedOutfits.map((outfit) => (
-            <View key={outfit.outfitId} style={styles.cardWrapper}>
-              <OutfitCard outfitId={outfit.outfitId} />
-            </View>
-          ))}
+          {generatedOutfits.map((outfit) => {
+            console.log("hi", outfit.SugID);
+
+            return (
+              <View key={outfit.SugID} style={styles.cardWrapper}>
+                <OutfitCard items={outfit?.items} />
+              </View>
+            );
+          })}
         </ScrollView>
       </View>
       <View style={styles.colorsSection}>
@@ -106,7 +125,7 @@ function GeneratedOutfitScreen({ route }) {
         {outfitColors.map((color) => (
           <View
             key={`${color}-${currentIndex}`}
-            style={[styles.color, { backgroundColor: color }]}
+            style={[styles.color, { backgroundColor: "#" + color }]}
           />
         ))}
         {/* <View style={[styles.color, { backgroundColor: "#878787" }]} /> */}
@@ -117,19 +136,22 @@ function GeneratedOutfitScreen({ route }) {
             style={[
               styles.saveButton,
               {
-                backgroundColor: generatedOutfits[currentIndex].favorites
-                  ? "black"
+                backgroundColor: true
+                  ? // backgroundColor: generatedOutfits[currentIndex].favorites
+                    "black"
                   : colors.accent,
               },
             ]}
             android_ripple={{ color: "rgba(0,0,0,0.1)" }}
-            onPress={() =>
-              (generatedOutfits[currentIndex].favorites =
-                !generatedOutfits[currentIndex].favorites)
+            onPress={
+              () => console.log("toggle favorites")
+
+              // (generatedOutfits[currentIndex].favorites =
+              //   !generatedOutfits[currentIndex].favorites)
             }
           >
             <Text style={styles.buttonText}>
-              {generatedOutfits[currentIndex].favorites ? "Unsave" : "Save"}
+              {generatedOutfits[currentIndex]?.favorites ? "Unsave" : "Save"}
             </Text>
           </Pressable>
         </View>

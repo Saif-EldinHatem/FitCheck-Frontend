@@ -11,7 +11,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useMemo, useState } from "react";
 import Collapsible from "react-native-collapsible";
-import { generationTags } from "../store/data";
+import { filtersData, generationTags } from "../store/data";
+import { useLocationStore } from "../store/locationStore";
 
 import colors from "../assets/colors/colors";
 import Pill from "../components/you screen/Pill";
@@ -22,6 +23,69 @@ function GenerationScreen() {
   const navigation = useNavigation();
   const [isAuto, setIsAuto] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
+  const coords = useLocationStore((state) => state.coords);
+
+  const handleGenerate = async (values) => {
+    console.log({ values });
+    const { dressCode, style, ...rest } = values;
+    values = { Occasion: dressCode, Style: style, ...rest };
+    console.log("values 2: ", values);
+
+    const flatTags = Object.values(values)
+      .flat()
+      .filter((tag) => tag !== "");
+
+    const FilterTags = Object.entries(values).reduce((acc, [Class, Tags]) => {
+      if (isAuto && Class === "weather") {
+        return acc;
+      }
+      if (Class === "theme") {
+        acc.push(...Tags.map((Tag) => ({ Class, Tag })));
+      } else if (Tags !== "") {
+        acc.push({ Class, Tag: Tags });
+      }
+      return acc;
+    }, []);
+
+    console.log({ FilterTags });
+
+    const requestPayload = {
+      CheckWeather: isAuto,
+      LocationLat: coords.latitude,
+      LocationLon: coords.longitude,
+      FilterTags,
+    };
+    console.log("data", requestPayload);
+    try {
+      const res = await fetch(
+        process.env.EXPO_PUBLIC_API_HOST + "/wardrobe/getrecommendation",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestPayload),
+        }
+      );
+
+      const data = await res.json();
+      console.log("coords: ", coords);
+
+      if (data.Result == false) {
+        // showToast("Error", data.Errors[0]);
+        console.log("Error", data.Errors[0]);
+      } else {
+        console.log("heyy: ", data);
+        navigation.push("GeneratedOutfit", {
+          suggestions: data.Suggestions,
+          tags: flatTags,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       dressCode: "",
@@ -29,17 +93,7 @@ function GenerationScreen() {
       theme: [],
       weather: "",
     },
-    onSubmit: async (values, { setSubmitting }) => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        navigation.push("GeneratedOutfit", { ...values });
-      } catch (error) {
-        console.error("Submission error");
-      } finally {
-        setSubmitting(false);
-      }
-    },
+    onSubmit: async (values) => handleGenerate(values),
   });
 
   function selectTag(field, title) {
