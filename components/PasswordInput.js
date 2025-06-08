@@ -14,9 +14,14 @@ import colors from "../assets/colors/colors";
 import { Ionicons } from "@expo/vector-icons";
 
 import { useState } from "react";
+import { useField } from "formik";
 
-function PasswordInput({ title, isCurrent = false }) {
+function PasswordInput({ name, title, isCurrent = false }) {
   const [isVisible, setIsVisible] = useState(false);
+
+  const [field, meta, helpers] = useField(name);
+  console.log(name, field);
+
   return (
     <View style={styles.inputContainer}>
       <Text style={styles.inputTitle}>{title}</Text>
@@ -25,13 +30,15 @@ function PasswordInput({ title, isCurrent = false }) {
           style={styles.textBox}
           secureTextEntry={!isVisible}
           cursorColor={colors.accent}
+          value={field.value}
+          onChangeText={(text) => helpers.setValue(text)}
         />
         <View style={styles.textBoxIcon}>
           <Pressable
             android_ripple={{ color: "rgba(132, 95, 57, 0.7)" }}
             onPress={() =>
               setIsVisible((current) => {
-                return (!current);
+                return !current;
               })
             }
           >
@@ -39,7 +46,11 @@ function PasswordInput({ title, isCurrent = false }) {
               source={isVisible ? hidden : visible}
               style={styles.iconImg}
             /> */}
-            <Ionicons name={isVisible? "eye-off-outline" : "eye-outline"} size={26} color={colors.accent} />
+            <Ionicons
+              name={isVisible ? "eye-off-outline" : "eye-outline"}
+              size={26}
+              color={colors.accent}
+            />
           </Pressable>
         </View>
       </View>

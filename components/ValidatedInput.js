@@ -1,5 +1,7 @@
-import { StyleSheet, View, Text, TextInput } from "react-native";
+import { StyleSheet, View, Text, TextInput, Pressable } from "react-native";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+import colors from "../assets/colors/colors";
+import { useNavigation } from "@react-navigation/native";
 
 function ValidatedInput({
   placeholder,
@@ -8,7 +10,9 @@ function ValidatedInput({
   handleChange,
   handleBlur,
   isPassword,
+  isLogin = false,
 }) {
+  const navigation = useNavigation();
   return (
     <View style={styles.inputWrapper}>
       <Animated.View
@@ -25,6 +29,14 @@ function ValidatedInput({
         />
       </Animated.View>
       {touched && error && <Text style={styles.validationText}>{error}</Text>}
+      {isLogin && isPassword && (
+        <Pressable
+          style={styles.link}
+          onPress={() => navigation.navigate("RequestPassword")}
+        >
+          <Text style={styles.linkText}>Forgot your password?</Text>
+        </Pressable>
+      )}
     </View>
   );
 }
@@ -54,6 +66,18 @@ const styles = StyleSheet.create({
     color: "darkred",
     marginTop: 3,
     paddingLeft: 5,
+    fontSize: 12,
+  },
+  link: {
+    marginTop: 7,
+    paddingLeft: 5,
+  },
+  linkText: {
+    color: colors.accent,
+    fontFamily: "poppins-semibold",
+    fontSize: 13,
+
+    // backgroundColor: "green",
   },
 });
 

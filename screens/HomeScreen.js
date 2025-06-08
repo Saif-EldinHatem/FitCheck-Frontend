@@ -75,13 +75,22 @@ function HomeScreen() {
             showsHorizontalScrollIndicator={false}
           >
             <View style={styles.cardWrapper}>
-              <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+              <OutfitCard
+                outfitId={"101"}
+                onPress={() => navigation.push("OutfitDetails")}
+              />
             </View>
             <View style={styles.cardWrapper}>
-              <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+              <OutfitCard
+                outfitId={"101"}
+                onPress={() => navigation.push("OutfitDetails")}
+              />
             </View>
             <View style={styles.cardWrapper}>
-              <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+              <OutfitCard
+                outfitId={"101"}
+                onPress={() => navigation.push("OutfitDetails")}
+              />
             </View>
           </ScrollView>
         </View>
@@ -110,13 +119,22 @@ function HomeScreen() {
             showsHorizontalScrollIndicator={false}
           >
             <View style={styles.cardWrapper}>
-              <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+              <OutfitCard
+                outfitId={"101"}
+                onPress={() => navigation.push("OutfitDetails")}
+              />
             </View>
             <View style={styles.cardWrapper}>
-              <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+              <OutfitCard
+                outfitId={"101"}
+                onPress={() => navigation.push("OutfitDetails")}
+              />
             </View>
             <View style={styles.cardWrapper}>
-              <OutfitCard onPress={() => navigation.push("OutfitDetails")} />
+              <OutfitCard
+                outfitId={"101"}
+                onPress={() => navigation.push("OutfitDetails")}
+              />
             </View>
           </ScrollView>
         </View>

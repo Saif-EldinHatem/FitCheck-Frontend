@@ -2,19 +2,38 @@ import { create } from "zustand";
 
 export const useUserStore = create((set) => ({
   Email: null,
+  Password: null,
   FirstName: null,
   LastName: null,
   Result: null,
   UserID: null,
   verified: null,
-  setUser: ({ Email, FirstName, LastName, Result, UserID, verified }) => {
+  Gender: null,
+  PhoneNum: null,
+  BirthDate: null,
+  setUser: ({
+    Email,
+    Password,
+    FirstName,
+    LastName,
+    Result,
+    UserID,
+    verified,
+    Gender,
+    PhoneNum,
+    BirthDate,
+  }) => {
     set({
       Email,
+      Password,
       FirstName,
       LastName,
       Result,
       UserID,
       verified,
+      Gender,
+      PhoneNum,
+      BirthDate: BirthDate.slice(0, 10),
     });
   },
   verify: () => {
@@ -31,6 +50,9 @@ export const useUserStore = create((set) => ({
       Result: null,
       UserID: null,
       verified: null,
+      Gender: null,
+      PhoneNum: null,
+      BirthDate: null,
     });
   },
 }));

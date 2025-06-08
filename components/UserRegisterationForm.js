@@ -53,6 +53,7 @@ function UserRegisterationForm({ showToast }) {
   const navigation = useNavigation();
   const Email = useRoute().params.values.Email;
   const setUser = useUserStore((state) => state.setUser);
+  
   async function handleRegister(values) {
     const birthDate = values.Year + "-" + values.Month + "-" + values.Day;
     values = { ...values, BirthDate: birthDate, Email };

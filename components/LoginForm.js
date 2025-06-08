@@ -39,8 +39,6 @@ function LoginForm() {
   const navigation = useNavigation();
 
   async function handleLogin(values) {
-    console.log(process.env.EXPO_PUBLIC_API_HOST);
-
     try {
       const res = await fetch(
         process.env.EXPO_PUBLIC_API_HOST + "/auth/login",
@@ -57,7 +55,9 @@ function LoginForm() {
       if (data.Result == false) {
         showToast("Error", data.Errors[0]);
       } else {
-        setUser({ ...data });
+        setUser({ ...data, Password: values.Password });
+        console.log({ ...data, Password: values.Password });
+
         if (data.Verified == false) {
           navigation.push("Verification", { Email: values.Email });
         } else {
@@ -96,6 +96,7 @@ function LoginForm() {
                 error={formikProps.errors.Email}
                 handleChange={formikProps.handleChange("Email")}
                 handleBlur={formikProps.handleBlur("Email")}
+                isLogin={true}
               />
 
               <ValidatedInput
@@ -105,6 +106,7 @@ function LoginForm() {
                 handleChange={formikProps.handleChange("Password")}
                 handleBlur={formikProps.handleBlur("Password")}
                 isPassword={true}
+                isLogin={true}
               />
 
               {formikProps.isSubmitting ? (
