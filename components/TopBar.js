@@ -15,7 +15,7 @@ function TopBar() {
     <View style={styles.barContainer}>
       <Text style={styles.logo}>FitCheck</Text>
       <View style={styles.rightRow}>
-        <Ionicons name="notifications-outline" size={27} color="#1D1B20" />
+        {/* <Ionicons name="notifications-outline" size={27} color="#1D1B20" /> */}
         <TouchableOpacity onPress={() => navigation.navigate("Account")}>
            <Image style={styles.userAvatar} source={require("../assets/images/home screen/user-avatar.png")}/>
         </TouchableOpacity>

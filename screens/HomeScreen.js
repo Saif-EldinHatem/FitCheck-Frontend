@@ -11,23 +11,146 @@ import {
   Pressable,
   Dimensions,
 } from "react-native";
+import * as FileSystem from "expo-file-system";
+
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import TopBar from "../components/TopBar";
 import WeatherCard from "../components/WeatherCard";
 import OutfitCard from "../components/OutfitCard";
 import colors from "../assets/colors/colors";
 import { useLocationStore } from "../store/locationStore";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useUserStore } from "../store/userStore";
+import { useOutfitStore } from "../store/outfitStore";
+import { useWardrobeStore } from "../store/wardrobeStore";
 
 const { height, width } = Dimensions.get("screen");
 function HomeScreen() {
   const { city, getLocation, coords } = useLocationStore();
   const FirstName = useUserStore((state) => state.FirstName);
-  useEffect(() => {
-    getLocation();
-  }, []);
+
+  const setWardrobeItems = useWardrobeStore((state) => state.setWardrobeItems);
+  const setOutfits = useOutfitStore((state) => state.setOutfits);
+
+  useFocusEffect(
+    useCallback(() => {
+      const checkImageExists = async (imageUri) => {
+        const fileInfo = await FileSystem.getInfoAsync(imageUri);
+        return fileInfo.exists;
+      };
+
+      async function downloadImage(imagePath, status) {
+        try {
+          const directoryPath = FileSystem.documentDirectory + "wardrobe/";
+          const fileName = imagePath.split("\\").pop(); // Extract only the file name
+          const localUri = directoryPath + fileName; // Append the file name to the directory path
+          const normalizedUri = localUri.replace(/\\/g, "/"); // Normalize the path
+
+          // Ensure the directory exists
+          const dirInfo = await FileSystem.getInfoAsync(directoryPath);
+          if (!dirInfo.exists) {
+            console.log("Directory does not exist, creating:", directoryPath);
+            await FileSystem.makeDirectoryAsync(directoryPath, {
+              intermediates: true,
+            });
+          }
+
+          const exists = await checkImageExists(normalizedUri); // Pass normalizedUri here
+          if (exists) {
+            // console.log("Image already exists: ", normalizedUri);
+            return normalizedUri;
+          }
+
+          if (status == 2) {
+            return null;
+          }
+          const res = await FileSystem.downloadAsync(
+            process.env.EXPO_PUBLIC_API_HOST + "/asset?file=" + imagePath,
+            normalizedUri
+          );
+          console.log("Image Downloaded to: ", res.uri);
+          return res.uri;
+        } catch (error) {
+          console.error("Error downloading image: ", error);
+          return null;
+        }
+      }
+
+      async function handleFetchWardrobe() {
+        console.log(process.env.EXPO_PUBLIC_API_HOST);
+        try {
+          const res = await fetch(
+            process.env.EXPO_PUBLIC_API_HOST + "/wardrobe",
+            {
+              method: "GET",
+            }
+          );
+
+          const data = await res.json();
+          if (data.Result == false) {
+            console.log("Error", data.Errors[0]);
+          } else {
+            const itemsWithLocalImages = await Promise.all(
+              data.Items.map(async (item) => {
+                const localImageUri = await downloadImage(
+                  item.ImagePath,
+                  item.Status
+                );
+
+                return { ...item, localImageUri };
+              })
+            );
+            setWardrobeItems(itemsWithLocalImages);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      async function handleFetchOutfits() {
+        try {
+          const res = await fetch(
+            process.env.EXPO_PUBLIC_API_HOST + "/wardrobe/outfits",
+            {
+              method: "GET",
+            }
+          );
+
+          const data = await res.json();
+          if (data.Result == false) {
+            console.log("Error", data.Errors[0]);
+          } else {
+            const groupedOutfits = Object.values(
+              data.Outfits.reduce((acc, curr) => {
+                const { OutfitID, ItemID, Favorite } = curr;
+                if (!acc[OutfitID]) {
+                  acc[OutfitID] = {
+                    OutfitID,
+                    ItemIDs: [],
+                    Favorite,
+                  };
+                }
+                acc[OutfitID].ItemIDs.push(ItemID);
+                return acc;
+              }, {})
+            );
+
+            setOutfits(groupedOutfits);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      handleFetchWardrobe();
+      handleFetchOutfits();
+      getLocation();
+    }, [])
+  );
+
+  const favoriteOutfits = useOutfitStore((state) => state.getFavoriteOutfits)();
+  const recentOutfits = useOutfitStore((state) => state.getRecentOutfits)();
 
   const navigation = useNavigation();
   return (
@@ -74,24 +197,14 @@ function HomeScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
           >
-            <View style={styles.cardWrapper}>
-              <OutfitCard
-                outfitId={"101"}
-                onPress={() => navigation.push("OutfitDetails")}
-              />
-            </View>
-            <View style={styles.cardWrapper}>
-              <OutfitCard
-                outfitId={"101"}
-                onPress={() => navigation.push("OutfitDetails")}
-              />
-            </View>
-            <View style={styles.cardWrapper}>
-              <OutfitCard
-                outfitId={"101"}
-                onPress={() => navigation.push("OutfitDetails")}
-              />
-            </View>
+            {recentOutfits.map(({ OutfitID }) => (
+              <View style={styles.cardWrapper} key={OutfitID}>
+                <OutfitCard
+                  OutfitID={OutfitID}
+                  onPress={() => navigation.push("OutfitDetails", { OutfitID })}
+                />
+              </View>
+            ))}
           </ScrollView>
         </View>
 
@@ -118,24 +231,14 @@ function HomeScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
           >
-            <View style={styles.cardWrapper}>
-              <OutfitCard
-                outfitId={"101"}
-                onPress={() => navigation.push("OutfitDetails")}
-              />
-            </View>
-            <View style={styles.cardWrapper}>
-              <OutfitCard
-                outfitId={"101"}
-                onPress={() => navigation.push("OutfitDetails")}
-              />
-            </View>
-            <View style={styles.cardWrapper}>
-              <OutfitCard
-                outfitId={"101"}
-                onPress={() => navigation.push("OutfitDetails")}
-              />
-            </View>
+            {favoriteOutfits.map(({ OutfitID }) => (
+              <View style={styles.cardWrapper} key={OutfitID}>
+                <OutfitCard
+                  OutfitID={OutfitID}
+                  onPress={() => navigation.push("OutfitDetails", { OutfitID })}
+                />
+              </View>
+            ))}
           </ScrollView>
         </View>
 

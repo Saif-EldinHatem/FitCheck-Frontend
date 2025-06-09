@@ -129,6 +129,7 @@ function WardrobeScreen() {
               item.ImagePath,
               item.Status
             );
+
             return { ...item, localImageUri };
           })
         );
@@ -165,9 +166,11 @@ function WardrobeScreen() {
 
   useEffect(() => {
     handleFetchData();
-
-    setFilteredList(wardrobeItems);
   }, []);
+
+  useEffect(() => {
+    setFilteredList(wardrobeItems);
+  }, [wardrobeItems]);
 
   useFocusEffect(
     useCallback(() => {
@@ -250,8 +253,10 @@ function WardrobeScreen() {
 
       {isFiltered && (
         <View style={styles.subHeader}>
-          <Text style={styles.subHeaderText}>Filtered:</Text>
-          {Object.values(filters)
+          <Text style={styles.subHeaderText}>
+            Filtered: {Object.values(filters).flat(2).join(", ")}
+          </Text>
+          {/* {Object.values(filters)
             .flat(2)
             .map((option, index) => {
               return (
@@ -259,7 +264,7 @@ function WardrobeScreen() {
                   {option},
                 </Text>
               );
-            })}
+            })} */}
         </View>
       )}
 
