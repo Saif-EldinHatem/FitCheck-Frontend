@@ -2,19 +2,27 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import Card from "./Card";
 
-import { outfitsDummyData } from "../store/data";
+import { useOutfitStore } from "../store/outfitStore";
+import { useWardrobeStore } from "../store/wardrobeStore";
 
-function OutfitCard({ outfitId, onPress, items = {} }) {
-  const [outfitItems, setOutfitItems] = useState();
+function OutfitCard({ OutfitID, onPress, items = [] }) {
+  const [outfitItems, setOutfitItems] = useState([]); // default to empty array
+  const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
+  const getOutfit = useOutfitStore((state) => state.getOutfit);
+  const currentOutfit = getOutfit(OutfitID);
+
   useEffect(() => {
-    if (outfitId) {
-      console.log({ outfitId });
-      const outfitItems = outfitsDummyData.find(
-        (outfit) => outfit.outfitId == outfitId
-      ).items;
-      setOutfitItems(outfitItems);
+    if (currentOutfit && wardrobeItems.length > 0) {
+      setOutfitItems(
+        currentOutfit.ItemIDs.map(
+          (id) =>
+            wardrobeItems.find((item) => item.ItemID === id)?.localImageUri
+        )
+      );
+    } else {
+      setOutfitItems(items.map((item) => item?.localImageUri));
     }
-  }, [items, outfitItems]);
+  }, [currentOutfit, wardrobeItems]);
 
   return (
     <View style={styles.container}>
@@ -23,21 +31,13 @@ function OutfitCard({ outfitId, onPress, items = {} }) {
           <View style={styles.smallBox}>
             <Image
               style={styles.img}
-              source={
-                outfitItems
-                  ? outfitItems[0]?.image
-                  : { uri: items[2]?.localImageUri }
-              }
+              source={outfitItems[0] ? { uri: outfitItems[0] } : undefined}
             />
           </View>
           <View style={styles.smallBox}>
             <Image
               style={styles.img}
-              source={
-                outfitItems
-                  ? outfitItems[1]?.image
-                  : { uri: items[0]?.localImageUri }
-              }
+              source={outfitItems[1] ? { uri: outfitItems[1] } : undefined}
             />
           </View>
         </View>
@@ -45,11 +45,7 @@ function OutfitCard({ outfitId, onPress, items = {} }) {
         <View style={styles.rightContainer}>
           <Image
             style={styles.img}
-            source={
-              outfitItems
-                ? outfitItems[2]?.image
-                : { uri: items[1]?.localImageUri }
-            }
+            source={outfitItems[2] ? { uri: outfitItems[2] } : undefined}
           />
         </View>
       </Card>
@@ -74,7 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   img: {
-    objectFit: "cover",
+    objectFit: "contain",
     height: "100%",
     width: "100%,",
   },

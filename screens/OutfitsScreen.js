@@ -7,18 +7,74 @@ import {
   FlatList,
 } from "react-native";
 import colors from "../assets/colors/colors";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import OutfitCard from "../components/OutfitCard";
 import { Ionicons } from "@expo/vector-icons";
 import { outfitsDummyData } from "../store/data";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useOutfitStore } from "../store/outfitStore";
 
 function OutfitsScreen({ route }) {
   const [isRecent, setIsRecent] = useState(false);
   const [isFavorites, setIsFavorites] = useState(false);
-  const [outfits, setOutfits] = useState(outfitsDummyData);
-  const [filteredOutfits, setFilteredOutfits] = useState(outfitsDummyData);
+  // const [outfits, setOutfits] = useState(outfitsDummyData);
+  const outfits = useOutfitStore((state) => state.outfits);
+  const setOutfits = useOutfitStore((state) => state.setOutfits);
+  const [filteredOutfits, setFilteredOutfits] = useState([]);
+
+  async function handleFetchData() {
+    try {
+      const res = await fetch(
+        process.env.EXPO_PUBLIC_API_HOST + "/wardrobe/outfits",
+        {
+          method: "GET",
+        }
+      );
+
+      const data = await res.json();
+      if (data.Result == false) {
+        console.log("Error", data.Errors[0]);
+      } else {
+        const groupedOutfits = Object.values(
+          data.Outfits.reduce((acc, curr) => {
+            const { OutfitID, ItemID, Favorite } = curr;
+            if (!acc[OutfitID]) {
+              acc[OutfitID] = {
+                OutfitID,
+                ItemIDs: [],
+                Favorite,
+              };
+            }
+            acc[OutfitID].ItemIDs.push(ItemID);
+            return acc;
+          }, {})
+        );
+
+        console.log("hi", groupedOutfits);
+        setOutfits(groupedOutfits);
+        setFilteredOutfits(groupedOutfits);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    handleFetchData();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      handleFetchData();
+    }, [])
+  );
+
+  // useEffect(()=>{
+  //   if(isFavorites){
+  //     const prevOutfits = outfits;
+  //   }
+  // }, [filteredOutfits, isFavorites])
 
   const navigation = useNavigation();
 
@@ -29,25 +85,58 @@ function OutfitsScreen({ route }) {
 
   function handleFiltering() {
     let filteredList;
-    if (isRecent == true && isFavorites == true) {
-      filteredList = outfits.filter(
-        (outfit) => outfit.favorites == true && outfit.recent == true
-      );
-    } else if (isRecent == true) {
-      filteredList = outfits.filter((outfit) => outfit.recent == true);
-    } else if (isFavorites == true) {
-      filteredList = outfits.filter((outfit) => outfit.favorites == true);
+    if (isFavorites == true) {
+      filteredList = outfits.filter((outfit) => outfit.Favorite === true);
     } else {
       filteredList = outfits;
     }
+    // if (isRecent == true && isFavorites == true) {
+    //   filteredList = outfits.filter(
+    //     (outfit) => outfit.favorites == true && outfit.recent == true
+    //   );
+    // } else if (isRecent == true) {
+    //   filteredList = outfits.filter((outfit) => outfit.recent == true);
+    // } else if (isFavorites == true) {
+    //   filteredList = outfits.filter((outfit) => outfit.favorites == true);
+    // } else {
+    //   filteredList = outfits;
+    // }
     setFilteredOutfits(filteredList);
   }
 
+  async function handleSetFavorite(values) {
+    try {
+      const res = await fetch(
+        process.env.EXPO_PUBLIC_API_HOST + "/wardrobe/setfavorite",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
+
+      const data = await res.json();
+      if (data.Result == false) {
+        console.error("Error", data.Errors[0]);
+      } else {
+        toggleFavorite(values.OutfitID);
+        console.log("Favorited");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   function toggleFavorite(id) {
-    setOutfits((prevOutfits) =>
+    console.log(id);
+
+    const prevOutfits = outfits;
+    setOutfits(
       prevOutfits.map((outfit) =>
-        outfit.outfitId === id
-          ? { ...outfit, favorites: !outfit.favorites }
+        outfit.OutfitID === id
+          ? { ...outfit, Favorite: !outfit.Favorite }
           : outfit
       )
     );
@@ -91,7 +180,7 @@ function OutfitsScreen({ route }) {
 
       <FlatList
         data={filteredOutfits}
-        keyExtractor={(item) => item.outfitId}
+        keyExtractor={(item) => item.OutfitID}
         numColumns={2}
         style={{ width: "100%" }}
         columnWrapperStyle={{
@@ -102,21 +191,26 @@ function OutfitsScreen({ route }) {
         contentContainerStyle={{
           gap: 15,
           paddingTop: 12,
-          paddingBottom: 20,
+          paddingBottom: 100,
         }}
         renderItem={({ item }) => (
           <View style={styles.cardWrapper}>
             <OutfitCard
-              outfitId={item.outfitId}
+              OutfitID={item.OutfitID}
               onPress={() =>
-                navigation.push("OutfitDetails", { outfitId: item.outfitId })
+                navigation.push("OutfitDetails", { OutfitID: item.OutfitID })
               }
             />
             <Pressable
               style={styles.bookmark}
-              onPress={toggleFavorite.bind(this, item.outfitId)}
+              onPress={() =>
+                handleSetFavorite({
+                  OutfitID: item.OutfitID,
+                  Favorite: !item.Favorite,
+                })
+              }
             >
-              {item.favorites ? (
+              {item.Favorite ? (
                 <Ionicons name="bookmark" size={28} color={"#D2A553"} />
               ) : (
                 <Ionicons name="bookmark-outline" size={28} />
@@ -136,13 +230,13 @@ function OutfitsScreen({ route }) {
             }}
           >
             <Text style={styles.bottomButtonText}>Generate</Text>
+            <Ionicons
+              name="sparkles-sharp"
+              color="white"
+              size={20}
+              style={styles.sparkles}
+            />
           </Pressable>
-          <Ionicons
-            name="sparkles-sharp"
-            color="white"
-            size={20}
-            style={styles.sparkles}
-          />
         </View>
       </View>
     </View>
@@ -206,7 +300,6 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 16,
     alignItems: "center",
-    backgroundColor: "green",
   },
   bottomButton: {
     borderRadius: 8,
@@ -222,17 +315,19 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "row",
   },
   bottomButtonText: {
     fontFamily: "higuen",
     fontSize: 24,
     fontStyle: 20,
     color: "white",
+    // left:10,
   },
   sparkles: {
-    position: "absolute",
-    right: 120,
-    top: 7,
+    // position: "absolute",
+    // right: 120,
+    bottom: 7,
   },
 });
 

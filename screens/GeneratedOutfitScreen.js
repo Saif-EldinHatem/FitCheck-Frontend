@@ -20,36 +20,57 @@ const { width } = Dimensions.get("window");
 
 function GeneratedOutfitScreen({ route }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [generatedOutfits, setGeneratedOutfits] = useState([]);
+
   const [outfitColors, setOutfitColors] = useState([]);
-  const getItem = useWardrobeStore((state) => state.getItem);
   const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
   const { suggestions, tags } = route.params;
-  // console.log({ tags });
-  // console.log("route.params: ", route.params);
+
+  const handleSave = async (values) => {
+    console.log("ex: ", values);
+    try {
+      const res = await fetch(
+        process.env.EXPO_PUBLIC_API_HOST + "/wardrobe/saveoutfit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.Result == false) {
+        // showToast("Error", data.Errors[0]);
+        console.log("Error", data.Errors[0]);
+      } else {
+        console.log("heyy: ", data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  // const getItem = useWardrobeStore((state) => state.getItem);
 
   // console.log({ suggestions });
 
-  console.log({ suggestions });
+  useEffect(() => {
+    const groupedOutfits = Object.values(
+      suggestions.reduce((acc, { SugID, ItemID }) => {
+        if (!acc[SugID]) {
+          acc[SugID] = { SugID, items: [], isSaved: false };
+        }
+        const item = wardrobeItems.find((item) => item.ItemID === ItemID);
+        if (item) acc[SugID].items.push(item);
+        return acc;
+      }, {})
+    );
+    setGeneratedOutfits(groupedOutfits);
+  }, [suggestions, wardrobeItems]);
 
-  const generatedOutfits = Object.values(
-    suggestions.reduce((acc, { SugID, ItemID }) => {
-      if (!acc[SugID]) {
-        acc[SugID] = { SugID, items: [] }; // Initialize an array for this SugID if it doesn't exist
-      }
-      acc[SugID].items.push(
-        wardrobeItems.find((item) => item.ItemID === ItemID)
-      ); // Add the ItemID to the corresponding SugID array
-      return acc;
-    }, {})
-  );
-  console.log(generatedOutfits[0]);
-
-  // console.log("object values", Object.values(groupedData[currentIndex]));
-
-  // const tags = Object.entries(route.params).filter(
-  //   ([key, values]) => values !== ""
-  // );
-  // const generatedOutfits = outfitsDummyData.slice(0, 3);
+  // console.log(generatedOutfits[0]);
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
@@ -57,7 +78,22 @@ function GeneratedOutfitScreen({ route }) {
     if (index !== currentIndex) {
       setCurrentIndex(index);
       console.log("Current index: ", index);
+      console.log("HI: ", generatedOutfits[currentIndex].items);
     }
+  };
+
+  const toggleSave = () => {
+    if (!generatedOutfits[currentIndex]?.isSaved) {
+      handleSave({ SugID: generatedOutfits[currentIndex]?.SugID });
+    }
+    setGeneratedOutfits((prevOutfits) => {
+      const updated = [...prevOutfits];
+      updated[currentIndex] = {
+        ...updated[currentIndex],
+        isSaved: !updated[currentIndex].isSaved,
+      };
+      return updated;
+    });
   };
 
   const getOutfitColors = () => {
@@ -68,13 +104,14 @@ function GeneratedOutfitScreen({ route }) {
           .filter((color) => color !== undefined)
       ),
     ];
-    console.log({ uniqueColors });
+    // console.log({ uniqueColors });
     setOutfitColors(uniqueColors);
   };
 
   useEffect(() => {
     getOutfitColors();
-  }, [currentIndex]);
+    console.log("LOOK!!: ", generatedOutfits[currentIndex]?.SugID);
+  }, [currentIndex, generatedOutfits]);
 
   const navigation = useNavigation();
   return (
@@ -110,8 +147,6 @@ function GeneratedOutfitScreen({ route }) {
           decelerationRate="fast"
         >
           {generatedOutfits.map((outfit) => {
-            console.log("hi", outfit.SugID);
-
             return (
               <View key={outfit.SugID} style={styles.cardWrapper}>
                 <OutfitCard items={outfit?.items} />
@@ -136,22 +171,16 @@ function GeneratedOutfitScreen({ route }) {
             style={[
               styles.saveButton,
               {
-                backgroundColor: true
-                  ? // backgroundColor: generatedOutfits[currentIndex].favorites
-                    "black"
+                backgroundColor: generatedOutfits[currentIndex]?.isSaved
+                  ? "black"
                   : colors.accent,
               },
             ]}
             android_ripple={{ color: "rgba(0,0,0,0.1)" }}
-            onPress={
-              () => console.log("toggle favorites")
-
-              // (generatedOutfits[currentIndex].favorites =
-              //   !generatedOutfits[currentIndex].favorites)
-            }
+            onPress={toggleSave}
           >
             <Text style={styles.buttonText}>
-              {generatedOutfits[currentIndex]?.favorites ? "Unsave" : "Save"}
+              {generatedOutfits[currentIndex]?.isSaved ? "Unsave" : "Save"}
             </Text>
           </Pressable>
         </View>

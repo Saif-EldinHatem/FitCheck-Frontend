@@ -16,22 +16,28 @@ import { useEffect, useState } from "react";
 import Card from "../components/Card";
 import { useNavigation } from "@react-navigation/native";
 import { outfitsDummyData } from "../store/data";
-
-const dummyData = [
-  { id: "1", image: require("../assets/images/clothes/black-tshirt.png") },
-  { id: "2", image: require("../assets/images/clothes/grayPants.webp") },
-  { id: "3", image: require("../assets/images/clothes/beanie.png") },
-  { id: "4", image: require("../assets/images/clothes/black-converse.png") },
-  { id: "5", image: require("../assets/images/clothes/sunglasses.png") },
-];
+import { useOutfitStore } from "../store/outfitStore";
+import { useWardrobeStore } from "../store/wardrobeStore";
 
 function OutfitDetailsScreen({ route }) {
-  const [data, setData] = useState(dummyData);
   const [editMode, setEditMode] = useState(false);
   const [selectedList, setSelectedList] = useState([]);
-  const outfitItems = outfitsDummyData.find(
-    (item) => item.outfitId === route.params?.outfitId
-  ).items;
+  const currentOutfit = useOutfitStore((state) =>
+    state.getOutfit(route.params?.OutfitID)
+  );
+  const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
+  const [outfitItems, setOutfitItems] = useState([]);
+  useEffect(() => {
+    const items = currentOutfit.ItemIDs.map((id) =>
+      wardrobeItems.find((item) => item.ItemID === id)
+    );
+    console.log("Items: ", items);
+
+    setOutfitItems(items);
+  }, [currentOutfit, wardrobeItems]);
+  // const outfitItems = outfitsDummyData.find(
+  //   (item) => item.outfitId === route.params?.outfitId
+  // ).items;
 
   const navigation = useNavigation();
   function handleItemPress(id) {
@@ -76,26 +82,26 @@ function OutfitDetailsScreen({ route }) {
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.grid}>
           {outfitItems.map((item) => (
-            <View key={item.id} style={styles.itemContainer}>
+            <View key={item.ItemID} style={styles.itemContainer}>
               <ItemCard
-                img={item.image}
+                img={{ uri: item.localImageUri }}
                 onPress={() => {
-                  navigation.navigate("ItemScreen", { itemId: item.id });
+                  navigation.navigate("ItemScreen", { itemId: item.ItemID });
                 }}
                 onLongPress={() => {
                   handleEditMode();
-                  setSelectedList((prev) => [...prev, item.id]);
+                  setSelectedList((prev) => [...prev, item.ItemID]);
                 }}
               />
-              {item.id != "last" && editMode == true && (
+              {editMode == true && (
                 <Pressable
                   style={styles.selectArea}
-                  onPress={handleItemPress.bind(this, item.id)}
+                  onPress={handleItemPress.bind(this, item.ItemID)}
                 >
                   <View style={styles.selectIcon}>
                     <Ionicons
                       name={
-                        selectedList.includes(item.id)
+                        selectedList.includes(item.ItemID)
                           ? "checkmark-circle"
                           : "ellipse-outline"
                       }

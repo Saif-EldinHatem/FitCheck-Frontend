@@ -2,8 +2,6 @@ import {
   StyleSheet,
   View,
   Text,
-  SafeAreaView,
-  Button,
   Pressable,
   ActivityIndicator,
   ScrollView,
