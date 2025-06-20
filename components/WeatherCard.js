@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { useLocationStore } from "../store/locationStore";
 
 const WeatherCard = () => {
-  const [weather, setWeather] = useState({});
+  const [weather, setWeather] = useState();
   const city = useLocationStore((state) => state.city);
   const coords = useLocationStore((state) => state.coords);
   const currentDate = new Date();
@@ -53,9 +53,11 @@ const WeatherCard = () => {
         <Text style={styles.dateText}>{formattedDate}</Text>
       </View>
       <View style={styles.descriptionContainer}>
-        <Text style={styles.descriptionText}>
-          {weather?.state}, {weather?.temp}°F
-        </Text>
+        {weather && (
+          <Text style={styles.descriptionText}>
+            {weather?.state}, {weather?.temp}°F
+          </Text>
+        )}
       </View>
       <View style={styles.cardRow}>
         <View style={styles.locationRow}>
@@ -65,15 +67,17 @@ const WeatherCard = () => {
           />
           <Text style={styles.locationText}>{city || "Unknown"}</Text>
         </View>
-        <View style={styles.weatherRow}>
-          <Image
-            source={require("../assets/cloud.png")}
-            style={styles.weatherIcon}
-          />
-          <Text style={styles.tempText}>
-            L: {weather.min}° H: {weather.max}°
-          </Text>
-        </View>
+        {weather && (
+          <View style={styles.weatherRow}>
+            <Image
+              source={require("../assets/cloud.png")}
+              style={styles.weatherIcon}
+            />
+            <Text style={styles.tempText}>
+              L: {weather.min}° H: {weather.max}°
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );
