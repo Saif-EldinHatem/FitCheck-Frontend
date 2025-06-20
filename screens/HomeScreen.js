@@ -2,36 +2,40 @@ import {
   StyleSheet,
   View,
   SafeAreaView,
-  TextInput,
   Text,
   StatusBar,
   Platform,
   ScrollView,
-  Image,
   Pressable,
   Dimensions,
 } from "react-native";
 import * as FileSystem from "expo-file-system";
 
-import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import TopBar from "../components/TopBar";
 import WeatherCard from "../components/WeatherCard";
 import OutfitCard from "../components/OutfitCard";
 import colors from "../assets/colors/colors";
 import { useLocationStore } from "../store/locationStore";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUserStore } from "../store/userStore";
 import { useOutfitStore } from "../store/outfitStore";
 import { useWardrobeStore } from "../store/wardrobeStore";
 
 const { height, width } = Dimensions.get("screen");
 function HomeScreen() {
+  const [favoriteOutfits, setFavoriteOutfits] = useState([]);
+  const [recentOutfits, setRecentOutfits] = useState([]);
   const { city, getLocation, coords } = useLocationStore();
   const FirstName = useUserStore((state) => state.FirstName);
 
   const setWardrobeItems = useWardrobeStore((state) => state.setWardrobeItems);
   const setOutfits = useOutfitStore((state) => state.setOutfits);
+  const getFavoriteOutfits = useOutfitStore(
+    (state) => state.getFavoriteOutfits
+  );
+
+  const getRecentOutfits = useOutfitStore((state) => state.getRecentOutfits);
 
   useEffect(() => {
     const checkImageExists = async (imageUri) => {
@@ -140,6 +144,7 @@ function HomeScreen() {
                 return acc;
               }, {})
             );
+            console.log("Hi");
 
             setOutfits(groupedOutfits);
           }
@@ -149,11 +154,10 @@ function HomeScreen() {
       }
 
       handleFetchOutfits();
+      setFavoriteOutfits(() => getFavoriteOutfits());
+      setRecentOutfits(() => getRecentOutfits());
     }, [])
   );
-
-  const favoriteOutfits = useOutfitStore((state) => state.getFavoriteOutfits)();
-  const recentOutfits = useOutfitStore((state) => state.getRecentOutfits)();
 
   const navigation = useNavigation();
   return (

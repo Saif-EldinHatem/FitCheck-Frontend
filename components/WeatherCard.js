@@ -55,7 +55,7 @@ const WeatherCard = () => {
       <View style={styles.descriptionContainer}>
         {weather && (
           <Text style={styles.descriptionText}>
-            {weather?.state}, {weather?.temp}°F
+            {weather?.state}, {weather?.temp}°C
           </Text>
         )}
       </View>
@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 31,
     textAlign: "left",
     width: "100%",
+    lineHeight: 35,
     // paddingBottom: 6,
     // marginTop: 10,
     fontFamily: "higuen",
