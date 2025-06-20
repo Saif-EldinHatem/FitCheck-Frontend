@@ -187,7 +187,7 @@ function WardrobeScreen() {
       const interval = setInterval(() => {
         console.log("Checking for updates...");
         handleFetchData();
-      }, 3000); // Call handleFetchData every 5 seconds
+      }, 3000); // Call handleFetchData every 3 seconds
 
       // Cleanup the interval when checkPending becomes false or component unmounts
       return () => clearInterval(interval);

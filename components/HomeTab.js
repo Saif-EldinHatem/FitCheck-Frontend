@@ -33,8 +33,18 @@ function HomeTab() {
           ),
         }}
       />
-        <Stack.Screen name="ItemScreen" component={ItemScreen} />
-
+      <Stack.Screen
+        name="ItemScreen"
+        component={ItemScreen}
+        options={{
+          title: "Item",
+          headerShown: true,
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: colors.main },
+          headerTitleStyle: { fontFamily: "higuen", fontSize: 32 },
+          headerTitleAlign: "center",
+        }}
+      />
     </Stack.Navigator>
   );
 }
