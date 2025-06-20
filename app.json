@@ -24,10 +24,20 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.saif.hatem.FitCheck"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7a33a645-9bd3-4002-8aa5-8f017e18fa89"
+      }
+    },
+    "owner": "saif.hatem",
+    "plugins": [
+      "expo-font"
+    ]
   }
 }

@@ -83,7 +83,7 @@ function YouScreen() {
         </View>
 
         <View style={styles.editIconWrapper}>
-          <Pressable onPress={() => console.log("edit-icon pressed")}>
+          <Pressable onPress={() => navigation.push("Settings")}>
             <Image
               source={require("../assets/images/Youscreen/edit-icon.png")}
               style={styles.editIcon}
@@ -93,7 +93,9 @@ function YouScreen() {
       </View>
 
       {/* Username */}
-      <Text style={styles.username}>{firstName}</Text>
+      <Pressable onPress={() => navigation.push("Settings")}>
+        <Text style={styles.username}>{firstName}</Text>
+      </Pressable>
 
       {/* Avatar Section */}
       <SectionWrapper title={"Avatar"}>
