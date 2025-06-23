@@ -28,8 +28,9 @@ function HomeScreen() {
   const [recentOutfits, setRecentOutfits] = useState([]);
   const { city, getLocation, coords } = useLocationStore();
   const FirstName = useUserStore((state) => state.FirstName);
-
-  const setWardrobeItems = useWardrobeStore((state) => state.setWardrobeItems);
+  const handleFetchWardrobe = useWardrobeStore((state) => state.fetchWardrobe);
+  // const setWardrobeItems = useWardrobeStore((state) => state.setWardrobeItems);
+  const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
   const setOutfits = useOutfitStore((state) => state.setOutfits);
   const getFavoriteOutfits = useOutfitStore(
     (state) => state.getFavoriteOutfits
@@ -38,79 +39,6 @@ function HomeScreen() {
   const getRecentOutfits = useOutfitStore((state) => state.getRecentOutfits);
 
   useEffect(() => {
-    const checkImageExists = async (imageUri) => {
-      const fileInfo = await FileSystem.getInfoAsync(imageUri);
-      return fileInfo.exists;
-    };
-
-    async function downloadImage(imagePath, status) {
-      try {
-        const directoryPath = FileSystem.documentDirectory + "wardrobe/";
-        const fileName = imagePath.split("\\").pop(); // Extract only the file name
-        const localUri = directoryPath + fileName; // Append the file name to the directory path
-        const normalizedUri = localUri.replace(/\\/g, "/"); // Normalize the path
-
-        // Ensure the directory exists
-        const dirInfo = await FileSystem.getInfoAsync(directoryPath);
-        if (!dirInfo.exists) {
-          console.log("Directory does not exist, creating:", directoryPath);
-          await FileSystem.makeDirectoryAsync(directoryPath, {
-            intermediates: true,
-          });
-        }
-
-        const exists = await checkImageExists(normalizedUri); // Pass normalizedUri here
-        if (exists) {
-          // console.log("Image already exists: ", normalizedUri);
-          return normalizedUri;
-        }
-
-        if (status == 2) {
-          return null;
-        }
-        const res = await FileSystem.downloadAsync(
-          process.env.EXPO_PUBLIC_API_HOST + "/asset?file=" + imagePath,
-          normalizedUri
-        );
-        console.log("Image Downloaded to: ", res.uri);
-        return res.uri;
-      } catch (error) {
-        console.error("Error downloading image: ", error);
-        return null;
-      }
-    }
-
-    async function handleFetchWardrobe() {
-      console.log(process.env.EXPO_PUBLIC_API_HOST);
-      try {
-        const res = await fetch(
-          process.env.EXPO_PUBLIC_API_HOST + "/wardrobe",
-          {
-            method: "GET",
-          }
-        );
-
-        const data = await res.json();
-        if (data.Result == false) {
-          console.log("Error", data.Errors[0]);
-        } else {
-          const itemsWithLocalImages = await Promise.all(
-            data.Items.map(async (item) => {
-              const localImageUri = await downloadImage(
-                item.ImagePath,
-                item.Status
-              );
-
-              return { ...item, localImageUri };
-            })
-          );
-          setWardrobeItems(itemsWithLocalImages);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
     handleFetchWardrobe();
     getLocation();
   }, []);
@@ -156,7 +84,7 @@ function HomeScreen() {
       handleFetchOutfits();
       setFavoriteOutfits(() => getFavoriteOutfits());
       setRecentOutfits(() => getRecentOutfits());
-    }, [])
+    }, [wardrobeItems])
   );
 
   const navigation = useNavigation();

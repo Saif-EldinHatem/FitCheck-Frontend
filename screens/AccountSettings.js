@@ -75,7 +75,7 @@ function AccountSettings() {
       const data = await res.json();
       if (data.Result == false) {
         // console.log("Error", data.Errors[0]);
-        showToast("Somethng went wrong", data.Errors[0], "error");
+        showToast("Something went wrong", data.Errors[0], "error");
       } else {
         console.log("before:", userInfo);
         console.log({ values });

@@ -11,31 +11,32 @@ import {
   Image,
   StyleSheet,
   Pressable,
-  SafeAreaView,
-  Button,
   KeyboardAvoidingView,
 } from "react-native";
 
 import colors from "../assets/colors/colors";
 import CustomBottomSheet from "../components/CustomBottomSheet";
-import { filtersData, itemsDummyData } from "../store/data";
-import { Ionicons } from "@expo/vector-icons";
+import { filtersData } from "../store/data";
 import ProcessingScreen from "../components/ProcessingScreen";
 import CollapsibleRow from "../components/CollapsibleRow";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useWardrobeStore } from "../store/wardrobeStore";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import * as FileSystem from "expo-file-system";
 
-function ItemScreen({ route }) {
+function ItemScreen() {
   const navigation = useNavigation();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
-  const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
-  const item = wardrobeItems.find(
-    (item) => item?.ItemID === route.params.itemId
-  );
+  // const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
+  const getItem = useWardrobeStore((state) => state.getItem);
+  const fetchWardrobe = useWardrobeStore((state) => state.fetchWardrobe);
+  const {
+    params: { isConfirm = false, itemIds = [], currentIndex },
+  } = useRoute();
+  const currentItemID = itemIds[currentIndex];
+  const item = getItem(currentItemID);
   const [itemName, setItemName] = useState(item?.ItemName);
   const [brandName, setBrandName] = useState(item?.BrandName);
   const [tags, setTags] = useState({
@@ -46,15 +47,38 @@ function ItemScreen({ route }) {
   });
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: (props) =>
-        isEdited ? (
-          <Pressable onPress={handleSave}>
-            <Text style={styles.saveChanges}>Save</Text>
-          </Pressable>
-        ) : null,
-    });
-  }, [isEdited, itemName, brandName, tags]);
+    if (isConfirm) {
+      navigation.setOptions({
+        title: `(${currentIndex + 1}/${itemIds.length})`,
+      });
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!isConfirm) {
+      navigation.setOptions({
+        headerRight: (props) =>
+          isEdited ? (
+            <Pressable onPress={handleSave}>
+              <Text style={styles.saveChanges}>Save</Text>
+            </Pressable>
+          ) : null,
+      });
+    }
+  }, [isEdited]);
+
+  useEffect(() => {
+    fillTags();
+  }, []);
+
+  useEffect(() => {
+    console.log(item);
+    if (item?.Status == 2) {
+      setIsProcessing(true);
+    } else {
+      setIsProcessing(false);
+    }
+  }, [item?.Status]);
 
   const handleSelectTag = (filterGroup, updatedTags) => {
     setTags((prev) => ({ ...prev, [filterGroup]: updatedTags || [] }));
@@ -89,12 +113,6 @@ function ItemScreen({ route }) {
     setTags(newtags);
   };
 
-  useEffect(() => {
-    console.log("Brand Name: " + item?.BrandName);
-
-    fillTags();
-  }, []);
-
   const handleSave = async () => {
     const Tags = Object.entries(tags)
       .map(([Class, Tags]) => Tags.map((Tag) => ({ Class, Tag })))
@@ -117,10 +135,10 @@ function ItemScreen({ route }) {
           }),
         }
       );
-      console.log("route id: " + route.params?.itemId);
+      console.log("route id: " + currentItemID);
       console.log("fetched: " + item?.ItemID);
       console.log(
-        "JSON.Stringify: " + JSON.stringify({ ItemID: route.params?.itemId })
+        "JSON.Stringify: " + JSON.stringify({ ItemID: currentItemID })
       );
       const data = await res.json();
       if (data.Result == false) {
@@ -144,12 +162,12 @@ function ItemScreen({ route }) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ItemID: route.params?.itemId }),
+          body: JSON.stringify({ ItemID: currentItemID }),
         }
       );
-      console.log("item id: " + route.params?.itemId);
+      console.log("item id: " + currentItemID);
       console.log(
-        "JSON.Stringify: " + JSON.stringify({ ItemID: route.params?.itemId })
+        "JSON.Stringify: " + JSON.stringify({ ItemID: currentItemID })
       );
       const data = await res.json();
       if (data.Result == false) {
@@ -178,38 +196,61 @@ function ItemScreen({ route }) {
     console.log("handleSheetChanges", index);
   }, []);
 
-  useEffect(() => {
-    console.log(item);
-    if (item?.Status == 2) {
-      setIsProcessing(true);
-    } else {
-      setIsProcessing(false);
-    }
-  }, [item?.Status]);
-
   const bottomSheetModalRef = useRef(null);
+
   return (
     <KeyboardAvoidingView style={styles.container}>
+      {isConfirm && (
+        <View style={styles.wizardContainer}>
+          <View style={styles.navigatorsContainer}>
+            {currentIndex > 0 && (
+              <View style={styles.navigatorWrapper}>
+                <Pressable
+                  style={styles.prevButton}
+                  onPress={() => navigation.pop()}
+                >
+                  <Text style={[styles.buttonTitle, styles.prevTitle]}>
+                    Previous
+                  </Text>
+                </Pressable>
+              </View>
+            )}
+            <View style={styles.navigatorWrapper}>
+              <Pressable
+                style={styles.nextButton}
+                onPress={() => {
+                  if (isEdited) {
+                    handleSave();
+                    fetchWardrobe();
+                  }
+                  if (currentIndex + 1 === itemIds.length) {
+                    navigation.reset({
+                      index: 0,
+                      routes: [{ name: "Wardrobe" }],
+                    });
+                  } else {
+                    navigation.push("ItemScreen", {
+                      itemIds: itemIds,
+                      currentIndex: currentIndex + 1,
+                      isConfirm: true,
+                    });
+                  }
+                }}
+              >
+                <Text style={[styles.buttonTitle, styles.nextTitle]}>
+                  {currentIndex + 1 === itemIds.length ? "Confirm" : "Next"}
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      )}
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: isConfirm && 100 }}
         showsVerticalScrollIndicator={false}
       >
         {isProcessing && <ProcessingScreen />}
-        {/* <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            // backgroundColor: "red",
-            marginTop: 32,
-          }}
-        >
-          <Ionicons name="chevron-back" size={28} />
-          <Text style={styles.pageTitle}>Item</Text>
-          <Pressable onPress={handleSave}>
-            <Text style={styles.saveChanges}>Save</Text>
-          </Pressable>
-        </View> */}
-        {/* <View style={styles.underline} /> */}
+
         <View style={styles.imageContainer}>
           <Image
             source={{
@@ -228,8 +269,7 @@ function ItemScreen({ route }) {
               setIsEdited(true);
             }}
           />
-          {/* <Text style={styles.itemBrand}>{item.BrandName || "Brand Name"}</Text> */}
-          {/* <Ionicons name="pencil-outline" size={16} /> */}
+
           <Image
             source={require("../assets/images/tools/pencil-outline.png")}
             style={{ height: 13, width: 13 }}
@@ -246,7 +286,6 @@ function ItemScreen({ route }) {
               setIsEdited(true);
             }}
           />
-          {/* <Text style={styles.itemName}>{item.ItemName || "Item Name"}</Text> */}
 
           <Image
             source={require("../assets/images/tools/pencil-outline.png")}
@@ -308,16 +347,16 @@ function ItemScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
-  alterTagsArea: {
-    marginTop: 30,
-    gap: 20,
-  },
   container: {
     flex: 1,
     // padding: 16,
     paddingVertical: 16,
     paddingHorizontal: 24,
     backgroundColor: colors.main,
+  },
+  alterTagsArea: {
+    marginTop: 30,
+    gap: 20,
   },
   pageTitle: {
     fontSize: 26,
@@ -483,6 +522,57 @@ const styles = StyleSheet.create({
     fontFamily: "poppins-semibold",
     color: "white",
     fontSize: 16,
+  },
+  wizardContainer: {
+    position: "absolute",
+    inset: 0,
+    justifyContent: "flex-end",
+    // paddingVertical: 16,
+  },
+  navigatorsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    width: "100%",
+    gap: 12,
+    paddingHorizontal: 10,
+    paddingBottom: 20,
+    paddingTop: 15,
+    zIndex: 100,
+
+    // borderTopWidth: 0.5,
+    // borderTopColor: "black",
+    // borderTopWidth: 2,
+    // borderTopColor:"black",
+    backgroundColor: colors.main,
+  },
+  navigatorWrapper: {
+    flex: 1,
+    height: 60,
+    borderRadius: 12,
+    overflow: "hidden",
+    elevation: 4,
+  },
+  prevButton: {
+    flex: 1,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  nextButton: {
+    flex: 1,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonTitle: {
+    fontFamily: "inter-semibold",
+    fontSize: 18,
+  },
+  prevTitle: {
+    color: "white",
+  },
+  nextTitle: {
+    color: "black",
   },
 });
 

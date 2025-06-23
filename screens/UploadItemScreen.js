@@ -146,19 +146,10 @@ function UploadItemScreen() {
       if (data.Result == false) {
         console.log("Error", data.Errors[0]);
       } else {
-        images.forEach((image, index) => {
-          var newItem;
-          if (image.isSelected) {
-            newItem = {
-              id: itemsDummyData.length + 1 + index,
-              image: { uri: image.uri },
-              name: "New Item",
-              brand: "processing...",
-            };
-            itemsDummyData.push(newItem);
-          }
-        });
-        navigation.pop();
+        // const itemID
+        console.log("here", data);
+        navigation.replace("ProcessingScreen", { itemsNumber: data.Items });
+        // navigation.pop();
 
         setImages([]);
       }

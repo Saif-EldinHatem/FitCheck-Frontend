@@ -7,8 +7,6 @@ import {
   Platform,
   Pressable,
   FlatList,
-  Button,
-  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -19,7 +17,7 @@ import CollapsibleRow from "../components/CollapsibleRow";
 import ItemCard from "../components/ItemCard";
 import CustomBottomSheet from "../components/CustomBottomSheet";
 import colors from "../assets/colors/colors";
-import { itemsDummyData, filtersData } from "../store/data";
+import { filtersData } from "../store/data";
 import { RefreshControl } from "react-native-gesture-handler";
 import { useWardrobeStore } from "../store/wardrobeStore";
 import { useFilterStore } from "../store/FilterationStore";
@@ -30,7 +28,7 @@ function WardrobeScreen() {
   const [checkPending, setCheckPending] = useState(false);
   const [filterdList, setFilteredList] = useState([]);
   const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
-  const setWardrobeItems = useWardrobeStore((state) => state.setWardrobeItems);
+  const handleFetchData = useWardrobeStore((state) => state.fetchWardrobe);
   const filters = useFilterStore((state) => state.filters);
   const updateFilter = useFilterStore((state) => state.updateFilter);
   const clearFilters = useFilterStore((state) => state.clearFilters);
@@ -50,11 +48,6 @@ function WardrobeScreen() {
     }
   };
 
-  const checkImageExists = async (imageUri) => {
-    const fileInfo = await FileSystem.getInfoAsync(imageUri);
-    return fileInfo.exists;
-  };
-
   async function deleteWardrobeDirectory() {
     const directoryPath = FileSystem.documentDirectory + "wardrobe/";
 
@@ -70,74 +63,6 @@ function WardrobeScreen() {
       }
     } catch (error) {
       console.error("Error deleting directory:", error);
-    }
-  }
-
-  async function downloadImage(imagePath, status) {
-    try {
-      const directoryPath = FileSystem.documentDirectory + "wardrobe/";
-      const fileName = imagePath.split("\\").pop(); // Extract only the file name
-      const localUri = directoryPath + fileName; // Append the file name to the directory path
-      const normalizedUri = localUri.replace(/\\/g, "/"); // Normalize the path
-
-      // Ensure the directory exists
-      const dirInfo = await FileSystem.getInfoAsync(directoryPath);
-      if (!dirInfo.exists) {
-        console.log("Directory does not exist, creating:", directoryPath);
-        await FileSystem.makeDirectoryAsync(directoryPath, {
-          intermediates: true,
-        });
-      }
-
-      const exists = await checkImageExists(normalizedUri); // Pass normalizedUri here
-      if (exists) {
-        // console.log("Image already exists: ", normalizedUri);
-        return normalizedUri;
-      }
-
-      if (status == 2) {
-        return null;
-      }
-      const res = await FileSystem.downloadAsync(
-        process.env.EXPO_PUBLIC_API_HOST + "/asset?file=" + imagePath,
-        normalizedUri
-      );
-      console.log("Image Downloaded to: ", res.uri);
-      return res.uri;
-    } catch (error) {
-      console.error("Error downloading image: ", error);
-      return null;
-    }
-  }
-
-  async function handleFetchData() {
-    console.log(process.env.EXPO_PUBLIC_API_HOST);
-    try {
-      const res = await fetch(process.env.EXPO_PUBLIC_API_HOST + "/wardrobe", {
-        method: "GET",
-      });
-
-      const data = await res.json();
-      if (data.Result == false) {
-        console.log("Error", data.Errors[0]);
-      } else {
-        // console.log("tags", data?.["Items"]);
-
-        const itemsWithLocalImages = await Promise.all(
-          data.Items.map(async (item) => {
-            const localImageUri = await downloadImage(
-              item.ImagePath,
-              item.Status
-            );
-
-            return { ...item, localImageUri };
-          })
-        );
-        setWardrobeItems(itemsWithLocalImages);
-        setCheckPending(true);
-      }
-    } catch (error) {
-      console.error(error);
     }
   }
 
@@ -164,35 +89,47 @@ function WardrobeScreen() {
     }
   }
 
-  useEffect(() => {
-    handleFetchData();
-  }, []);
-
-  useEffect(() => {
-    setFilteredList(wardrobeItems);
-  }, [wardrobeItems]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const hasPending = await handleFetchData();
+  //     setCheckPending(hasPending);
+  //   };
+  //   fetchData();
+  // }, []);
 
   useFocusEffect(
     useCallback(() => {
-      handleFetchData();
+      const fetchData = async () => {
+        const hasPending = await handleFetchData();
+        setCheckPending(hasPending);
+      };
+      fetchData();
     }, [])
   );
 
   useEffect(() => {
-    applyFilter();
-  }, [wardrobeItems, filters, isFiltered]);
-
-  useEffect(() => {
+    let interval;
     if (checkPending) {
-      const interval = setInterval(() => {
-        console.log("Checking for updates...");
-        handleFetchData();
+      interval = setInterval(async () => {
+        const stillPending = await handleFetchData();
+        if (!stillPending) {
+          setCheckPending(false);
+          clearInterval(interval);
+        }
       }, 3000); // Call handleFetchData every 3 seconds
 
       // Cleanup the interval when checkPending becomes false or component unmounts
       return () => clearInterval(interval);
     }
   }, [checkPending]);
+
+  useEffect(() => {
+    setFilteredList(wardrobeItems);
+  }, [wardrobeItems]);
+
+  useEffect(() => {
+    applyFilter();
+  }, [wardrobeItems, filters, isFiltered]);
 
   useEffect(() => {
     // Automatically set checkPending to false if no items have Status == 2
@@ -205,8 +142,8 @@ function WardrobeScreen() {
 
   function applyFilter() {
     const selectedFilters = Object.values(filters).flat();
-    var newItems = [];
-    console.log("selectedFilters: ", selectedFilters);
+    let newItems = [];
+    // console.log("selectedFilters: ", selectedFilters);
     if (selectedFilters.length === 0) {
       setFilteredList(wardrobeItems);
       return;
@@ -295,7 +232,11 @@ function WardrobeScreen() {
                   uri: item.localImageUri,
                 }}
                 onPress={() =>
-                  navigation.navigate("ItemScreen", { itemId: item.ItemID })
+                  navigation.navigate("ItemScreen", {
+                    itemIds: [item.ItemID],
+                    isConfirm: false,
+                    currentIndex: 0,
+                  })
                 }
               />
             </View>

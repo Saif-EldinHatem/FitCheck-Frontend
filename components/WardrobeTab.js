@@ -3,6 +3,7 @@ import WardrobeScreen from "../screens/WardrobeScreen";
 import ItemScreen from "../screens/ItemScreen";
 import colors from "../assets/colors/colors";
 import UploadItemScreen from "../screens/UploadItemScreen";
+import ProcessingScreen from "./ProcessingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +42,11 @@ function WardrobeTab() {
           headerTitleStyle: { fontFamily: "higuen", fontSize: 32 },
           headerTitleAlign: "center",
         }}
+      />
+      <Stack.Screen
+        name="ProcessingScreen"
+        component={ProcessingScreen}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
