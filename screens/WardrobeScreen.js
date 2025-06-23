@@ -29,6 +29,7 @@ function WardrobeScreen() {
   const [isFiltered, setIsFiltered] = useState(false);
   const [checkPending, setCheckPending] = useState(false);
   const [filterdList, setFilteredList] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
   const setWardrobeItems = useWardrobeStore((state) => state.setWardrobeItems);
   const filters = useFilterStore((state) => state.filters);
@@ -180,7 +181,7 @@ function WardrobeScreen() {
 
   useEffect(() => {
     applyFilter();
-  }, [wardrobeItems, filters, isFiltered]);
+  }, [wardrobeItems, filters, isFiltered, searchText]);
 
   useEffect(() => {
     if (checkPending) {
@@ -203,19 +204,29 @@ function WardrobeScreen() {
     }
   }, [wardrobeItems]);
 
-  function applyFilter() {
-    const selectedFilters = Object.values(filters).flat();
-    var newItems = [];
-    console.log("selectedFilters: ", selectedFilters);
-    if (selectedFilters.length === 0) {
-      setFilteredList(wardrobeItems);
-      return;
-    }
-    newItems = wardrobeItems.filter((item) => {
-      return item?.Tags?.some(({ Tag }) => selectedFilters.includes(Tag));
-    });
-    setFilteredList(newItems);
+function applyFilter() {
+  const selectedFilters = Object.values(filters).flat();
+  let newItems = wardrobeItems;
+
+  // Apply tag filters if any
+  if (selectedFilters.length > 0) {
+    newItems = newItems.filter((item) =>
+      item?.Tags?.some(({ Tag }) => selectedFilters.includes(Tag))
+    );
   }
+
+  // Apply search filter if searchText is not empty
+  if (searchText.trim() !== "") {
+    const search = searchText.trim().toLowerCase();
+    newItems = newItems.filter(
+      (item) =>
+        (item.BrandName && item.BrandName.toLowerCase().includes(search)) ||
+        (item.ItemName && item.ItemName.toLowerCase().includes(search))
+    );
+  }
+
+  setFilteredList(newItems);
+}
 
   return (
     <KeyboardAvoidingView
@@ -228,6 +239,8 @@ function WardrobeScreen() {
             style={styles.inputField}
             placeholder="Search"
             cursorColor={colors.accent}
+            value={searchText}
+            onChangeText={setSearchText}
           />
         </View>
         <View
