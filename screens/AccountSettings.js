@@ -138,7 +138,7 @@ function AccountSettings() {
                   <Text style={styles.rowTitle}>Email</Text>
 
                   <View style={styles.rowContent}>
-                    <LightInput name="Email" content={`${userInfo.Email}`} />
+                    <LightInput name="Email" content={`${userInfo.Email}`} readOnly={true} />
                   </View>
                 </View>
 

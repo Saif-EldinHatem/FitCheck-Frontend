@@ -27,6 +27,7 @@ function WardrobeScreen() {
   const [isFiltered, setIsFiltered] = useState(false);
   const [checkPending, setCheckPending] = useState(false);
   const [filterdList, setFilteredList] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const wardrobeItems = useWardrobeStore((state) => state.wardrobeItems);
   const handleFetchData = useWardrobeStore((state) => state.fetchWardrobe);
   const filters = useFilterStore((state) => state.filters);
@@ -107,6 +108,7 @@ function WardrobeScreen() {
     }, [])
   );
 
+
   useEffect(() => {
     let interval;
     if (checkPending) {
@@ -129,7 +131,7 @@ function WardrobeScreen() {
 
   useEffect(() => {
     applyFilter();
-  }, [wardrobeItems, filters, isFiltered]);
+  }, [wardrobeItems, filters, isFiltered, searchText]);
 
   useEffect(() => {
     // Automatically set checkPending to false if no items have Status == 2
@@ -140,19 +142,29 @@ function WardrobeScreen() {
     }
   }, [wardrobeItems]);
 
-  function applyFilter() {
-    const selectedFilters = Object.values(filters).flat();
-    let newItems = [];
-    // console.log("selectedFilters: ", selectedFilters);
-    if (selectedFilters.length === 0) {
-      setFilteredList(wardrobeItems);
-      return;
-    }
-    newItems = wardrobeItems.filter((item) => {
-      return item?.Tags?.some(({ Tag }) => selectedFilters.includes(Tag));
-    });
-    setFilteredList(newItems);
+function applyFilter() {
+  const selectedFilters = Object.values(filters).flat();
+  let newItems = wardrobeItems;
+
+  // Apply tag filters if any
+  if (selectedFilters.length > 0) {
+    newItems = newItems.filter((item) =>
+      item?.Tags?.some(({ Tag }) => selectedFilters.includes(Tag))
+    );
   }
+
+  // Apply search filter if searchText is not empty
+  if (searchText.trim() !== "") {
+    const search = searchText.trim().toLowerCase();
+    newItems = newItems.filter(
+      (item) =>
+        (item.BrandName && item.BrandName.toLowerCase().includes(search)) ||
+        (item.ItemName && item.ItemName.toLowerCase().includes(search))
+    );
+  }
+
+  setFilteredList(newItems);
+}
 
   return (
     <KeyboardAvoidingView
@@ -165,12 +177,15 @@ function WardrobeScreen() {
             style={styles.inputField}
             placeholder="Search"
             cursorColor={colors.accent}
+            value={searchText}
+            onChangeText={setSearchText}
           />
         </View>
         <View
           style={[
             styles.iconWrapper,
             isFiltered && { backgroundColor: "#5B6962" },
+            (searchText != "") && { backgroundColor: "#5B6962" },
           ]}
         >
           <Pressable
@@ -252,11 +267,12 @@ function WardrobeScreen() {
               alignItems: "center",
             }}
           >
-            {Object.values(filters).flat().length > 0 ? (
+            {Object.values(filters).flat().length > 0 || searchText.trim() !== ""? (
               <Pressable
                 onPress={() => {
-                  console.log("here");
                   clearFilters();
+                  setIsFiltered(false);
+                  setSearchText("");
                 }}
               >
                 <Text>no items found. Clear filter</Text>

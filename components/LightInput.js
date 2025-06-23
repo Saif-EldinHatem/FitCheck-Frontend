@@ -7,6 +7,7 @@ function LightInput({
   content,
   isPassword = false,
   alignCenter = false,
+  readOnly = false,
 }) {
   const [value, setValue] = useState(content);
   const [field, meta, helpers] = useField(name);
@@ -21,6 +22,7 @@ function LightInput({
         value={field.value}
         onChangeText={(text) => helpers.setValue(text)}
         style={styles.inputField}
+        readOnly={readOnly}
       />
     </View>
   );
