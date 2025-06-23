@@ -247,6 +247,7 @@ function applyFilter() {
           style={[
             styles.iconWrapper,
             isFiltered && { backgroundColor: "#5B6962" },
+            (searchText != "") && { backgroundColor: "#5B6962" },
           ]}
         >
           <Pressable
@@ -324,11 +325,12 @@ function applyFilter() {
               alignItems: "center",
             }}
           >
-            {Object.values(filters).flat().length > 0 ? (
+            {Object.values(filters).flat().length > 0 || searchText.trim() !== ""? (
               <Pressable
                 onPress={() => {
-                  console.log("here");
                   clearFilters();
+                  setIsFiltered(false);
+                  setSearchText("");
                 }}
               >
                 <Text>no items found. Clear filter</Text>
