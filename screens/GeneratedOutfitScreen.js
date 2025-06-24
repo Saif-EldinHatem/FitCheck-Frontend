@@ -56,19 +56,30 @@ function GeneratedOutfitScreen({ route }) {
 
   // console.log({ suggestions });
 
-  useEffect(() => {
-    const groupedOutfits = Object.values(
-      suggestions.reduce((acc, { SugID, ItemID }) => {
-        if (!acc[SugID]) {
-          acc[SugID] = { SugID, items: [], isSaved: false };
-        }
-        const item = wardrobeItems.find((item) => item.ItemID === ItemID);
-        if (item) acc[SugID].items.push(item);
-        return acc;
-      }, {})
-    );
-    setGeneratedOutfits(groupedOutfits);
-  }, [suggestions, wardrobeItems]);
+useEffect(() => {
+  const grouped = new Map();
+  suggestions.forEach(({ SugID, ItemID }) => {
+    if (!grouped.has(SugID)) {
+      grouped.set(SugID, { SugID, items: [], isSaved: false });
+    }
+    const item = wardrobeItems.find((i) => i.ItemID === ItemID);
+    if (item && !grouped.get(SugID).items.some(i => i.ItemID === item.ItemID)) {
+      grouped.get(SugID).items.push(item);
+    }
+  });
+
+  const seen = new Set();
+  const uniqueOutfits = [];
+  for (const outfit of grouped.values()) {
+    const key = outfit.items.map(i => i.ItemID).sort().join("-");
+    if (!seen.has(key)) {
+      seen.add(key);
+      uniqueOutfits.push(outfit);
+    }
+  }
+
+  setGeneratedOutfits(uniqueOutfits);
+}, [suggestions, wardrobeItems]);
 
   // console.log(generatedOutfits[0]);
 
