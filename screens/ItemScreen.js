@@ -65,7 +65,7 @@ function ItemScreen() {
           ) : null,
       });
     }
-  }, [isEdited]);
+  }, [navigation, itemName, brandName, tags, isEdited]);
 
   useEffect(() => {
     fillTags();
@@ -282,7 +282,7 @@ function ItemScreen() {
             placeholderTextColor={"#000"}
             style={styles.itemName}
             onChangeText={(text) => {
-              setItemName((prev) => text);
+              setItemName(text);
               setIsEdited(true);
             }}
           />
