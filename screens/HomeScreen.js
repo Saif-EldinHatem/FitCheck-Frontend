@@ -109,8 +109,15 @@ function HomeScreen() {
           <WeatherCard />
         </ScrollView>
 
+        {(recentOutfits.length == 0 && favoriteOutfits.length == 0) && (
+          <View style={{ alignItems: "center"}}>          
+            <Text style={{fontFamily: "Inter", fontSize: 20, marginTop: 130, padding: 50}}>Recent and Favorite outfits will appear here as you use the app!</Text>
+          </View>
+        )}
+
         {/* scrollableSection */}
-        <View style={styles.section}>
+        {recentOutfits.length > 0 && (
+          <View style={styles.section}>
           {/* Section Heading */}
           <View style={styles.sectionHeading}>
             <Text style={styles.sectionTitle}>Recent Outfits</Text>
@@ -142,8 +149,11 @@ function HomeScreen() {
             ))}
           </ScrollView>
         </View>
+        )}
+
 
         {/* scrollableSection */}
+        {favoriteOutfits.length > 0 && (
         <View style={styles.section}>
           {/* Section Heading */}
           <View style={styles.sectionHeading}>
@@ -175,7 +185,7 @@ function HomeScreen() {
               </View>
             ))}
           </ScrollView>
-        </View>
+        </View>)}
 
         {/* <Pressable onPress={() => navigation.navigate("Outfits")}>
           <Text style={styles.generateOutfitText}>Generate New</Text>

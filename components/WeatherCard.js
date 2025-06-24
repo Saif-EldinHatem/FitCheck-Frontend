@@ -4,6 +4,7 @@ import { useLocationStore } from "../store/locationStore";
 
 const WeatherCard = () => {
   const [weather, setWeather] = useState();
+  const [loading, setLoading] = useState(false);
   const city = useLocationStore((state) => state.city);
   const coords = useLocationStore((state) => state.coords);
   const currentDate = new Date();
@@ -16,6 +17,8 @@ const WeatherCard = () => {
   useEffect(() => {
     if (!coords) return;
     async function handleWeatherApi() {
+    setLoading(true);
+
       try {
         const res = await fetch(
           `https://api.openweathermap.org/data/2.5/weather?lat=${coords.latitude}&lon=${coords.longitude}&appid=${process.env.EXPO_PUBLIC_OPENWEATHER_API_KEY}&units=metric`,
@@ -42,6 +45,9 @@ const WeatherCard = () => {
       } catch (error) {
         console.error(error);
       }
+      finally {
+        setLoading(false); 
+      }
     }
 
     handleWeatherApi();
@@ -53,7 +59,9 @@ const WeatherCard = () => {
         <Text style={styles.dateText}>{formattedDate}</Text>
       </View>
       <View style={styles.descriptionContainer}>
-        {weather && (
+        {loading ? (
+          <Text style={styles.descriptionText}>Loading...</Text>
+        ) : weather && (
           <Text style={styles.descriptionText}>
             {weather?.state}, {weather?.temp}°C
           </Text>
