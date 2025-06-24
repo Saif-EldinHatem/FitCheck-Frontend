@@ -114,99 +114,110 @@ function GeneratedOutfitScreen({ route }) {
   }, [currentIndex, generatedOutfits]);
 
   const navigation = useNavigation();
-  return (
-    <View style={styles.screen}>
-      {tags.length != 0 && (
-        <View style={styles.tagsSection}>
-          <Text style={styles.sectionTitle}>Tags: </Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.pillStyles}
-          >
-            {tags.map((tag, index) => (
-              <Pill
-                key={`${tag}-${index}`}
-                title={tag}
-                isSelected={true}
-                setIsSelected={() => {}}
-              />
-            ))}
-          </ScrollView>
-        </View>
-      )}
 
-      <View style={styles.scrollViewWrapper}>
+return (
+  <View style={styles.screen}>
+    {tags.length != 0 && (
+      <View style={styles.tagsSection}>
+        <Text style={styles.sectionTitle}>Tags: </Text>
         <ScrollView
           horizontal
-          contentContainerStyle={[styles.scrollView, { flexGrow: 1 }]}
           showsHorizontalScrollIndicator={false}
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          snapToInterval={width * 0.9 + 11.5 / 2}
-          decelerationRate="fast"
+          contentContainerStyle={styles.pillStyles}
         >
-          {generatedOutfits.map((outfit) => {
-            return (
-              <View key={outfit.SugID} style={styles.cardWrapper}>
-                <OutfitCard items={outfit?.items} />
-              </View>
-            );
-          })}
+          {tags.map((tag, index) => (
+            <Pill
+              key={`${tag}-${index}`}
+              title={tag}
+              isSelected={true}
+              setIsSelected={() => {}}
+            />
+          ))}
         </ScrollView>
       </View>
-      <View style={styles.colorsSection}>
-        <Text style={styles.sectionTitle}>Colors: </Text>
-        {outfitColors.map((color) => (
-          <View
-            key={`${color}-${currentIndex}`}
-            style={[styles.color, { backgroundColor: "#" + color }]}
-          />
-        ))}
-        {/* <View style={[styles.color, { backgroundColor: "#878787" }]} /> */}
-      </View>
-      <View style={styles.buttonsContainer}>
-        <View style={styles.buttonWrapper}>
-          <Pressable
-            style={[
-              styles.saveButton,
-              {
-                backgroundColor: generatedOutfits[currentIndex]?.isSaved
-                  ? "black"
-                  : colors.accent,
-              },
-            ]}
-            android_ripple={{ color: "rgba(0,0,0,0.1)" }}
-            onPress={toggleSave}
-          >
-            <Text style={styles.buttonText}>
-              {generatedOutfits[currentIndex]?.isSaved ? "Unsave" : "Save"}
-            </Text>
-          </Pressable>
-        </View>
+    )}
 
-        <View style={styles.buttonWrapper}>
-          <Pressable
-            style={styles.rerunButton}
-            android_ripple={{ color: "rgba(0,0,0,0.1)" }}
+    {generatedOutfits.length === 0 ? (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 18, color: "#888", textAlign: "center" }}>
+          No outfits could be generated with your current wardrobe and preferences.
+        </Text>
+      </View>
+    ) : (
+      <>
+        <View style={styles.scrollViewWrapper}>
+          <ScrollView
+            horizontal
+            contentContainerStyle={[styles.scrollView, { flexGrow: 1 }]}
+            showsHorizontalScrollIndicator={false}
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            snapToInterval={width * 0.9 + 11.5 / 2}
+            decelerationRate="fast"
           >
-            <Text style={styles.buttonText}>Rerun</Text>
-          </Pressable>
+            {generatedOutfits.map((outfit) => {
+              return (
+                <View key={outfit.SugID} style={styles.cardWrapper}>
+                  <OutfitCard items={outfit?.items} />
+                </View>
+              );
+            })}
+          </ScrollView>
         </View>
-      </View>
-      <Pressable onPress={() => navigation.pop()}>
-        <Text style={styles.changePreferencesButton}>
-          Change Generation Preferences
-        </Text>
-      </Pressable>
-      <View style={styles.noteWrapper}>
-        <Text style={styles.note}>
-          Some preferences will be discarded if no wardrobe items match.
-        </Text>
-      </View>
+        <View style={styles.colorsSection}>
+          <Text style={styles.sectionTitle}>Colors: </Text>
+          {outfitColors.map((color) => (
+            <View
+              key={`${color}-${currentIndex}`}
+              style={[styles.color, { backgroundColor: "#" + color }]}
+            />
+          ))}
+                  {/* <View style={[styles.color, { backgroundColor: "#878787" }]} /> */}
+        </View>
+        <View style={styles.buttonsContainer}>
+          <View style={styles.buttonWrapper}>
+            <Pressable
+              style={[
+                styles.saveButton,
+                {
+                  backgroundColor: generatedOutfits[currentIndex]?.isSaved
+                    ? "black"
+                    : colors.accent,
+                },
+              ]}
+              android_ripple={{ color: "rgba(0,0,0,0.1)" }}
+              onPress={toggleSave}
+            >
+              <Text style={styles.buttonText}>
+                {generatedOutfits[currentIndex]?.isSaved ? "Unsave" : "Save"}
+              </Text>
+            </Pressable>
+          </View>
+          <View style={styles.buttonWrapper}>
+            <Pressable
+              style={styles.rerunButton}
+              android_ripple={{ color: "rgba(0,0,0,0.1)" }}
+            >
+              <Text style={styles.buttonText}>Rerun</Text>
+            </Pressable>
+          </View>
+        </View>
+      </>
+    )}
+
+    <Pressable onPress={() => navigation.pop()}>
+      <Text style={styles.changePreferencesButton}>
+        Change Generation Preferences
+      </Text>
+    </Pressable>
+    <View style={styles.noteWrapper}>
+      <Text style={styles.note}>
+        Some preferences will be discarded if no wardrobe items match.
+      </Text>
     </View>
-  );
-}
+  </View>
+);}
+
 
 const styles = StyleSheet.create({
   screen: {
@@ -313,6 +324,7 @@ const styles = StyleSheet.create({
     color: "#888888",
     fontFamily: "inter",
     marginTop: 55,
+    paddingBottom: 10,
   },
 });
 
